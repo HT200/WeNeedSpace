@@ -52,6 +52,12 @@ public class WaveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
+        if (Input.GetKey(KeyCode.Return))
+        {
+            TestCompleteWave();
+        }
+
         // Continue with the wave
         if(m_waveState == WaveState.IN_PROGRESS)
         {
@@ -95,7 +101,7 @@ public class WaveManager : MonoBehaviour
         // Spawn the easy enemies first
         if (m_numEasyEnemies > 0)
         {
-            GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, m_spawnPosition);
+            GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, transform, m_spawnPosition);
             easyEnemy.name = "EasyEnemy" + m_numEasyEnemies;
             Debug.Log("Spawned " + easyEnemy.name);
             // Decrease the number of medium enemies left to spawn
@@ -104,7 +110,7 @@ public class WaveManager : MonoBehaviour
         // Then spawn the medium enemies
         else if (m_numMediumEnemies > 0)
         {
-            GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, m_spawnPosition);
+            GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, transform, m_spawnPosition);
             mediumEnemy.name = "MediumEnemy" + m_numMediumEnemies;
             Debug.Log("Spawned " + mediumEnemy.name);
             // Decrease the number of medium enemies left to spawn
@@ -113,7 +119,7 @@ public class WaveManager : MonoBehaviour
         // Then spawn the hard enemies
         else if (m_numHardEnemies > 0)
         {
-            GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, m_spawnPosition);
+            GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, transform, m_spawnPosition);
             hardEnemy.name = "HardEnemy" + m_numHardEnemies;
             Debug.Log("Spawned " + hardEnemy.name);
             // Decrease the number of hard enemies left to spawn
@@ -144,5 +150,14 @@ public class WaveManager : MonoBehaviour
         m_numEasyEnemies = m_waveWeight / m_easyEnemyWeight;
         // Subtract the total enemy weight from the wave weight
         m_waveWeight -= (m_numEasyEnemies * m_easyEnemyWeight);
+    }
+
+
+    void TestCompleteWave()
+    {
+        foreach(Transform childTransform in transform)
+        {
+            Destroy(childTransform.gameObject);
+        }
     }
 }
