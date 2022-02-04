@@ -12,14 +12,81 @@ public class ShipMovement : MonoBehaviour
 
     float lasercooldown;
     float speed;
+    float SCREEN_WIDTH;
+    float SCREEN_HEIGHT;
+    bool MajorAxis;
+    Vector3 f1;
+    Vector3 f2;
+    float limit;
+    bool test;
+
     // Start is called before the first frame update
     void Start()
     {
+        test = false;
+        limit = 100;
         lasercooldown = 0;
         speed = 0.0000f;
         pos = transform.position;
         vel = transform.forward * 0.00f;
         acc = transform.forward*speed;
+        SCREEN_WIDTH = Screen.width;
+        SCREEN_HEIGHT = Screen.height;
+
+
+
+        //the radius of the gui circle is 315 with my current resolution
+        //So when mouse position is more than 315 units away from (SCREEN_WIDTH,SCREEN_HEIGHT) it should start rotating the ship
+        //However hard coding it to 315 wouldn't react to different resolutions
+        //So it should be represented by a percentage of the screen instead
+        //Additionally since the measurements of Screen_Width and Screen_Height are done in the start method it doesnt react to resizing
+
+        //Addtionally additionally I'm fitting a circle in a rectangle, stretching the rectangle would create an ellipse so maybe distance should
+        //be cross-referenced?
+
+        //currently the diameter is 630  so 630/1920 is the ratio of the width
+        //Similarly the ratio for height is 630/907
+
+        //1:Any point on an ellipse can be described as (distance from focus 1 + distance from focus 2) = diameter of major axis
+        //2:What needs to be known: focus 1, focus 2, the major axis
+        //3:The major axis can be found easily: multiply both screen attributes by their respective ratios, see which one is bigger
+        //4:Now that we know the major axis, we also know the diameter of the major axis
+        //5:going back to line 1, we see we have a variable solved
+        //6:If you think about it, either of the points on the minor axis have an equal distance to both foci
+        //7:By the same method in line 3, we can find the minor diameter and subsequently the points on it
+        //8:Take one of those points, and imagine a triangle with that point, one of the foci, and the origin
+        //9:The height is the radius of the minor axis, and using line 7, we already have that
+        //10:and from line 1  -> 2(distance from either focus) = diameter of major axis -> distance from either focus = radius of major axis
+        //11:So the hypotenuse is the radius of the major axis
+        //12:By the pythagorean theorem, we can find the third side, which is each focus' distance to the origin
+        //13:Now we just travel that distance along the major axis in both dimensions, and we have both foci 
+
+        float wRatio = 630.0f / 1920.0f;
+        float hRatio = 630.0f / 907.0f; 
+        f1 = new Vector3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+        f2 = f1;
+
+        MajorAxis = SCREEN_HEIGHT*hRatio > SCREEN_WIDTH * wRatio;
+        if (MajorAxis)
+        {
+            //This is if the screen height is stretched more than width, it means that the height is the major axis
+            Vector2 mPoint = new Vector2((SCREEN_WIDTH*wRatio)/2.0f,0);
+            Vector2 MAxis = new Vector2(0,SCREEN_HEIGHT * hRatio/2.0f);
+            float focusOffset = Mathf.Sqrt(MAxis.sqrMagnitude - mPoint.sqrMagnitude);
+            f1 += new Vector3(0,focusOffset);
+            f2 += new Vector3(0,-focusOffset);
+            limit = SCREEN_HEIGHT * hRatio/2.0f;
+        }
+        else
+        {
+            Vector2 mPoint = new Vector2((SCREEN_HEIGHT * hRatio) / 2.0f, 0);
+            Vector2 MAxis = new Vector2(0, SCREEN_WIDTH*wRatio / 2.0f);
+            float focusOffset = Mathf.Sqrt(MAxis.sqrMagnitude - mPoint.sqrMagnitude);
+            f1 += new Vector3(focusOffset, 0);
+            f2 += new Vector3(-focusOffset, 0);
+            limit = SCREEN_WIDTH * wRatio/2.0f;
+        }
+
     }
     //Starting speed is 10^-2 unity blocks per frame
     //acceleration increments by 10^-7 unity blocks per frame^2
@@ -44,7 +111,7 @@ public class ShipMovement : MonoBehaviour
             }
         }
 
-        //Rotation Controls
+        //Rotation Controls via keyboard
         if (!Input.GetKey(KeyCode.R))
         {
             if (Input.GetKey(KeyCode.LeftArrow))
@@ -80,6 +147,18 @@ public class ShipMovement : MonoBehaviour
         }
 
 
+        //All rotation via mouse input
+        if((Input.mousePosition - f1).magnitude +  (Input.mousePosition-f2).magnitude > 2 * limit)
+        {
+            test = true;
+        }
+        else
+        {
+            test = false;
+        }
+
+
+
         //Firing mechanism
         if (Input.GetKey(KeyCode.Space) && lasercooldown <= 0.0f)
         {
@@ -98,6 +177,12 @@ public class ShipMovement : MonoBehaviour
         {
             lasercooldown -= dt;
         }
+
+
+
+
+        //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
+        //Since acc is dependent on the transform.forward
 
 
 
@@ -137,5 +222,13 @@ public class ShipMovement : MonoBehaviour
 
         GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000)/100 + " x 10^-2");
         GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
+        GUI.Box(new Rect(0, 120, 300, 30), "Screen Width: " + SCREEN_WIDTH + " Screen Height: " + SCREEN_HEIGHT);
+        GUI.Box(new Rect(0, 150, 300, 30), "F1: " + f1 + " F2: " + f2);
+        GUI.Box(new Rect(0, 180, 300, 30), "Mouse Position: " + Input.mousePosition);
+        GUI.Box(new Rect(0, 210, 300, 30), "Limit: " + limit);
+        if (test)
+        {
+            GUI.Box(new Rect(0, 240, 300, 30), "You are outside the ellipse");
+        }
     }
 }
