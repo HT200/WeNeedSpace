@@ -17,8 +17,10 @@ public class ShipMovement : MonoBehaviour
     bool MajorAxis;
     Vector3 f1;
     Vector3 f2;
+    Vector2 centerScreen;
     float limit;
     bool test;
+    Vector2 rot;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +34,7 @@ public class ShipMovement : MonoBehaviour
         acc = transform.forward*speed;
         SCREEN_WIDTH = Screen.width;
         SCREEN_HEIGHT = Screen.height;
-
+        centerScreen = new Vector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
 
 
         //the radius of the gui circle is 315 with my current resolution
@@ -62,8 +64,8 @@ public class ShipMovement : MonoBehaviour
         //13:Now we just travel that distance along the major axis in both dimensions, and we have both foci 
 
         float wRatio = 630.0f / 1920.0f;
-        float hRatio = 630.0f / 907.0f; 
-        f1 = new Vector3(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+        float hRatio = 630.0f / 907.0f;
+        f1 = centerScreen;
         f2 = f1;
 
         MajorAxis = SCREEN_HEIGHT*hRatio > SCREEN_WIDTH * wRatio;
@@ -146,21 +148,24 @@ public class ShipMovement : MonoBehaviour
             transform.Rotate(-0.1f, 0, 0,Space.Self);
         }
 
+        rot = ((Vector2)Input.mousePosition - centerScreen);
 
         //All rotation via mouse input
         if((Input.mousePosition - f1).magnitude +  (Input.mousePosition-f2).magnitude > 2 * limit)
         {
             test = true;
+            transform.Rotate(-rot.normalized.y * 0.1f, rot.normalized.x * 0.1f, 0.0f);
+
         }
         else
         {
             test = false;
         }
 
-
+        rot /= limit;
 
         //Firing mechanism
-        if (Input.GetKey(KeyCode.Space) && lasercooldown <= 0.0f)
+        if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && lasercooldown <= 0.0f)
         {
             //Currently this has the laserfire instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
             //In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
@@ -171,6 +176,7 @@ public class ShipMovement : MonoBehaviour
             //A temp object allows us to reference it and its subcomponents if we want to after firing
             //So if we create more complex laser fire it might be necessary
             GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+            temp.transform.Rotate(-rot.y * 21.8f, rot.x * 21.8f, 0.0f);
             // the interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
         }else if (lasercooldown > 0.0f)
@@ -230,5 +236,6 @@ public class ShipMovement : MonoBehaviour
         {
             GUI.Box(new Rect(0, 240, 300, 30), "You are outside the ellipse");
         }
+        GUI.Box(new Rect(0, 270, 300, 30), "Rotation: " + rot);
     }
 }
