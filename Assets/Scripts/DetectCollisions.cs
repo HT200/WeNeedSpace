@@ -18,23 +18,46 @@ public class DetectCollisions : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // Check collision between a bullet and an enemy
-        if (this.tag == "Bullet" && other.tag == "Enemy")
+        if (this.tag == "Bullet")
         {
-            EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
+            if (other.tag == "Enemy"){
+                EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
 
-            float dist = Vector3.Distance(enemyScript.GetWeakPoint(), transform.position - other.transform.position);
+                float dist = Vector3.Distance(enemyScript.GetWeakPoint(), transform.position - other.transform.position);
 
-            if (dist <= 0.5f)
-            {
-                // Critical Hit
-                gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
-                enemyScript.UpdateHealth(-playerScript.damage, true);
+                if (dist <= 0.5f)
+                {
+                    // Critical Hit
+                    gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
+                    enemyScript.UpdateHealth(-playerScript.damage, true);
+                }
+                else
+                {
+                    gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
+                    enemyScript.UpdateHealth(-playerScript.damage, false);
+                }
             }
-            else
+            if (other.tag == "Player")
             {
-                gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
-                enemyScript.UpdateHealth(-playerScript.damage, false);
+                //The player has been hit
+                Destroy(other.gameObject);
+            }
+            if(other.tag == "Bullet")
+            {
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
+            }
+
+
+        } else if (this.tag == "Player")
+        {
+            if(other.tag == "Enemy")
+            {
+                //This should cause an explosion, for now it means destroying both
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
             }
         }
+        //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
     }
 }
