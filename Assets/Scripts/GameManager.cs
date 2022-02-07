@@ -26,12 +26,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
+        score = 0;
     }
 
     void Update()
     {
-
+        OnGUI();
     }
 
     /// <summary>
@@ -65,5 +65,14 @@ public class GameManager : MonoBehaviour
     public void SetCombo(int newCombo)
     {
         comboMult = newCombo;
+    }
+
+    public void OnGUI()
+    {
+        GUI.color = Color.white;
+        GUI.skin.box.fontSize = 15;
+        GUI.skin.box.wordWrap = false;
+
+        GUI.Box(new Rect(0, 0, 300, 30), "Current score: " + score);
     }
 }
