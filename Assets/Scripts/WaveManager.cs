@@ -55,7 +55,16 @@ public class WaveManager : MonoBehaviour
         // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
         if (Input.GetKey(KeyCode.Return))
         {
-            TestCompleteWave();
+            // If the wave is in progress, destroy the current wave
+            if (m_waveState == WaveState.IN_PROGRESS)
+            {
+                TestDestroyCurrentWave();
+            }
+            // Otherwise we immediately restart the next wave
+            else if (m_waveState == WaveState.COMPLETED)
+            {
+                Start();
+            }
         }
 
         // Continue with the wave
@@ -70,11 +79,8 @@ public class WaveManager : MonoBehaviour
                 SpawnEnemy();
             }
 
-            // If all enemies have been spawned and destroyed, then the wave has been completed
-            if(m_numEasyEnemies + m_numMediumEnemies + m_numHardEnemies == 0 && transform.childCount == 0)
-            {
-                WaveCompleted();
-            }
+            // Checks and handles wave completion criteria
+            CheckWaveCompleted();
         }        
         // If a wave has been completed, we are inbetween waves
         else if(m_waveState == WaveState.COMPLETED)
@@ -90,10 +96,17 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    public void WaveCompleted()
+    public void CheckWaveCompleted()
     {
-        m_waveState = WaveState.COMPLETED;
-        Debug.Log("Wave " + m_waveNumber + " completed!");
+        // If all enemies have been spawned and destroyed, then the wave has been completed
+        if (m_numEasyEnemies == 0 &&
+            m_numMediumEnemies == 0 &&
+            m_numHardEnemies == 0 &&
+            m_spawnPosition.childCount == 0)
+        {
+            m_waveState = WaveState.COMPLETED;
+            Debug.Log("Wave " + m_waveNumber + " completed!");
+        }
     }
 
     private void SpawnEnemy()
@@ -101,7 +114,7 @@ public class WaveManager : MonoBehaviour
         // Spawn the easy enemies first
         if (m_numEasyEnemies > 0)
         {
-            GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, transform, m_spawnPosition);
+            GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, m_spawnPosition);
             easyEnemy.name = "EasyEnemy" + m_numEasyEnemies;
             Debug.Log("Spawned " + easyEnemy.name);
             // Decrease the number of medium enemies left to spawn
@@ -110,7 +123,7 @@ public class WaveManager : MonoBehaviour
         // Then spawn the medium enemies
         else if (m_numMediumEnemies > 0)
         {
-            GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, transform, m_spawnPosition);
+            GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, m_spawnPosition);
             mediumEnemy.name = "MediumEnemy" + m_numMediumEnemies;
             Debug.Log("Spawned " + mediumEnemy.name);
             // Decrease the number of medium enemies left to spawn
@@ -119,7 +132,7 @@ public class WaveManager : MonoBehaviour
         // Then spawn the hard enemies
         else if (m_numHardEnemies > 0)
         {
-            GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, transform, m_spawnPosition);
+            GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, m_spawnPosition);
             hardEnemy.name = "HardEnemy" + m_numHardEnemies;
             Debug.Log("Spawned " + hardEnemy.name);
             // Decrease the number of hard enemies left to spawn
@@ -153,9 +166,9 @@ public class WaveManager : MonoBehaviour
     }
 
 
-    void TestCompleteWave()
+    void TestDestroyCurrentWave()
     {
-        foreach(Transform childTransform in transform)
+        foreach(Transform childTransform in m_spawnPosition)
         {
             Destroy(childTransform.gameObject);
         }

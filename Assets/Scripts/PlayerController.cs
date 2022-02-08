@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
         health += num;
         print(num + " Health");
     }
+
     /// <summary>
     /// Update the player's damage output
     /// </summary>
