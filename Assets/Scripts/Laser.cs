@@ -47,6 +47,9 @@ public class Laser : MonoBehaviour
         lineRenderer.SetPosition(0, from);  
         lineRenderer.SetPosition(1, to);
 
+        from = gameObject.transform.position;
+        to = gameObject.transform.forward * 3f + gameObject.transform.position;
+
         transform.position = transform.position + transform.forward * 20f * Time.deltaTime;
         total += Time.deltaTime;
         if (total >= 5.0f)
