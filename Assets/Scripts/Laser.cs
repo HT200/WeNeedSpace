@@ -16,8 +16,12 @@ public class Laser : MonoBehaviour
 
     public Vector3 from;
 
+    float total;
+
     void Start()
     {
+        total = 0.0f;
+
         color = Color.green;
 
         width = .2f;
@@ -42,6 +46,13 @@ public class Laser : MonoBehaviour
     {
         lineRenderer.SetPosition(0, from);  
         lineRenderer.SetPosition(1, to);
+
+        transform.position = transform.position + transform.forward * 20f * Time.deltaTime;
+        total += Time.deltaTime;
+        if (total >= 5.0f)
+        {
+            Destroy(gameObject);
+        }
     }
 }
 

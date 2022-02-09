@@ -98,14 +98,14 @@ public class ShipMovement : MonoBehaviour
     {
         float dt = Time.deltaTime;
         //Acceleration controls
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.W))
         {
             if (speed < 1.0f)
             {
                 speed += 0.1f * dt;
             }
         }
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.S))
         {
             if (speed > 0.0f)
             {
@@ -114,28 +114,14 @@ public class ShipMovement : MonoBehaviour
         }
 
         //Rotation Controls via keyboard
-        if (!Input.GetKey(KeyCode.R))
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(KeyCode.A))
             {
-                transform.Rotate(0, -0.1f, 0, Space.Self);
+                transform.Rotate(0, 0.0f, .1f, Space.Self);
             }
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.D))
             {
-                transform.Rotate(0, 0.1f, 0, Space.Self);
+                transform.Rotate(0, 0.0f, -.1f, Space.Self);
             }
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                transform.Rotate(0, 0, 0.1f, Space.Self);
-            }
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                transform.Rotate(0, 0, -0.1f, Space.Self);
-            }
-        }
 
 
 

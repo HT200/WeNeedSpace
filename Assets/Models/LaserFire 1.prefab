@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 779460830986738914}
   - component: {fileID: 779460830986738916}
   - component: {fileID: 779460830986738919}
-  - component: {fileID: -871171642442086370}
   m_Layer: 0
   m_Name: LaserFire 1
   m_TagString: Bullet
@@ -162,15 +161,3 @@ MonoBehaviour:
   color: {r: 0, g: 0, b: 0, a: 0}
   to: {x: 0, y: 0, z: 0}
   from: {x: 0, y: 0, z: 0}
---- !u!114 &-871171642442086370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 779460830986738915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee3350a9327064f4a8517c95fdf76d65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
