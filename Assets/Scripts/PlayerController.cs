@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     Vector3 acc;
 
     public GameObject laserfire;
-
     float lasercooldown;
+    
     float speed;
     float SCREEN_WIDTH;
     float SCREEN_HEIGHT;
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
 
         pos += vel * dt;
         transform.position = pos;
-        OnGUI();
+        // OnGUI();
     }
 
     /// <summary>

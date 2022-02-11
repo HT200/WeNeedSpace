@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3513293051325555107}
   - component: {fileID: 3513293051325555106}
   - component: {fileID: 2588341768903465072}
+  - component: {fileID: -1182370732273763935}
   m_Layer: 0
   m_Name: EasyEnemy
   m_TagString: Untagged
@@ -103,8 +104,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3513293051325555117}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6f6b56d61968a94cbe288fe67e16169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-1182370732273763935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3513293051325555117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 422f5b16d6fa1cf47a6feb9f84b2f14e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}

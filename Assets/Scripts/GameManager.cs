@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        OnGUI();
+        // OnGUI();
     }
 
     public void CheckWaveCompleted()
