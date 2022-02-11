@@ -237,6 +237,7 @@ public class PlayerController : MonoBehaviour
         GUI.color = Color.white;
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
+        /*
 
         GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 100 + " x 10^-2");
         GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
@@ -249,5 +250,6 @@ public class PlayerController : MonoBehaviour
             GUI.Box(new Rect(0, 240, 300, 30), "You are outside the ellipse");
         }
         GUI.Box(new Rect(0, 270, 300, 30), "Rotation: " + rot);
+        */
     }
 }
