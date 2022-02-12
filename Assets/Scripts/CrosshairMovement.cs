@@ -11,10 +11,12 @@ public class CrosshairMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        crosshair = gameObject.GetComponent<RectTransform>();
+        GameObject o;
+        crosshair = (o = gameObject).GetComponent<RectTransform>();
         //This is a little lengthy but it lets us offset the weird bump  made by the first translation
-        SCREEN_WIDTH = gameObject.transform.parent.gameObject.GetComponent<RectTransform>().rect.width;
-        SCREEN_HEIGHT = gameObject.transform.parent.gameObject.GetComponent<RectTransform>().rect.height;
+        var parent = o.transform.parent;
+        SCREEN_WIDTH = parent.gameObject.GetComponent<RectTransform>().rect.width;
+        SCREEN_HEIGHT = parent.gameObject.GetComponent<RectTransform>().rect.height;
         offset = new Vector3(-SCREEN_WIDTH/2.0f, -SCREEN_HEIGHT/2.0f, 0);
     }
 

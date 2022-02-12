@@ -33,7 +33,8 @@ public class EnemyController : MonoBehaviour
     {
         // Update the world-space location of this enemy's weakpoint as it moves
         BoxCollider enemy = transform.GetComponent<BoxCollider>();
-        weakPoint = transform.TransformPoint(enemy.center.x, enemy.center.y, enemy.center.z - enemy.size.z / 2);
+        var center = enemy.center;
+        weakPoint = transform.TransformPoint(center.x, center.y, center.z - enemy.size.z / 2);
     }
 
     /// <summary>

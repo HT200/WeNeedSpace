@@ -119,14 +119,10 @@ public class GameManager : MonoBehaviour
     public void CheckWaveCompleted()
     {
         // If all enemies have been spawned and destroyed, then the wave has been completed
-        if (m_numEasyEnemies == 0 &&
-            m_numMediumEnemies == 0 &&
-            m_numHardEnemies == 0 &&
-            m_spawnPosition.childCount == 0)
-        {
-            m_waveState = WaveState.COMPLETED;
-            Debug.Log("Wave " + m_waveNumber + " completed!");
-        }
+        if (m_numEasyEnemies != 0 || m_numMediumEnemies != 0 || m_numHardEnemies != 0 ||
+            m_spawnPosition.childCount != 0) return;
+        m_waveState = WaveState.COMPLETED;
+        Debug.Log("Wave " + m_waveNumber + " completed!");
     }
 
     private void SpawnEnemy()

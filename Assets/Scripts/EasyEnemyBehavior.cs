@@ -20,14 +20,16 @@ public class EasyEnemyBehavior : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
 
         // Generate random target in the direction of the player
-        Vector3 halfToPlayer = transform.position + (player.transform.position - transform.position) / 2;
+        var tf = transform;
+        var position = tf.position;
+        Vector3 halfToPlayer = position + (player.transform.position - position) / 2;
         target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
 
         // Send the enemy toward the target
-        transform.forward = (target - transform.position).normalized;
+        tf.forward = (target - position).normalized;
 
-        vel = transform.forward * speed;
-        pos = transform.position;
+        vel = tf.forward * speed;
+        pos = position;
     }
 
     void Update()

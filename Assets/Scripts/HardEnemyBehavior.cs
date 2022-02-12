@@ -31,15 +31,17 @@ public class HardEnemyBehavior : MonoBehaviour
         playerScript = player.GetComponent<PlayerController>();
 
         // Generate random target in the direction of the player
-        Vector3 halfToPlayer = transform.position + (player.transform.position - transform.position) / 2;
+        var tf = transform;
+        var position = tf.position;
+        Vector3 halfToPlayer = position + (player.transform.position - position) / 2;
         target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
 
         // Send the enemy toward the target
-        transform.forward = (target - transform.position).normalized;
+        tf.forward = (target - position).normalized;
         seeking = false;
 
-        vel = transform.forward * speed;
-        pos = transform.position;
+        vel = tf.forward * speed;
+        pos = position;
 
         laserTimer = laserCooldown;
     }
@@ -65,10 +67,12 @@ public class HardEnemyBehavior : MonoBehaviour
                 // The enemy is too close to the player, retreat to a random target behind it
                 seeking = false;
 
-                Vector3 toPlayer = transform.position + (player.transform.position - transform.position) / 2;
-                target = -transform.forward * toPlayer.magnitude * 2 + Random.onUnitSphere * toPlayer.magnitude;
+                var tf = transform;
+                var position = tf.position;
+                Vector3 toPlayer = position + (player.transform.position - position) / 2;
+                target = -tf.forward * toPlayer.magnitude * 2 + Random.onUnitSphere * toPlayer.magnitude;
 
-                transform.forward = (target - transform.position).normalized;
+                tf.forward = (target - position).normalized;
             }
             else
             {
@@ -79,7 +83,8 @@ public class HardEnemyBehavior : MonoBehaviour
                 // Fire every 1 second while strafing while within firing range
                 if (Vector3.Distance(transform.position, target) < maxFireDistance && laserTimer <= 0.0f)
                 {
-                    GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+                    var tf = transform;
+                    GameObject temp = Instantiate(laserfire, tf.position + tf.forward * 1.5f, tf.rotation);
                     laserTimer = laserCooldown;
                 }
                 else if (laserTimer > 0.0f)
