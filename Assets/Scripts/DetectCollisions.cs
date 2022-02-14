@@ -31,8 +31,9 @@ public class DetectCollisions : MonoBehaviour
                 if (dist <= 0.5f)
                 {
                     // Critical Hit
-                    /*
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
+                    //Currently working with 1 health enemies, we'll deal with this later
+                    /*
                     enemyScript.UpdateHealth(-playerScript.damage, true);
                     */
                     Destroy(other.gameObject);
@@ -40,8 +41,8 @@ public class DetectCollisions : MonoBehaviour
                 }
                 else
                 {
-                    /*
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
+                    /*
                     enemyScript.UpdateHealth(-playerScript.damage, false);
                     */
                     Destroy(other.gameObject);
@@ -84,11 +85,5 @@ public class DetectCollisions : MonoBehaviour
         GUI.color = Color.white;
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
-        GUI.Box(new Rect(0, 60, 300, 30), "Testing typing capabilities");
-
-        if (test)
-        {
-            GUI.Box(new Rect(0, 30, 300, 30), "REGISTERED A HIT!");
-        }
     }
 }

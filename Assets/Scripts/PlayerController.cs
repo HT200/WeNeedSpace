@@ -237,10 +237,11 @@ public class PlayerController : MonoBehaviour
         GUI.color = Color.white;
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
-        /*
+        
 
-        GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 100 + " x 10^-2");
+        GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 10000);
         GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
+        /*
         GUI.Box(new Rect(0, 120, 300, 30), "Screen Width: " + SCREEN_WIDTH + " Screen Height: " + SCREEN_HEIGHT);
         GUI.Box(new Rect(0, 150, 300, 30), "F1: " + f1 + " F2: " + f2);
         GUI.Box(new Rect(0, 180, 300, 30), "Mouse Position: " + Input.mousePosition);
