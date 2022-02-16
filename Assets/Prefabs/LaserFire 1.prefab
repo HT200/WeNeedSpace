@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 779460830986738914}
   - component: {fileID: 779460830986738919}
   - component: {fileID: 7296899927697318734}
+  - component: {fileID: -7734669700662669850}
   m_Layer: 0
   m_Name: LaserFire 1
   m_TagString: Bullet
@@ -160,4 +161,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
-  player: {fileID: 0}
+--- !u!136 &-7734669700662669850
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779460830986738915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.1
+  m_Height: 1.2
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.5}

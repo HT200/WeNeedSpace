@@ -6,10 +6,12 @@ public class EnemyController : MonoBehaviour
 {
     public GameManager gameManager;
 
-    public GameObject player;
+    bool test;
+
+    GameObject player;
     PlayerController playerScript;
 
-    float health = 100.0f;
+    float health = 1.0f;
 
     // Can be true if this enemy has only been hit with critical hits
     bool perfectDestroy = true;
@@ -22,15 +24,17 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        test = false;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        playerScript = player.GetComponent<PlayerController>();
+        playerScript = gameManager.player.GetComponent<PlayerController>();
     }
 
     void Update()
     {
         // Update the world-space location of this enemy's weakpoint as it moves
         BoxCollider enemy = transform.GetComponent<BoxCollider>();
-        weakPoint = transform.TransformPoint(enemy.center.x, enemy.center.y, enemy.center.z - enemy.size.z / 2);
+        var center = enemy.center;
+        weakPoint = transform.TransformPoint(center.x, center.y, center.z - enemy.size.z / 2);
     }
 
     /// <summary>
@@ -38,6 +42,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     void DestroyEnemy()
     {
+        test = true;
         // TODO
         print("Enemy Destroyed");
 
@@ -49,6 +54,8 @@ public class EnemyController : MonoBehaviour
 
         // Add to the player's combo
         gameManager.SetCombo(gameManager.GetCombo() + 1);
+
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -64,6 +71,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void UpdateHealth(float num, bool crit)
     {
+        test = true;
         if (crit)
         {
             // Critical hit, apply multiplier
@@ -89,5 +97,16 @@ public class EnemyController : MonoBehaviour
     public Vector3 GetWeakPoint()
     {
         return weakPoint;
+    }
+
+    public void OnGUI()
+    {
+        GUI.color = Color.white;
+        GUI.skin.box.fontSize = 15;
+        GUI.skin.box.wordWrap = false;
+        if (test)
+        {
+            GUI.Box(new Rect(0, 30, 300, 30), "Current health: " + health);
+        }
     }
 }
