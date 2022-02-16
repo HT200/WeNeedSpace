@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float health = 100.0f;
     public float damage = 5.0f;
 
+    //All the v3s for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
     Vector3 pos;
     Vector3 vel;
     Vector3 acc;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public GameObject laserfire;
     float lasercooldown;
     
+    //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
     float SCREEN_WIDTH;
     float SCREEN_HEIGHT;
@@ -110,7 +112,7 @@ public class PlayerController : MonoBehaviour
         //Acceleration controls
         if (Input.GetKey(KeyCode.W))
         {
-            if (speed < 1.0f)
+            if (speed < 0.5f)
             {
                 speed += 0.1f * dt;
             }
@@ -160,10 +162,6 @@ public class PlayerController : MonoBehaviour
         //Firing mechanism
         if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && lasercooldown <= 0.0f)
         {
-            //Currently this has the laserfire instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
-            //In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
-            //Additionally it might be best to tweak the code so it doesnt perform physical movement on a frame by frame basis but
-            //instead uses actual time since the last frame to account for differing computer speeds
 
             //You may be wondering why im creating a temp object when the Instantiate() method can be called alone, creating
             //A temp object allows us to reference it and its subcomponents if we want to after firing
@@ -190,13 +188,16 @@ public class PlayerController : MonoBehaviour
             //This means that velocity is already at max
 
             //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
-            //To replicate this, if  at max speed, update only the direction of the velocity not the magnitude
+            //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-            //EDIT: because of how this works there is no loss of speed while turning
-            //as a result you can turn on a dime and suddenly be moving in a new direction easily
-            //We need to create a way to LOSE speed not only during turns but in general as well
-
-            vel = (vel + acc).normalized * 5f;
+            if((vel+acc).magnitude > 5.0f)
+            {
+                vel = (vel + acc * dt).normalized * 5.0f;
+            }
+            else
+            {
+                vel += acc* dt;
+            }
         }
         else
         {
