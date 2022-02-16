@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     public float health = 100.0f;
     public float damage = 5.0f;
 
-    // Physics vector variables
+    // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
     private Vector3 pos;
     private Vector3 vel;
     private Vector3 acc;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public GameObject laserfire;
     float lasercooldown;
     
+    //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
     // Start is called before the first frame update
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
         // Acceleration controls
         if (Input.GetKey(KeyCode.W))
         {
-            if (speed < 1.0f)
+            if (speed < 0.5f)
             {
                 speed += 0.1f * Time.deltaTime;
             }
@@ -84,13 +85,16 @@ public class PlayerController : MonoBehaviour
             //This means that velocity is already at max
 
             //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
-            //To replicate this, if  at max speed, update only the direction of the velocity not the magnitude
+            //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-            //EDIT: because of how this works there is no loss of speed while turning
-            //as a result you can turn on a dime and suddenly be moving in a new direction easily
-            //We need to create a way to LOSE speed not only during turns but in general as well
-
-            vel = (vel + acc).normalized * 5f;
+            if((vel+acc).magnitude > 5.0f)
+            {
+                vel = (vel + acc * dt).normalized * 5.0f;
+            }
+            else
+            {
+                vel += acc* dt;
+            }
         }
         else
         {
@@ -159,7 +163,6 @@ public class PlayerController : MonoBehaviour
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
         
-
         GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 10000);
         GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
     }

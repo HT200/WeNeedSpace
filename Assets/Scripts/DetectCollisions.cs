@@ -32,6 +32,7 @@ public class DetectCollisions : MonoBehaviour
                 {
                     // Critical Hit
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
+                    gameManager.IncrementKill();
                     //Currently working with 1 health enemies, we'll deal with this later
                     /*
                     enemyScript.UpdateHealth(-playerScript.damage, true);
@@ -42,6 +43,7 @@ public class DetectCollisions : MonoBehaviour
                 else
                 {
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
+                    gameManager.IncrementKill();
                     /*
                     enemyScript.UpdateHealth(-playerScript.damage, false);
                     */
