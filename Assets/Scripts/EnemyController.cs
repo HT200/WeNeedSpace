@@ -104,9 +104,5 @@ public class EnemyController : MonoBehaviour
         GUI.color = Color.white;
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
-        if (test)
-        {
-            GUI.Box(new Rect(0, 30, 300, 30), "Current health: " + health);
-        }
     }
 }

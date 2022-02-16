@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
 
     int score;
-
+    int totalkills;
     // Wave variables
     private int m_waveNumber = 0;
     private int m_waveWeight = 0;
@@ -42,9 +42,8 @@ public class GameManager : MonoBehaviour
     public int scoreWaveClear = 100;
     // TODO: Add more...
 
-    // Multipliers
-    // How many enemies killed without getting hit
-    int comboMult = 1;
+    //Combo for accurate shots
+    int combo = 0;
     // Critically damaged an enemy
     int critMult = 2;
     // TODO: Add more...
@@ -52,6 +51,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         score = 0;
+        totalkills = 0;
 
         // Increase the wave variables
         m_waveNumber += 1;
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
     public void UpdateScore(int num, bool crit)
     {
         // Apply multipliers
-        num *= comboMult;
+        num += combo;
         if (crit)
         {
             num *= critMult;
@@ -212,14 +212,14 @@ public class GameManager : MonoBehaviour
     /// <returns>The player's current combo multiplier</returns>
     public int GetCombo()
     {
-        return comboMult;
+        return combo;
     }
     /// <summary>
     /// Set the player's current combo multiplier
     /// </summary>
     public void SetCombo(int newCombo)
     {
-        comboMult = newCombo;
+        combo = newCombo;
     }
 
     public void OnGUI()
@@ -228,6 +228,20 @@ public class GameManager : MonoBehaviour
         GUI.skin.box.fontSize = 15;
         GUI.skin.box.wordWrap = false;
 
-        GUI.Box(new Rect(0, 0, 300, 30), "Current score: " + score);
+        GUI.Box(new Rect(0, 60, 300, 30), "Current score: " + score);
+        GUI.Box(new Rect(0, 90, 300, 30), "Current combo: " + combo);
+    }
+
+    public void IncrementKill()
+    {
+        totalkills++;
+        combo += 12;
+    }
+    public void DeIncrementCombo()
+    {
+        if (combo > 1)
+        {
+            combo-=2;
+        }
     }
 }

@@ -172,6 +172,7 @@ public class PlayerController : MonoBehaviour
             temp.transform.Rotate(-rot.y * 21.8f, rot.x * 21.8f, 0.0f);
             // the interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
+            gameManager.DeIncrementCombo();
         }
         else if (lasercooldown > 0.0f)
         {
