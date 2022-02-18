@@ -127,6 +127,7 @@ public class PlayerController : MonoBehaviour
 
             // The interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
+            m_gameManager.DeIncrementCombo();
         }
         else if (lasercooldown > 0.0f)
         {
