@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType { EASY, MEDIUM, HARD }
+
 public class EnemyController : MonoBehaviour
 {
     public GameManager gameManager;
 
-    bool test;
-
-    GameObject player;
-    PlayerController playerScript;
+    protected GameObject player;
 
     float health = 1.0f;
 
@@ -22,19 +21,44 @@ public class EnemyController : MonoBehaviour
     // The center point (in world-space) at which this enemy will recieve critical damage
     Vector3 weakPoint;
 
-    void Start()
+    // This enemy's type, decided when spawned
+    public EnemyType m_enemyType;
+
+    protected Vector3 pos;
+    protected Vector3 vel;
+    protected Vector3 target;
+
+    protected float speed = 6.0f;
+
+    protected virtual void Start()
     {
-        test = false;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        playerScript = gameManager.player.GetComponent<PlayerController>();
+        player = gameManager.player;
+
+        // Generate random target in the direction of the player
+        Vector3 position = transform.position;
+        Vector3 halfToPlayer = position + (player.transform.position - position) / 2;
+        target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
+
+        // Send the enemy toward the target
+        transform.forward = (target - position).normalized;
+
+        vel = transform.forward * speed;
+        pos = position;
     }
 
-    void Update()
+    protected virtual void Update()
     {
+        float dt = Time.deltaTime;
+
         // Update the world-space location of this enemy's weakpoint as it moves
-        BoxCollider enemy = transform.GetComponent<BoxCollider>();
-        var center = enemy.center;
-        weakPoint = transform.TransformPoint(center.x, center.y, center.z - enemy.size.z / 2);
+        // BoxCollider enemy = transform.GetComponent<BoxCollider>();
+        // var center = enemy.center;
+        // weakPoint = transform.TransformPoint(center.x, center.y, center.z - enemy.size.z / 2);
+
+        vel = transform.forward * speed;
+        pos += vel * dt;
+        transform.position = pos;
     }
 
     /// <summary>
@@ -42,7 +66,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     void DestroyEnemy()
     {
-        test = true;
         // TODO
         print("Enemy Destroyed");
 
@@ -71,7 +94,6 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void UpdateHealth(float num, bool crit)
     {
-        test = true;
         if (crit)
         {
             // Critical hit, apply multiplier
