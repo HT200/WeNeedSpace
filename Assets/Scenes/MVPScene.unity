@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -361,9 +361,9 @@ GameObject:
   - component: {fileID: 170300388}
   - component: {fileID: 170300387}
   - component: {fileID: 170300386}
-  - component: {fileID: 170300385}
   - component: {fileID: 170300384}
   - component: {fileID: 170300383}
+  - component: {fileID: 170300385}
   m_Layer: 0
   m_Name: Enemy (8)
   m_TagString: Enemy
@@ -424,10 +424,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 170300381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &170300386
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -583,9 +584,9 @@ GameObject:
   - component: {fileID: 216475972}
   - component: {fileID: 216475971}
   - component: {fileID: 216475970}
-  - component: {fileID: 216475969}
   - component: {fileID: 216475968}
   - component: {fileID: 216475967}
+  - component: {fileID: 216475969}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -631,10 +632,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 216475966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &216475970
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -724,9 +726,9 @@ GameObject:
   - component: {fileID: 248725405}
   - component: {fileID: 248725404}
   - component: {fileID: 248725403}
-  - component: {fileID: 248725402}
   - component: {fileID: 248725401}
   - component: {fileID: 248725400}
+  - component: {fileID: 248725402}
   m_Layer: 0
   m_Name: Enemy (2)
   m_TagString: Enemy
@@ -787,10 +789,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 248725398}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &248725403
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -865,9 +868,9 @@ GameObject:
   - component: {fileID: 273385099}
   - component: {fileID: 273385098}
   - component: {fileID: 273385097}
-  - component: {fileID: 273385096}
   - component: {fileID: 273385095}
   - component: {fileID: 273385094}
+  - component: {fileID: 273385096}
   m_Layer: 0
   m_Name: Enemy (1)
   m_TagString: Enemy
@@ -928,10 +931,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 273385092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &273385097
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1421,9 +1425,9 @@ GameObject:
   - component: {fileID: 449725359}
   - component: {fileID: 449725358}
   - component: {fileID: 449725357}
-  - component: {fileID: 449725356}
   - component: {fileID: 449725355}
   - component: {fileID: 449725354}
+  - component: {fileID: 449725356}
   m_Layer: 0
   m_Name: Enemy (5)
   m_TagString: Enemy
@@ -1484,10 +1488,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 449725352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &449725357
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1562,9 +1567,9 @@ GameObject:
   - component: {fileID: 450260019}
   - component: {fileID: 450260018}
   - component: {fileID: 450260017}
-  - component: {fileID: 450260016}
   - component: {fileID: 450260015}
   - component: {fileID: 450260014}
+  - component: {fileID: 450260016}
   m_Layer: 0
   m_Name: Enemy (7)
   m_TagString: Enemy
@@ -1625,10 +1630,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 450260012}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &450260017
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1703,9 +1709,9 @@ GameObject:
   - component: {fileID: 463111114}
   - component: {fileID: 463111113}
   - component: {fileID: 463111112}
-  - component: {fileID: 463111111}
   - component: {fileID: 463111110}
   - component: {fileID: 463111109}
+  - component: {fileID: 463111111}
   m_Layer: 0
   m_Name: Enemy (6)
   m_TagString: Enemy
@@ -1766,10 +1772,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 463111107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &463111112
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1844,9 +1851,9 @@ GameObject:
   - component: {fileID: 464733937}
   - component: {fileID: 464733936}
   - component: {fileID: 464733935}
-  - component: {fileID: 464733934}
   - component: {fileID: 464733933}
   - component: {fileID: 464733932}
+  - component: {fileID: 464733934}
   m_Layer: 0
   m_Name: Enemy (4)
   m_TagString: Enemy
@@ -1907,10 +1914,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 464733930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &464733935
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3180,9 +3188,9 @@ GameObject:
   - component: {fileID: 1491663157}
   - component: {fileID: 1491663156}
   - component: {fileID: 1491663155}
-  - component: {fileID: 1491663154}
   - component: {fileID: 1491663153}
   - component: {fileID: 1491663152}
+  - component: {fileID: 1491663154}
   m_Layer: 0
   m_Name: Enemy (3)
   m_TagString: Enemy
@@ -3243,10 +3251,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1491663150}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ead0b85624b90d846bb2d8935ad7f087, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fc6ee6f36e90f0478cc5568116fa7a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  m_enemyType: 0
 --- !u!65 &1491663155
 BoxCollider:
   m_ObjectHideFlags: 0
