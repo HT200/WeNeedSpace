@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum WaveState { IN_PROGRESS, COMPLETED }
+
 public class GameManager : MonoBehaviour
 {
     public GameObject player;
@@ -139,6 +141,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, m_spawnPosition);
             easyEnemy.name = "EasyEnemy" + m_numEasyEnemies;
+            easyEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.EASY;
             Debug.Log("Spawned " + easyEnemy.name);
             // Decrease the number of medium enemies left to spawn
             m_numEasyEnemies -= 1;
@@ -148,6 +151,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, m_spawnPosition);
             mediumEnemy.name = "MediumEnemy" + m_numMediumEnemies;
+            mediumEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.MEDIUM;
             Debug.Log("Spawned " + mediumEnemy.name);
             // Decrease the number of medium enemies left to spawn
             m_numMediumEnemies -= 1;
@@ -157,6 +161,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, m_spawnPosition);
             hardEnemy.name = "HardEnemy" + m_numHardEnemies;
+            hardEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.HARD;
             Debug.Log("Spawned " + hardEnemy.name);
             // Decrease the number of hard enemies left to spawn
             m_numHardEnemies -= 1;
