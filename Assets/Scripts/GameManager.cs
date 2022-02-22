@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     int score;
     int totalkills;
+
     // Wave variables
     private int m_waveNumber = 0;
     private int m_waveWeight = 0;
@@ -48,6 +50,10 @@ public class GameManager : MonoBehaviour
     int critMult = 2;
     // TODO: Add more...
 
+    // UI Element Variables
+    [SerializeField] private Text m_scoreText;
+    [SerializeField] private Text m_waveText;
+
     void Start()
     {
         score = 0;
@@ -65,6 +71,7 @@ public class GameManager : MonoBehaviour
 
         // Immediately start the first wave
         m_waveState = WaveState.IN_PROGRESS;
+        m_waveText.text = "Wave: " + m_waveNumber;
         Debug.Log("Wave " + m_waveNumber + " started!");
     }
 
@@ -201,9 +208,13 @@ public class GameManager : MonoBehaviour
             num *= critMult;
         }
 
+        // Log the Score update
+        Debug.Log("Updating Score from " + score + " to " + (score + num));
+
         // Add to the player's score
         score += num;
-        print("Score: " + score);
+        // Update the UI
+        m_scoreText.text = "Score: " + score;
     }
 
     /// <summary>
