@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     // TODO: Add more...
 
     //Combo for accurate shots
-    int combo = 0;
+    int combo = 20;
     // Critically damaged an enemy
     int critMult = 2;
     // TODO: Add more...

@@ -71,13 +71,6 @@ public class DetectCollisions : MonoBehaviour
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
             }
-        }else if(this.tag=="Enemy")
-        {
-            if(other.tag == "Bullet")
-            {
-                Destroy(other.gameObject);
-                Destroy(this.gameObject);
-            }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
     }
