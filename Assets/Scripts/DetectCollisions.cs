@@ -8,22 +8,18 @@ public class DetectCollisions : MonoBehaviour
 
     PlayerController playerScript;
 
-    bool test;
-
     void Start()
     {
-        test = false;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerScript = gameManager.player.GetComponent<PlayerController>();
     }
-        void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         // Check collision between a bullet and an enemy
         if (this.tag == "Bullet")
         {
-            if (other.tag == "Enemy"){
-                test = true;
-
+            if (other.tag == "Enemy")
+            {
                 EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
 
                 float dist = Vector3.Distance(enemyScript.GetWeakPoint(), transform.position - other.transform.position);
@@ -57,20 +53,19 @@ public class DetectCollisions : MonoBehaviour
                 //The player has been hit
                 Destroy(other.gameObject);
             }
-            if(other.tag == "Bullet")
+            if (other.tag == "Bullet")
             {
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
             }
-
-
-        } else if (this.tag == "Player")
+        }
+        else if (this.tag == "Player")
         {
-            if(other.tag == "Enemy")
+            if (other.tag == "Enemy")
             {
                 //This should cause an explosion, for now it means destroying both
                 Destroy(other.gameObject);
-                Destroy(this.gameObject);
+                // Destroy(this.gameObject);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
