@@ -31,24 +31,25 @@ public class DetectCollisions : MonoBehaviour
                 if (dist <= 0.5f)
                 {
                     // Critical Hit
-                    gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
+                    Destroy(other.gameObject);
+                    Destroy(this.gameObject);
                     gameManager.IncrementKill();
+                    gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
                     //Currently working with 1 health enemies, we'll deal with this later
                     /*
                     enemyScript.UpdateHealth(-playerScript.damage, true);
                     */
-                    Destroy(other.gameObject);
-                    Destroy(this.gameObject);
                 }
                 else
                 {
+                    Destroy(other.gameObject);
+                    Destroy(this.gameObject);
+                    gameManager.IncrementKill();
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
                     gameManager.IncrementKill();
                     /*
                     enemyScript.UpdateHealth(-playerScript.damage, false);
                     */
-                    Destroy(other.gameObject);
-                    Destroy(this.gameObject);
                 }
             }
             if (other.tag == "Player")
