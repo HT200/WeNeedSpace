@@ -105,6 +105,11 @@ public class PlayerController : MonoBehaviour
 
         pos += vel * Time.deltaTime;
         transform.position = pos;
+
+        if (lasercooldown > 0.0f)
+        {
+            lasercooldown -= Time.deltaTime;
+        }
     }
 
     /// <summary>
@@ -124,14 +129,12 @@ public class PlayerController : MonoBehaviour
             Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
             // Point the newly created laser GameObject towards the point in world space
             temp.transform.LookAt(worldPos);
+            Laser tempScript = temp.GetComponent<Laser>();
+            tempScript.speed = 20.0f;
 
             // The interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
             m_gameManager.DeIncrementCombo();
-        }
-        else if (lasercooldown > 0.0f)
-        {
-            lasercooldown -= Time.deltaTime;
         }
     }
 

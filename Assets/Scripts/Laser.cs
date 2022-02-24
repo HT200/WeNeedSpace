@@ -16,6 +16,8 @@ public class Laser : MonoBehaviour
 
     public Vector3 from;
 
+    public float speed;
+
     float total;
 
     void Start()
@@ -52,7 +54,7 @@ public class Laser : MonoBehaviour
         from = position;
         to = o.transform.forward * 3f + position;
 
-        transform.position += transform.forward * 20f * Time.deltaTime;
+        transform.position += transform.forward * speed * Time.deltaTime;
         total += Time.deltaTime;
         if (total >= 5.0f)
         {
