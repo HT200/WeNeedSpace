@@ -18,9 +18,9 @@ public class PlayerUI : MonoBehaviour
     private RectTransform m_crosshairTransform;
     private RectTransform m_thresholdTransform;
 
-    // Healthbar and Speedometer Sliders
-    public Slider m_healthbarSlider;
-    public Slider m_speedometerSlider;
+    // Shield and Health Bar Fill Images
+    public Image m_shieldBarFillImage;
+    public Image m_healthBarFillImage;
 
     // Start is called before the first frame update
     void Start()
