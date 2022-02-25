@@ -20,6 +20,7 @@ public class DetectCollisions : MonoBehaviour
         {
             if (other.tag == "Enemy")
             {
+
                 EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
 
                 float dist = Vector3.Distance(enemyScript.GetWeakPoint(), transform.position - other.transform.position);
@@ -47,12 +48,11 @@ public class DetectCollisions : MonoBehaviour
                     */
                 }
             }
-            if (other.tag == "Player")
+            else if (other.tag == "Bullet")
             {
-                //The player has been hit
                 Destroy(other.gameObject);
-            }
-            if (other.tag == "Bullet")
+                Destroy(this.gameObject);
+            }else if(other.tag == "Wall")
             {
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
@@ -66,11 +66,15 @@ public class DetectCollisions : MonoBehaviour
                 Destroy(other.gameObject);
                 // Destroy(this.gameObject);
             }
-        }else if(this.tag == "Player")
-        {
-            if(other.tag == "Wall")
+            if (other.tag == "Wall")
             {
-                this.gameObject.transform.position = new Vector3(0.0f,0.0f,0.0f);
+                this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+            }
+        }else if (this.tag == "Wall")
+        {
+            if(other.tag == "Player")
+            {
+                other.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
