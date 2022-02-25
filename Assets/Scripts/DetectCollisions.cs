@@ -42,7 +42,6 @@ public class DetectCollisions : MonoBehaviour
                     Destroy(this.gameObject);
                     gameManager.IncrementKill();
                     gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
-                    gameManager.IncrementKill();
                     /*
                     enemyScript.UpdateHealth(-playerScript.damage, false);
                     */
@@ -66,6 +65,12 @@ public class DetectCollisions : MonoBehaviour
                 //This should cause an explosion, for now it means destroying both
                 Destroy(other.gameObject);
                 // Destroy(this.gameObject);
+            }
+        }else if(this.tag == "Player")
+        {
+            if(other.tag == "Wall")
+            {
+                this.gameObject.transform.position = new Vector3(0.0f,0.0f,0.0f);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)

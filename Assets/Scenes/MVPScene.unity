@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 21846137}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -251,11 +251,11 @@ MonoBehaviour:
   m_timeBetweenSpawns: 1.5
   m_timeBetweenWaves: 1000
   m_easyEnemyWeight: 1
-  m_easyEnemyPrefab: {fileID: 3513293051325555117, guid: af6af6d59e0a31f4090b2a92fd77c966, type: 3}
+  m_easyEnemyPrefab: {fileID: 2108155773921516430, guid: 60819d44fd37f384ba33bd6c1a762087, type: 3}
   m_mediumEnemyWeight: 3
-  m_mediumEnemyPrefab: {fileID: 4723209954218055162, guid: f40a5fd2d2a07784c939efbb6c2ea5ed, type: 3}
+  m_mediumEnemyPrefab: {fileID: 8062333733843316950, guid: 0f79d00672b72e64c894705bb9d04f10, type: 3}
   m_hardEnemyWeight: 5
-  m_hardEnemyPrefab: {fileID: 2289681003360463083, guid: 856c3a13455a2e04aa5a0d663ca5351d, type: 3}
+  m_hardEnemyPrefab: {fileID: 1401411994979112461, guid: aed4d2795e495974abab2449867916d0, type: 3}
   m_spawnPosition: {fileID: 47062670}
   scoreEnemyHit: 5
   scorePerfectDestroy: 50
@@ -270,7 +270,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47062668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.75, z: 15.53}
+  m_LocalPosition: {x: 0, y: 16.14, z: 36.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -697,7 +697,7 @@ GameObject:
   - component: {fileID: 586427743}
   m_Layer: 0
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -867,7 +867,7 @@ GameObject:
   - component: {fileID: 950236690}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1174,7 +1174,7 @@ GameObject:
   - component: {fileID: 1169761822}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1386,8 +1386,8 @@ MonoBehaviour:
   m_thresholdColor: {r: 0, g: 0, b: 0, a: 0}
   m_crosshairImage: {fileID: 96312077}
   m_thresholdImage: {fileID: 1192013771}
-  m_healthbarSlider: {fileID: 349457818}
-  m_speedometerSlider: {fileID: 317597735}
+  m_shieldBarFillImage: {fileID: 0}
+  m_healthBarFillImage: {fileID: 0}
 --- !u!1 &1192013769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,7 +1510,7 @@ GameObject:
   - component: {fileID: 1280558357}
   m_Layer: 0
   m_Name: WallHolder
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1732,7 +1732,7 @@ GameObject:
   - component: {fileID: 1590824776}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2245,7 +2245,7 @@ GameObject:
   - component: {fileID: 2017163548}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
