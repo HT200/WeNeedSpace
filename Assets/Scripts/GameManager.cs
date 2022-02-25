@@ -40,16 +40,12 @@ public class GameManager : MonoBehaviour
     // Score Types
     // An enemy was hit
     public int scoreEnemyHit = 5;
-    // An enemy was destroyed with only critical hits
-    public int scorePerfectDestroy = 50;
     // A wave was cleared
     public int scoreWaveClear = 100;
     // TODO: Add more...
 
     //Combo for accurate shots
     int combo = 20;
-    // Critically damaged an enemy
-    int critMult = 2;
     // TODO: Add more...
 
     // UI Element Variables
@@ -130,6 +126,7 @@ public class GameManager : MonoBehaviour
             m_spawnPosition.childCount != 0) return;
         m_waveState = WaveState.COMPLETED;
         Debug.Log("Wave " + m_waveNumber + " completed!");
+        score += scoreWaveClear;
     }
 
     private void SpawnEnemy()
@@ -202,14 +199,10 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Update the player's score
     /// </summary>
-    public void UpdateScore(int num, bool crit)
+    public void UpdateScore(int num)
     {
         // Apply multipliers
         num += combo;
-        if (crit)
-        {
-            num *= critMult;
-        }
 
         // Log the Score update
         Debug.Log("Updating Score from " + score + " to " + (score + num));
@@ -236,22 +229,12 @@ public class GameManager : MonoBehaviour
         combo = newCombo;
     }
 
-    public void OnGUI()
-    {
-        GUI.color = Color.white;
-        GUI.skin.box.fontSize = 15;
-        GUI.skin.box.wordWrap = false;
-
-        GUI.Box(new Rect(0, 60, 300, 30), "Current score: " + score);
-        GUI.Box(new Rect(0, 90, 300, 30), "Current combo: " + combo);
-    }
-
     public void IncrementKill()
     {
         totalkills++;
         combo += 12;
     }
-    public void DeIncrementCombo()
+    public void DecrementCombo()
     {
         if (combo > 1)
         {

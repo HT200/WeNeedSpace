@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
             // The interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
-            m_gameManager.DeIncrementCombo();
+            m_gameManager.DecrementCombo();
         }
     }
 
@@ -161,15 +161,5 @@ public class PlayerController : MonoBehaviour
         // TODO: Upgrade weapons for more damage?
         damage += change;
         print("Player damage output changed to " + damage);
-    }
-
-    public void OnGUI()
-    {
-        GUI.color = Color.white;
-        GUI.skin.box.fontSize = 15;
-        GUI.skin.box.wordWrap = false;
-        
-        GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 10000);
-        GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
     }
 }
