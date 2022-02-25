@@ -68,13 +68,15 @@ public class DetectCollisions : MonoBehaviour
             }
             if (other.tag == "Wall")
             {
-                this.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
             }
         }else if (this.tag == "Wall")
         {
             if(other.tag == "Player")
             {
-                other.gameObject.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
