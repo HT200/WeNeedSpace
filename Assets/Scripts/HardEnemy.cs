@@ -46,7 +46,7 @@ public class HardEnemy : EnemyController
                 seeking = false;
 
                 Vector3 toPlayer = pos + (playerPos - pos) / 2;
-                target = -transform.forward * toPlayer.magnitude * 2 + Random.onUnitSphere * toPlayer.magnitude;
+                target = -transform.forward * maxFireDistance + Random.onUnitSphere * maxFireDistance;
 
                 transform.forward = (target - pos).normalized;
             }
@@ -59,7 +59,8 @@ public class HardEnemy : EnemyController
                 // Fire every 1 second while strafing while within firing range
                 if (Vector3.Distance(pos, target) < maxFireDistance && laserTimer <= 0.0f)
                 {
-                    Instantiate(laserfire, pos + transform.forward * 1.5f, transform.rotation);
+                    GameObject laser = Instantiate(laserfire, pos + transform.forward * 3f, transform.rotation);
+                    laser.GetComponent<Laser>().speed = 20.0f;
                     laserTimer = laserCooldown;
                 }
                 else if (laserTimer > 0.0f)
