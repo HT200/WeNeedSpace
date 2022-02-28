@@ -37,11 +37,6 @@ public class DetectCollisions : MonoBehaviour
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
             }
-            else if (other.tag == "Wall")
-            {
-                Destroy(other.gameObject);
-                Destroy(this.gameObject);
-            }
         }
         else if (this.tag == "Player")
         {

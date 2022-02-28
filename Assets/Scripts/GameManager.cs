@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveText;
     [SerializeField] private Text m_outOfBoundTop;
     [SerializeField] private Text m_outOfBoundBot;
+    [SerializeField] private Text m_timer;
 
     Color boundColor;
     bool changingColor;
@@ -61,7 +62,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         changingColor = true;
-        boundColor = new Color(255, 0, 0);
+        boundColor = new Color(128, 0, 0);
         score = 0;
         totalkills = 0;
 
@@ -127,8 +128,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void BoundWarning()
+    public void BoundWarning(float dtimer)
     {
+        m_outOfBoundTop.gameObject.SetActive(true);
+        m_outOfBoundBot.gameObject.SetActive(true);
+        m_timer.gameObject.SetActive(true);
+        m_timer.text = (Mathf.Round(dtimer*100)/100).ToString() + "s";
         if (changingColor)
         {
             boundColor.r -= 1;
@@ -137,10 +142,23 @@ public class GameManager : MonoBehaviour
         {
             boundColor.r += 1;
         }
-        changingColor = boundColor.r >= 255;
+
+        if(boundColor.r >= 255)
+        {
+            changingColor = true;
+        }else if(boundColor.r <= 0)
+        {
+            changingColor = false;
+        }
         m_outOfBoundTop.color = boundColor;
         m_outOfBoundBot.color = boundColor;
 
+    }
+
+    public void RemoveWarning()
+    {
+        m_outOfBoundBot.gameObject.SetActive(false);
+        m_outOfBoundTop.gameObject.SetActive(false);
     }
 
     public void CheckWaveCompleted()

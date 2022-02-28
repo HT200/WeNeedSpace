@@ -42,6 +42,7 @@ public class MapCollision : MonoBehaviour
             //Player returns into the map: put logic here
             //1.End countdown
             playerScript.outOfBounds = false;
+            gameManager.RemoveWarning();
             //2.Player stops warning, tells UI script to stop warning
 
         }

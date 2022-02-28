@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
+
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
 
         if (outOfBounds)
         {
-            m_gameManager.BoundWarning();
+            m_gameManager.BoundWarning(deathtimer);
             deathtimer -= dt;
         }else if(deathtimer < 10.00f)
         {
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour
         // Acceleration controls
         if (Input.GetKey(KeyCode.W))
         {
-            if (speed < 0.5f)
+            if (speed < 1.5f)
             {
                 speed += 0.1f * Time.deltaTime;
             }
