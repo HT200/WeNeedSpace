@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
 
         if (outOfBounds)
         {
+            m_gameManager.BoundWarning();
             deathtimer -= dt;
         }else if(deathtimer < 10.00f)
         {

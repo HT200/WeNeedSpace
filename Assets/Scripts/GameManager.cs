@@ -51,9 +51,17 @@ public class GameManager : MonoBehaviour
     // UI Element Variables
     [SerializeField] private Text m_scoreText;
     [SerializeField] private Text m_waveText;
+    [SerializeField] private Text m_outOfBoundTop;
+    [SerializeField] private Text m_outOfBoundBot;
+
+    Color boundColor;
+    bool changingColor;
+    public bool outOfBounds;
 
     void Start()
     {
+        changingColor = true;
+        boundColor = new Color(255, 0, 0);
         score = 0;
         totalkills = 0;
 
@@ -117,6 +125,22 @@ public class GameManager : MonoBehaviour
                 Start();
             }
         }
+    }
+
+    public void BoundWarning()
+    {
+        if (changingColor)
+        {
+            boundColor.r -= 1;
+        }
+        else
+        {
+            boundColor.r += 1;
+        }
+        changingColor = boundColor.r >= 255;
+        m_outOfBoundTop.color = boundColor;
+        m_outOfBoundBot.color = boundColor;
+
     }
 
     public void CheckWaveCompleted()
