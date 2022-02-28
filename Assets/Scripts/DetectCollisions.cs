@@ -20,7 +20,9 @@ public class DetectCollisions : MonoBehaviour
         {
             if (other.tag == "Enemy")
             {
-                EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
+                //This line isnt necessary, as the enemies all die in one hit currently so no health mechanics, no need for script
+
+                //EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
 
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
@@ -45,22 +47,9 @@ public class DetectCollisions : MonoBehaviour
         {
             if (other.tag == "Enemy")
             {
-                //This should cause an explosion, for now it means destroying both
+                //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
                 // Destroy(this.gameObject);
-            }
-            if (other.tag == "Wall")
-            {
-                Destroy(other.gameObject);
-                Destroy(this.gameObject);
-            }
-        }
-        else if (this.tag == "Wall")
-        {
-            if (other.tag == "Player")
-            {
-                Destroy(other.gameObject);
-                Destroy(this.gameObject);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)

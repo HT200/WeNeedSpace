@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     // Player Camera Reference
     [SerializeField] private Camera m_camera;
 
+    float deathtimer;
+    public bool outOfBounds;
     // The player's health and damage output (temporary values?)
     public float health = 100.0f;
     public float damage = 5.0f;
@@ -31,6 +33,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        outOfBounds = false;
+        deathtimer = 10.00f;
         if (m_gameManager == null)
         {
             m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -49,6 +53,21 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
+        //Out of bounds logic
+        if (deathtimer <= 0.0f)
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (outOfBounds)
+        {
+            deathtimer -= dt;
+        }else if(deathtimer < 10.00f)
+        {
+            deathtimer = 10.00f;
+        }
+        //end of out of bounds logic
+
 
         // Acceleration controls
         if (Input.GetKey(KeyCode.W))
