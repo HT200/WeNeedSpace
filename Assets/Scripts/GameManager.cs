@@ -124,9 +124,13 @@ public class GameManager : MonoBehaviour
         // If all enemies have been spawned and destroyed, then the wave has been completed
         if (m_numEasyEnemies != 0 || m_numMediumEnemies != 0 || m_numHardEnemies != 0 ||
             m_spawnPosition.childCount != 0) return;
+
         m_waveState = WaveState.COMPLETED;
         Debug.Log("Wave " + m_waveNumber + " completed!");
         score += scoreWaveClear;
+
+        // Regenerate the player's Shield once a Wave is completed
+        player.GetComponent<PlayerController>().RegenerateShield();
     }
 
     private void SpawnEnemy()
@@ -221,6 +225,7 @@ public class GameManager : MonoBehaviour
     {
         return combo;
     }
+
     /// <summary>
     /// Set the player's current combo multiplier
     /// </summary>
@@ -234,6 +239,7 @@ public class GameManager : MonoBehaviour
         totalkills++;
         combo += 12;
     }
+
     public void DecrementCombo()
     {
         if (combo > 1)

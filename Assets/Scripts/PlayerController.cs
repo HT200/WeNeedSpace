@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour
     // Player Camera Reference
     [SerializeField] private Camera m_camera;
 
+    // Health and Shield values (temporary values)
+    [SerializeField] private int m_maxHealth = 3;
+    private int m_currentHealth;
+    [SerializeField] private int m_maxShield = 3;
+    private int m_currentShield;
+    // Damage value (temporary)
+    public int m_damage = 1;
     float deathtimer;
     public bool outOfBounds;
     // The player's health and damage output (temporary values?)
@@ -39,6 +46,10 @@ public class PlayerController : MonoBehaviour
         {
             m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
+
+        // Initialize current Health and Shield values to their maximums
+        m_currentHealth = m_maxHealth;
+        m_currentShield = m_maxShield;
 
         lasercooldown = 0;
         speed = 0.0000f;
@@ -68,6 +79,12 @@ public class PlayerController : MonoBehaviour
         }
         //end of out of bounds logic
 
+
+        // Use only for development purposes for testing when the Player takes damage
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DamagePlayer();
+        }
 
         // Acceleration controls
         if (Input.GetKey(KeyCode.W))
@@ -157,28 +174,55 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     /// <summary>
-    /// Update the player's health
+    /// Update the player's Health and Shield when they take damage.
+    /// This damage amount should always be 1.
     /// </summary>
-    public void UpdateHealth(float num)
+    public void DamagePlayer()
     {
-        if (num < 0)
+        // Player has taken damage so reset the combo
+        m_gameManager.SetCombo(1);
+
+        // If the Shield has been depleted, apply damage to Health instead.
+        if (m_currentShield == 0)
         {
-            // Player has taken damage, reset combo
-            m_gameManager.SetCombo(1);
+            Debug.Log("Player Health damaged from " + m_currentHealth + " to " + (m_currentHealth - 1));
+            m_currentHealth -= 1;
+        }
+        else
+        {
+            Debug.Log("Player Shield damaged from " + m_currentShield + " to " + (m_currentShield - 1));
+            m_currentShield -= 1;
         }
 
-        health += num;
-        print(num + " Health");
+        // Update the UI using Health and Shield percentages of their max values.
+        float healthPercent = (float)m_currentHealth / (float)m_maxHealth;
+        float shieldPercent = (float)m_currentShield / (float)m_maxShield;
+        m_playerUI.UpdateHealthAndShield(healthPercent, shieldPercent);
+
+        // If both the Shield and Health values are depleted, it is Game Over
+        if (m_currentHealth == 0 && m_currentShield == 0)
+        {
+            // Handle Game Over here
+        }
+    }
+
+    /// <summary>
+    /// Regenerate the player's Shield. Happens automatically at the end of each wave.
+    /// </summary>
+    public void RegenerateShield()
+    {
+        m_currentShield = m_maxShield;
     }
 
     /// <summary>
     /// Update the player's damage output
     /// </summary>
-    public void UpdateDamage(float change)
+    public void UpdateDamage(int change)
     {
         // TODO: Upgrade weapons for more damage?
-        damage += change;
-        print("Player damage output changed to " + damage);
+        Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
+        m_damage += change;
     }
 }

@@ -8,18 +8,23 @@ public class PlayerUI : MonoBehaviour
     // Reference to the Player GameObject
     [SerializeField] private GameObject m_player;
 
-    // Crosshair Colors
+    // UI Colors
     public Color m_crosshairColor;
-    public Color m_thresholdColor;
-    // Crosshair Sprites
+    public Color m_healthShieldOutlineColor;
+    public Color m_healthBarFillColor;
+    public Color m_shieldBarFillColor;
+
+    // Crosshair Sprites and Transforms
     public Image m_crosshairImage;
     public Image m_thresholdImage;
-    // Crosshair Transforms
     private RectTransform m_crosshairTransform;
     private RectTransform m_thresholdTransform;
 
-    // Shield and Health Bar Fill Images
+    // Shield Bar Images
+    public Image m_shieldBarOutlineImage;
     public Image m_shieldBarFillImage;
+    // Health Bar Images
+    public Image m_healthBarOutlineImage;
     public Image m_healthBarFillImage;
 
     // Start is called before the first frame update
@@ -29,7 +34,7 @@ public class PlayerUI : MonoBehaviour
         m_crosshairTransform = m_crosshairImage.GetComponent<RectTransform>();
         m_thresholdTransform = m_thresholdImage.GetComponent<RectTransform>();
 
-        ColorCrosshair();
+        ColorUI();
     }
 
     // Update is called once per frame
@@ -61,24 +66,32 @@ public class PlayerUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the colors of the Crosshair and Threshold sprites. If the Threshold color
-    /// is either black (0,0,0,1) or clear (0,0,0,0), set both Sprites to the 
-    /// Crosshair color.
+    /// Update the Health and Shield Bars.
     /// </summary>
-    void ColorCrosshair()
+    /// <param name="healthPercent">The player's current health as a percentage of the max</param>
+    /// <param name="shieldPercent">The player's current shield as a percentage of the max</param>
+    public void UpdateHealthAndShield(float healthPercent, float shieldPercent)
     {
-        // If the Threshold color is not set, set both Sprites to the same color
-        if (m_thresholdColor == Color.clear || m_thresholdColor == Color.black)
-        {
-            m_crosshairImage.color = m_crosshairColor;
-            m_thresholdImage.color = m_crosshairColor;
-        }
-        // Otherwise set them both to their inspector colors
-        else
-        {
-            m_crosshairImage.color = m_crosshairColor;
-            m_thresholdImage.color = m_thresholdColor;
-        }
+        m_healthBarFillImage.fillAmount = healthPercent;
+        m_shieldBarFillImage.fillAmount = shieldPercent;
+    }    
+
+    /// <summary>
+    /// Set the colors of the different UI sprite elements. If the seconday color
+    /// is either black (0,0,0,1) or clear (0,0,0,0), set all Sprites to the 
+    /// primary color.
+    /// </summary>
+    private void ColorUI()
+    {
+        // The Crosshair and Threshold images get the Crosshair Color
+        m_crosshairImage.color = m_crosshairColor;
+        m_thresholdImage.color = m_crosshairColor;
+        // The Shield and Health Bar Outline images get the Outline Color
+        m_shieldBarOutlineImage.color = m_healthShieldOutlineColor;
+        m_healthBarOutlineImage.color = m_healthShieldOutlineColor;
+        // The Shield and Health Bar Fill images get their respective colors
+        m_shieldBarFillImage.color = m_shieldBarFillColor;
+        m_healthBarFillImage.color = m_healthBarFillColor;
     }
 
     /// <summary>
@@ -95,7 +108,7 @@ public class PlayerUI : MonoBehaviour
     /// dist > 0: outside the threshold
     /// dist <= 0: inside the threshold
     /// </returns>
-    float DistancePastThreshold(Vector3 ellipsisCenter)
+    private float DistancePastThreshold(Vector3 ellipsisCenter)
     {
         // Compute (rx^2 and ry^2): half the dimensions of the Threshold Image, then squared
         float xRadius = Mathf.Pow(m_thresholdTransform.rect.width * m_thresholdTransform.localScale.x / 2, 2);
