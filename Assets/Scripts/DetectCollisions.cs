@@ -22,38 +22,20 @@ public class DetectCollisions : MonoBehaviour
             {
                 EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
 
-                float dist = Vector3.Distance(enemyScript.GetWeakPoint(), transform.position - other.transform.position);
-
-                if (dist <= 0.5f)
-                {
-                    // Critical Hit
-                    Destroy(other.gameObject);
-                    Destroy(this.gameObject);
-                    gameManager.IncrementKill();
-                    gameManager.UpdateScore(gameManager.scoreEnemyHit, true);
-                    //Currently working with 1 health enemies, we'll deal with this later
-                    /*
-                    enemyScript.UpdateHealth(-playerScript.damage, true);
-                    */
-                }
-                else
-                {
-                    Destroy(other.gameObject);
-                    Destroy(this.gameObject);
-                    gameManager.IncrementKill();
-                    gameManager.UpdateScore(gameManager.scoreEnemyHit, false);
-                    gameManager.IncrementKill();
-                    /*
-                    enemyScript.UpdateHealth(-playerScript.damage, false);
-                    */
-                }
-            }
-            if (other.tag == "Player")
-            {
-                //The player has been hit
                 Destroy(other.gameObject);
+                Destroy(this.gameObject);
+                gameManager.IncrementKill();
+                gameManager.UpdateScore(gameManager.scoreEnemyHit);
+                /*
+                enemyScript.UpdateHealth(-playerScript.damage);
+                */
             }
-            if (other.tag == "Bullet")
+            else if (other.tag == "Bullet")
+            {
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
+            }
+            else if (other.tag == "Wall")
             {
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
@@ -67,18 +49,24 @@ public class DetectCollisions : MonoBehaviour
                 Destroy(other.gameObject);
                 // Destroy(this.gameObject);
             }
+            if (other.tag == "Wall")
+            {
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
+            }
+        }
+        else if (this.tag == "Wall")
+        {
+            if (other.tag == "Player")
+            {
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
+            }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
     }
 
     private void Update()
     {
-    }
-
-    private void OnGUI()
-    {
-        GUI.color = Color.white;
-        GUI.skin.box.fontSize = 15;
-        GUI.skin.box.wordWrap = false;
     }
 }

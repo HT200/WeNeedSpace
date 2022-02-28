@@ -203,14 +203,4 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
     }
-
-    public void OnGUI()
-    {
-        GUI.color = Color.white;
-        GUI.skin.box.fontSize = 15;
-        GUI.skin.box.wordWrap = false;
-        
-        GUI.Box(new Rect(0, 0, 300, 30), "Current velocity: " + Mathf.Round(vel.magnitude * 10000) / 10000);
-        GUI.Box(new Rect(0, 30, 300, 30), "Acceleration: " + speed);
-    }
 }
