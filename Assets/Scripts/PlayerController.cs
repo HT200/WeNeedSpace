@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Use only for development purposes for testing when the Player takes damage
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             DamagePlayer();
         }
