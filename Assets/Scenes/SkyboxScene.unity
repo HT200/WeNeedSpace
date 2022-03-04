@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0df522e3318ec964d943e8f539bb31f9, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.09634524, g: 0.06757821, b: 0.039691005, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -354,10 +354,13 @@ MonoBehaviour:
   m_hardEnemyPrefab: {fileID: 2289681003360463083, guid: 856c3a13455a2e04aa5a0d663ca5351d, type: 3}
   m_spawnPosition: {fileID: 0}
   scoreEnemyHit: 5
-  scorePerfectDestroy: 50
   scoreWaveClear: 100
   m_scoreText: {fileID: 0}
   m_waveText: {fileID: 0}
+  m_outOfBoundTop: {fileID: 0}
+  m_outOfBoundBot: {fileID: 0}
+  m_timer: {fileID: 0}
+  outOfBounds: 0
 --- !u!4 &448044354
 Transform:
   m_ObjectHideFlags: 0
@@ -622,6 +625,9 @@ MonoBehaviour:
   m_maxHealth: 3
   m_maxShield: 3
   m_damage: 1
+  outOfBounds: 0
+  health: 100
+  damage: 5
   laserfire: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
 --- !u!4 &573356627
 Transform:
@@ -1189,8 +1195,8 @@ MonoBehaviour:
   m_player: {fileID: 573356623}
   m_crosshairColor: {r: 0, g: 1, b: 0, a: 1}
   m_healthShieldOutlineColor: {r: 0, g: 1, b: 0, a: 1}
-  m_healthBarFillColor: {r: 1, g: 0.19245279, b: 0.19245279, a: 0.39215687}
-  m_shieldBarFillColor: {r: 0, g: 0.4933064, b: 1, a: 0.39215687}
+  m_healthBarFillColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+  m_shieldBarFillColor: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_crosshairImage: {fileID: 1936040265}
   m_thresholdImage: {fileID: 398167265}
   m_shieldBarOutlineImage: {fileID: 2142881523}
