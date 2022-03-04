@@ -33,6 +33,7 @@ public class MapCollision : MonoBehaviour
             //2.player tells UI they're gonna die
             //3.Player/UI starts countdown til death
             //4.Within player script, if the countdown reaches 0 destroy the player
+            //5.Also within player script, start the tractor beam using their current position
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -44,6 +45,7 @@ public class MapCollision : MonoBehaviour
             playerScript.outOfBounds = false;
             gameManager.RemoveWarning();
             //2.Player stops warning, tells UI script to stop warning
+
 
         }
     }

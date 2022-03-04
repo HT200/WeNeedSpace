@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     public float damage = 5.0f;
 
     // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
-    private Vector3 pos;
-    private Vector3 vel;
+    public Vector3 pos;
+    public Vector3 vel;
     private Vector3 acc;
 
     // Laser variables
@@ -75,6 +75,10 @@ public class PlayerController : MonoBehaviour
         {
             m_gameManager.BoundWarning(deathtimer);
             deathtimer -= dt;
+            pos += -pos.normalized * 3f * dt;
+
+
+
         }else if(deathtimer < 10.00f)
         {
             deathtimer = 10.00f;
