@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 vel;
     private Vector3 acc;
 
+    public Vector3 Pos => pos;
+
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
@@ -226,5 +228,15 @@ public class PlayerController : MonoBehaviour
         // TODO: Upgrade weapons for more damage?
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
+    }
+    
+    /// <summary>
+    /// Get the predicted positions where this vehicle should be in x seconds
+    /// </summary>
+    /// <param name="seconds">how many seconds ahead to look</param>
+    /// <returns>predicted future positions</returns>
+    public Vector3 GetFuturePosition(float seconds)
+    {
+        return pos + vel * seconds;
     }
 }

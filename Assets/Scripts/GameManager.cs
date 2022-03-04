@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
+    
+    public List<Enemy> enemyList;
 
     // Score Types
     // An enemy was hit
