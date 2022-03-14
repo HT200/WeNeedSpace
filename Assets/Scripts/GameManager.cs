@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float m_timeBetweenSpawns = 1.5f;
     private float m_waveTimer;
     [SerializeField] private float m_timeBetweenWaves = 10f;
+    [SerializeField] private float m_playTime = 0.0f;
 
     // Enemy variables
     private int m_numEasyEnemies;
@@ -68,22 +69,28 @@ public class GameManager : MonoBehaviour
         score = 0;
         totalkills = 0;
 
+        NewWave();
+    }
+
+    void NewWave()
+    {
         // Increase the wave variables
         m_waveNumber += 1;
         m_waveWeight = 10 * m_waveNumber;
-        
+
         DetermineWaveEnemies();
 
         // Initialize the timers
         m_spawnTimer = m_timeBetweenSpawns;
         m_waveTimer = m_timeBetweenWaves;
+        m_playTime = 0.0f;
 
         // Immediately start the first wave
         m_waveState = WaveState.IN_PROGRESS;
         m_waveText.text = "Wave: " + m_waveNumber;
         Debug.Log("Wave " + m_waveNumber + " started!");
+        UpdateScore(0);
     }
-
     void Update()
     {
         // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
@@ -97,13 +104,14 @@ public class GameManager : MonoBehaviour
             // Otherwise we immediately restart the next wave
             else if (m_waveState == WaveState.COMPLETED)
             {
-                Start();
+                NewWave();
             }
         }
 
         // Continue with the wave
         if(m_waveState == WaveState.IN_PROGRESS)
         {
+            m_playTime += Time.deltaTime;
             // Decrease the timer buy each frame duration
             m_spawnTimer -= Time.deltaTime;
 
@@ -127,8 +135,9 @@ public class GameManager : MonoBehaviour
             // Once the wave timer hits zero, start the next wave
             if(m_waveTimer <= 0)
             {
+                TimeBonus();
                 SetWaveTimerWarning(false);
-                Start();
+                NewWave();
             }
         }
     }
@@ -270,6 +279,18 @@ public class GameManager : MonoBehaviour
         m_scoreText.text = "Score: " + score;
     }
 
+    public void TimeBonus()
+    {
+        if(m_playTime < 60.0f)
+        {
+            score += 300;
+        }
+        else if(m_playTime > 180.0f)
+        {
+            score += (int)(300 - 2.5 * m_playTime);
+        }
+    }
+
     /// <summary>
     /// Get the player's current combo multiplier
     /// </summary>
@@ -299,5 +320,10 @@ public class GameManager : MonoBehaviour
         {
             combo-=2;
         }
+    }
+
+    public void SafeShutdown()
+    {
+
     }
 }
