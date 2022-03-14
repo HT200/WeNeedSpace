@@ -54,6 +54,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_outOfBoundTop;
     [SerializeField] private Text m_outOfBoundBot;
     [SerializeField] private Text m_timer;
+    [SerializeField] private Text m_waveTimeText;
+    [SerializeField] private Text m_waveWarnText;
 
     Color boundColor;
     bool changingColor;
@@ -117,12 +119,15 @@ public class GameManager : MonoBehaviour
         // If a wave has been completed, we are inbetween waves
         else if(m_waveState == WaveState.COMPLETED)
         {
+            SetWaveTimerWarning(true);
             // Decrease the timer by each frame duration
             m_waveTimer -= Time.deltaTime;
+            m_waveTimeText.text = (Mathf.Round(m_waveTimer*100)/100).ToString();
 
             // Once the wave timer hits zero, start the next wave
             if(m_waveTimer <= 0)
             {
+                SetWaveTimerWarning(false);
                 Start();
             }
         }
@@ -159,6 +164,12 @@ public class GameManager : MonoBehaviour
     {
         m_outOfBoundBot.gameObject.SetActive(false);
         m_outOfBoundTop.gameObject.SetActive(false);
+    }
+
+    public void SetWaveTimerWarning(bool b)
+    {
+        m_waveTimeText.gameObject.SetActive(b);
+        m_waveWarnText.gameObject.SetActive(b);
     }
 
     public void CheckWaveCompleted()
