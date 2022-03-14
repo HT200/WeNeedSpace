@@ -33,13 +33,14 @@ public class PlayerController : MonoBehaviour
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
-    
+    public bool freeze;
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
     // Start is called before the first frame update
     void Start()
     {
+        freeze = false;
         outOfBounds = false;
         deathtimer = 10.00f;
         if (m_gameManager == null)
@@ -73,8 +74,10 @@ public class PlayerController : MonoBehaviour
 
         if (outOfBounds)
         {
+            //Tell the game manager you're out of bounds so it can warn you
             m_gameManager.BoundWarning(deathtimer);
             deathtimer -= dt;
+            //tractor beam
             pos += -pos.normalized * 3f * dt;
 
 
@@ -124,29 +127,32 @@ public class PlayerController : MonoBehaviour
         //Vector changes applied
 
         acc = transform.forward * speed;
-        if (vel.magnitude >= 5.0f)
+        if (!freeze)
         {
-            //This means that velocity is already at max
-
-            //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
-            //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
-
-            if((vel+acc).magnitude > 5.0f)
+            if (vel.magnitude >= 5.0f)
             {
-                vel = (vel + acc * dt).normalized * 5.0f;
+                //This means that velocity is already at max
+
+                //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
+                //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
+
+                if ((vel + acc).magnitude > 5.0f)
+                {
+                    vel = (vel + acc * dt).normalized * 5.0f;
+                }
+                else
+                {
+                    vel += acc * dt;
+                }
             }
             else
             {
-                vel += acc* dt;
+                vel += acc * Time.deltaTime;
             }
-        }
-        else
-        {
-            vel += acc * Time.deltaTime;
-        }
 
-        pos += vel * Time.deltaTime;
-        transform.position = pos;
+            pos += vel * Time.deltaTime;
+            transform.position = pos;
+        }
 
         if (lasercooldown > 0.0f)
         {

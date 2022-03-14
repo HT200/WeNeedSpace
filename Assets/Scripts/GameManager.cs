@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_timer;
     [SerializeField] private Text m_waveTimeText;
     [SerializeField] private Text m_waveWarnText;
+    [SerializeField] private Text m_gameOverText;
 
     Color boundColor;
     bool changingColor;
@@ -324,6 +325,12 @@ public class GameManager : MonoBehaviour
 
     public void SafeShutdown()
     {
-
+        //Destroy the enemies
+        TestDestroyCurrentWave();
+        //Freeze the Player
+        player.GetComponent<PlayerController>().freeze = true;
+        //Display that you've lost
+        m_gameOverText.gameObject.SetActive(true);
+        //Store score (WIP)
     }
 }
