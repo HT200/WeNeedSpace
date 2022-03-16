@@ -69,7 +69,8 @@ public class PlayerController : MonoBehaviour
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
-            Destroy(this.gameObject);
+            m_gameManager.SafeShutdown();
+            m_gameManager.RemoveWarning();
         }
 
         if (outOfBounds)
@@ -127,8 +128,6 @@ public class PlayerController : MonoBehaviour
         //Vector changes applied
 
         acc = transform.forward * speed;
-        if (!freeze)
-        {
             if (vel.magnitude >= 5.0f)
             {
                 //This means that velocity is already at max
@@ -136,7 +135,7 @@ public class PlayerController : MonoBehaviour
                 //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
                 //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-                if ((vel + acc).magnitude > 5.0f)
+                if ((vel + acc * dt).magnitude > 5.0f)
                 {
                     vel = (vel + acc * dt).normalized * 5.0f;
                 }
@@ -147,16 +146,15 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                vel += acc * Time.deltaTime;
+            vel += acc * dt;
             }
 
-            pos += vel * Time.deltaTime;
+            pos += vel * dt;
             transform.position = pos;
-        }
 
         if (lasercooldown > 0.0f)
         {
-            lasercooldown -= Time.deltaTime;
+            lasercooldown -= dt;
         }
     }
 
@@ -236,5 +234,10 @@ public class PlayerController : MonoBehaviour
         // TODO: Upgrade weapons for more damage?
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
+    }
+    //This is a read only get function so the gamemangager 
+    public PlayerUI GetPlayerUI()
+    {
+        return this.m_playerUI;
     }
 }

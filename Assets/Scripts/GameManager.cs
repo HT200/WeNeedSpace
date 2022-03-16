@@ -149,6 +149,7 @@ public class GameManager : MonoBehaviour
         m_outOfBoundBot.gameObject.SetActive(true);
         m_timer.gameObject.SetActive(true);
         m_timer.text = (Mathf.Round(dtimer*100)/100).ToString() + "s";
+        
         if (changingColor)
         {
             boundColor.r -= 1;
@@ -167,6 +168,7 @@ public class GameManager : MonoBehaviour
         }
         m_outOfBoundTop.color = boundColor;
         m_outOfBoundBot.color = boundColor;
+        
 
     }
 
@@ -174,6 +176,7 @@ public class GameManager : MonoBehaviour
     {
         m_outOfBoundBot.gameObject.SetActive(false);
         m_outOfBoundTop.gameObject.SetActive(false);
+        m_timer.gameObject.SetActive(false);
     }
 
     public void SetWaveTimerWarning(bool b)
@@ -282,14 +285,17 @@ public class GameManager : MonoBehaviour
 
     public void TimeBonus()
     {
+        //If the player defeated the wave in under a minute, flat 300 bonus
         if(m_playTime < 60.0f)
         {
             score += 300;
         }
-        else if(m_playTime > 180.0f)
+        //If between 1-3 minutes, use variable, its should be 300 at 60, 0 at 180
+        else if(m_playTime < 180.0f)
         {
-            score += (int)(300 - 2.5 * m_playTime);
+            score += (int)(300 - 2.5 * (m_playTime - 60.0f));
         }
+        //Otherwise give 0 points
     }
 
     /// <summary>
@@ -325,12 +331,17 @@ public class GameManager : MonoBehaviour
 
     public void SafeShutdown()
     {
-        //Destroy the enemies
-        TestDestroyCurrentWave();
-        //Freeze the Player
-        player.GetComponent<PlayerController>().freeze = true;
+        //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
+        Time.timeScale = 0f;
         //Display that you've lost
         m_gameOverText.gameObject.SetActive(true);
+        //Note: If you were to die by going out of bounds, this could be done easier through the player script
+        //but since the player can die multiple ways we need one method
+        player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
+
+
         //Store score (WIP)
+
+        //Return to main menu (TBA)
     }
 }
