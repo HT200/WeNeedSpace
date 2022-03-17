@@ -30,17 +30,19 @@ public class PlayerController : MonoBehaviour
     public Vector3 vel;
     private Vector3 acc;
 
+    //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
+    bool gameover;
+
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
-    public bool freeze;
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
     // Start is called before the first frame update
     void Start()
     {
-        freeze = false;
+        gameover = false;
         outOfBounds = false;
         deathtimer = 10.00f;
         if (m_gameManager == null)
@@ -69,6 +71,7 @@ public class PlayerController : MonoBehaviour
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
+            gameover = true;
             m_gameManager.SafeShutdown();
             m_gameManager.RemoveWarning();
         }
@@ -90,44 +93,53 @@ public class PlayerController : MonoBehaviour
         //end of out of bounds logic
 
 
-        // Use only for development purposes for testing when the Player takes damage
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            DamagePlayer();
-        }
 
-        // Acceleration controls
-        if (Input.GetKey(KeyCode.W))
+        //None of this should be run if the game is over
+        if (!gameover)
         {
-            if (speed < 1.5f)
+
+            // Use only for development purposes for testing when the Player takes damage
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                speed += 0.1f * Time.deltaTime;
+                DamagePlayer();
             }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            if (speed > 0.0f)
+
+            // Acceleration controls
+            if (Input.GetKey(KeyCode.W))
             {
-                speed -= 0.1f * Time.deltaTime;
+                if (speed < 1.5f)
+                {
+                    speed += 0.1f * Time.deltaTime;
+                }
             }
-        }
+            if (Input.GetKey(KeyCode.S))
+            {
+                if (speed > 0.0f)
+                {
+                    speed -= 0.1f * Time.deltaTime;
+                }
+            }
 
-        // Rotation Controls via keyboard (Roll)
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(0, 0, 0.5f, Space.Self);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(0, 0, -0.5f, Space.Self);
-        }
+            // Rotation Controls via keyboard (Roll)
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(0, 0, 0.5f, Space.Self);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(0, 0, -0.5f, Space.Self);
+            }
 
-        //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
-        //Since acc is dependent on the transform.forward
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                pos += new Vector3(0.0f, 0.0f, 5.0f) * dt;
+            }
+            //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
+            //Since acc is dependent on the transform.forward
 
-        //Vector changes applied
+            //Vector changes applied
 
-        acc = transform.forward * speed;
+            acc = transform.forward * speed;
             if (vel.magnitude >= 5.0f)
             {
                 //This means that velocity is already at max
@@ -146,15 +158,16 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-            vel += acc * dt;
+                vel += acc * dt;
             }
 
             pos += vel * dt;
             transform.position = pos;
 
-        if (lasercooldown > 0.0f)
-        {
-            lasercooldown -= dt;
+            if (lasercooldown > 0.0f)
+            {
+                lasercooldown -= dt;
+            }
         }
     }
 

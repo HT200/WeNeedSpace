@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
-public enum WaveState { IN_PROGRESS, COMPLETED }
+public enum WaveState { IN_PROGRESS, COMPLETED, OVER }
 
 public class GameManager : MonoBehaviour
 {
@@ -58,6 +59,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveTimeText;
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
+    [SerializeField] private Text m_nameText;
+
+    //for storing score/name pairs in I/O
+    List<string> scores;
 
     Color boundColor;
     bool changingColor;
@@ -65,6 +70,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        scores = new List<string>();
+        m_nameText.text = "";
         changingColor = true;
         boundColor = new Color(128, 0, 0);
         score = 0;
@@ -94,8 +101,13 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+
+        if (Input.GetKey(KeyCode.RightControl))
+        {
+            SafeShutdown();
+        }
         // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             // If the wave is in progress, destroy the current wave
             if (m_waveState == WaveState.IN_PROGRESS)
@@ -106,6 +118,10 @@ public class GameManager : MonoBehaviour
             else if (m_waveState == WaveState.COMPLETED)
             {
                 NewWave();
+            }else if(m_waveState == WaveState.OVER)
+            {
+                ReadFromFile();
+                WriteToFile();
             }
         }
 
@@ -126,6 +142,8 @@ public class GameManager : MonoBehaviour
             CheckWaveCompleted();
         }        
         // If a wave has been completed, we are inbetween waves
+        //Note: we should change all these else ifs to a single switch statement
+        //since an enum cant be two states at once making them explicitly mutually exclusive is unnecessary
         else if(m_waveState == WaveState.COMPLETED)
         {
             SetWaveTimerWarning(true);
@@ -140,34 +158,53 @@ public class GameManager : MonoBehaviour
                 SetWaveTimerWarning(false);
                 NewWave();
             }
+        }else if(m_waveState == WaveState.OVER)
+        {
+            if (!m_nameText.gameObject.activeInHierarchy)
+            {
+                m_nameText.gameObject.SetActive(true);
+            }
+            //If the game is over, start accepting the players name
+            //once entered, place it-with its associated score- into a file
+            if (Input.anyKey)
+            {
+                if (m_nameText.text.Length < 11)
+                {
+                    m_nameText.text += Input.inputString;
+                }
+            }
         }
     }
 
     public void BoundWarning(float dtimer)
     {
-        m_outOfBoundTop.gameObject.SetActive(true);
-        m_outOfBoundBot.gameObject.SetActive(true);
-        m_timer.gameObject.SetActive(true);
-        m_timer.text = (Mathf.Round(dtimer*100)/100).ToString() + "s";
-        
-        if (changingColor)
+        if (m_waveState != WaveState.OVER)
         {
-            boundColor.r -= 1;
-        }
-        else
-        {
-            boundColor.r += 1;
-        }
+            m_outOfBoundTop.gameObject.SetActive(true);
+            m_outOfBoundBot.gameObject.SetActive(true);
+            m_timer.gameObject.SetActive(true);
+            m_timer.text = (Mathf.Round(dtimer * 100) / 100).ToString() + "s";
 
-        if(boundColor.r >= 255)
-        {
-            changingColor = true;
-        }else if(boundColor.r <= 0)
-        {
-            changingColor = false;
+            if (changingColor)
+            {
+                boundColor.r -= 1;
+            }
+            else
+            {
+                boundColor.r += 1;
+            }
+
+            if (boundColor.r >= 255)
+            {
+                changingColor = true;
+            }
+            else if (boundColor.r <= 0)
+            {
+                changingColor = false;
+            }
+            m_outOfBoundTop.color = boundColor;
+            m_outOfBoundBot.color = boundColor;
         }
-        m_outOfBoundTop.color = boundColor;
-        m_outOfBoundBot.color = boundColor;
         
 
     }
@@ -282,7 +319,9 @@ public class GameManager : MonoBehaviour
         // Update the UI
         m_scoreText.text = "Score: " + score;
     }
-
+    /// <summary>
+    /// Applies a bonus based on how much time it took for the player to destroy the wave
+    /// </summary>
     public void TimeBonus()
     {
         //If the player defeated the wave in under a minute, flat 300 bonus
@@ -328,20 +367,70 @@ public class GameManager : MonoBehaviour
             combo-=2;
         }
     }
-
+    /// <summary>
+    /// Safely shutsdown the game
+    /// </summary>
     public void SafeShutdown()
     {
+        //While this hardly a wavestate its much easier to attach this to an enum so it essentially turns off the other two's update methods in the process
+        m_waveState = WaveState.OVER;
+
+
         //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
         Time.timeScale = 0f;
         //Display that you've lost
+
         m_gameOverText.gameObject.SetActive(true);
         //Note: If you were to die by going out of bounds, this could be done easier through the player script
         //but since the player can die multiple ways we need one method
         player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
+        player.GetComponent<PlayerController>().GetPlayerUI().gameObject.SetActive(false);
+
+        //Store score With associated name (max 10 characters)(WIP)
 
 
-        //Store score (WIP)
 
         //Return to main menu (TBA)
+    }
+
+    private void WriteToFile()
+    {
+        Debug.Log("Entering write to file method");
+        if (m_nameText.text == "")
+        {
+            //If the player, for whatever reasons, writes to file with no name, use this placeholder instead
+            m_nameText.text = "LONESLDRR";
+        }
+
+
+        StreamWriter scoreWrite = new StreamWriter("scores.txt");
+        for(int i = 0; i < scores.Count; i+=2)
+        {
+            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1]);
+        }
+
+
+        scoreWrite.WriteLine(m_nameText.text.Trim().ToUpper() + ":" + score.ToString());
+        //ALWAYS REMEMBER TO CLOSE
+        scoreWrite.Close();
+
+    }
+    private void ReadFromFile()
+    {
+        Debug.Log("Entering read from file method");
+        StreamReader scoreRead = new StreamReader("scores.txt");
+        string line = "blah";
+        string[] tempSplit;
+        while((line = scoreRead.ReadLine()) != null)
+        {
+            Debug.Log("entering line: " + line);
+            //A line is comprised of "name:score"
+            tempSplit = line.Split(':');
+            //With this, all even numbered spots of the scores list contain names, and their associate score is 1 ahead of that
+            scores.Add(tempSplit[0]);
+            scores.Add(tempSplit[1]);
+        }
+        //ALWAYS REMEMBER TO CLOSE
+        scoreRead.Close();
     }
 }
