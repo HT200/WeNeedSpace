@@ -39,6 +39,12 @@ public class GameManager : MonoBehaviour
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
 
+    //For altering the name
+    int nameIndex;
+    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=:;\"~`<>?";
+
+
+
     // Score Types
     // An enemy was hit
     public int scoreEnemyHit = 5;
@@ -70,8 +76,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        nameIndex = 0;
         scores = new List<string>();
-        m_nameText.text = "";
+        m_nameText.text = "________";
         changingColor = true;
         boundColor = new Color(128, 0, 0);
         score = 0;
@@ -164,14 +171,65 @@ public class GameManager : MonoBehaviour
             {
                 m_nameText.gameObject.SetActive(true);
             }
+
+            //This method needs
+            //1. a variable to store the current index in the name
+            //2. a list of characters available for input
+            //3. a text object in the canvas to represent where your current selected space is
+            //Name writing psuedocode:
+            /*
+             * if(player input)
+             * if(Left or right arrow key){change selected space in name string}
+             * if(Up/down){change currently selected space's symbol to the one 1 ahead/below in the pre-ordained alphabet}
+             * if(delete input){reset the current space to an underscore}
+             * 
+             * 
+             * */
+            //additionally this requires us to trim the trailing underscores from the final product
+            //(if the player wants underscores in their final name thats fine, treat them like significant figures)
+            //Like "NDS_best__" would be trimmed to "NDS_best"
+
             //If the game is over, start accepting the players name
             //once entered, place it-with its associated score- into a file
             if (Input.anyKey)
             {
-                if (m_nameText.text.Length < 11)
-                {
-                    m_nameText.text += Input.inputString;
+                //Note: Nameindex can range from 0-9
+
+                //We need to use a temp string because indexing a string is read only, so we can alter each character individually
+                string alteredString = "";
+
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        nameIndex = (nameIndex + 1) % 10;
+                    }else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        nameIndex = (nameIndex - 1) % 10;
+                    }
+                    //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
+                    //This adds everything UP TO the space your altering to the temp string
+                    //if your altering the first space, theres no previous text to copy
+                    if (nameIndex != 0)
+                    {
+                        alteredString += m_nameText.ToString().Substring(0, nameIndex);
+                    }
+                    if (Input.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        alteredString += alphabet[alphabet.IndexOf(m_nameText.ToString()[nameIndex]) + 1];
+
+                    }else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        alteredString += alphabet[alphabet.IndexOf(m_nameText.ToString()[nameIndex]) - 1];
                 }
+                else
+                {
+                    alteredString += m_nameText.ToString()[nameIndex];
+                }
+                    if (nameIndex != 9) {
+                        alteredString += m_nameText.ToString().Substring(nameIndex + 1,9-nameIndex);
+                    }
+
+
+                m_nameText.text = alteredString;
             }
         }
     }
