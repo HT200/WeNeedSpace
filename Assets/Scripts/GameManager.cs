@@ -472,7 +472,7 @@ public class GameManager : MonoBehaviour
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
         for(int i = 0; i < scores.Count; i+=2)
         {
-            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1]);
+            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1].Trim('_'));
         }
 
 
