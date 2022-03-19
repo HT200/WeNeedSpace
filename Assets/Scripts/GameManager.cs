@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     {
         nameIndex = 0;
         scores = new List<string>();
-        m_nameText.text = "________";
+        m_nameText.text = "__________";
         changingColor = true;
         boundColor = new Color(128, 0, 0);
         score = 0;
@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour
                 NewWave();
             }else if(m_waveState == WaveState.OVER)
             {
+                //This block needs a scene or state transition to avoid a player writing to file multiple times
                 ReadFromFile();
                 WriteToFile();
             }
@@ -136,7 +137,7 @@ public class GameManager : MonoBehaviour
         if(m_waveState == WaveState.IN_PROGRESS)
         {
             m_playTime += Time.deltaTime;
-            // Decrease the timer buy each frame duration
+            // Decrease the timer by each frame duration
             m_spawnTimer -= Time.deltaTime;
 
             // Once the spawn timer equals zero, spawn the next enemy and reset the spawn timer
@@ -172,63 +173,70 @@ public class GameManager : MonoBehaviour
                 m_nameText.gameObject.SetActive(true);
             }
 
-            //This method needs
-            //1. a variable to store the current index in the name
-            //2. a list of characters available for input
-            //3. a text object in the canvas to represent where your current selected space is
-            //Name writing psuedocode:
-            /*
-             * if(player input)
-             * if(Left or right arrow key){change selected space in name string}
-             * if(Up/down){change currently selected space's symbol to the one 1 ahead/below in the pre-ordained alphabet}
-             * if(delete input){reset the current space to an underscore}
-             * 
-             * 
-             * */
-            //additionally this requires us to trim the trailing underscores from the final product
-            //(if the player wants underscores in their final name thats fine, treat them like significant figures)
-            //Like "NDS_best__" would be trimmed to "NDS_best"
-
-            //If the game is over, start accepting the players name
-            //once entered, place it-with its associated score- into a file
             if (Input.anyKey)
             {
                 //Note: Nameindex can range from 0-9
 
-                //We need to use a temp string because indexing a string is read only, so we can alter each character individually
+                //We need to use a temp string because indexing a string is read only, so we can't alter each character individually
                 string alteredString = "";
 
-                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    nameIndex = (nameIndex + 1) % 10;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
+                    //I'll need to do the same for the downarrow logic
+                    if(nameIndex == 0)
                     {
-                        nameIndex = (nameIndex + 1) % 10;
-                    }else if (Input.GetKeyDown(KeyCode.LeftArrow))
-                    {
-                        nameIndex = (nameIndex - 1) % 10;
+                        nameIndex = 9;
                     }
-                    //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
-                    //This adds everything UP TO the space your altering to the temp string
-                    //if your altering the first space, theres no previous text to copy
-                    if (nameIndex != 0)
+                    else
                     {
-                        alteredString += m_nameText.ToString().Substring(0, nameIndex);
+                        nameIndex--;
                     }
-                    if (Input.GetKeyDown(KeyCode.UpArrow))
-                    {
-                        alteredString += alphabet[alphabet.IndexOf(m_nameText.ToString()[nameIndex]) + 1];
+                }
+                Debug.Log("name index is: " + nameIndex);
+                //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
+                //This adds everything UP TO the space your altering to the temp string
+                //if your altering the first space, theres no previous text to copy
 
-                    }else if (Input.GetKeyDown(KeyCode.DownArrow))
+                //adding the start
+                if (nameIndex != 0)
+                {
+                    alteredString += m_nameText.text.ToString().Substring(0, nameIndex);
+                }
+
+                //Adding the current character
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) + 1) % alphabet.Length];
+
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    if (m_nameText.text.ToString()[nameIndex] == alphabet[0])
                     {
-                        alteredString += alphabet[alphabet.IndexOf(m_nameText.ToString()[nameIndex]) - 1];
+                        alteredString += alphabet[alphabet.Length - 1];
+                    }
+                    else
+                    {
+                        alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) - 1)];
+                    }
                 }
                 else
                 {
-                    alteredString += m_nameText.ToString()[nameIndex];
+                    alteredString += m_nameText.text.ToString()[nameIndex];
                 }
-                    if (nameIndex != 9) {
-                        alteredString += m_nameText.ToString().Substring(nameIndex + 1,9-nameIndex);
-                    }
 
 
+                //Adding the end
+                if (nameIndex != 9)
+                {
+                    alteredString += m_nameText.text.ToString().Substring(nameIndex + 1, 9 - nameIndex);
+                }
+                //Rewrite
                 m_nameText.text = alteredString;
             }
         }
