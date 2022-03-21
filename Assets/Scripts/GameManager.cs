@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     //For altering the name
     int nameIndex;
-    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=:;\"~`<>?";
+    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
 
 
 

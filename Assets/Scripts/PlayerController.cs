@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         m_currentShield = m_maxShield;
 
         lasercooldown = 0;
-        speed = 0.0000f;
+        speed = 2.0000f;
         pos = transform.position;
         vel = transform.forward * 0.00f;
         acc = transform.forward * speed;
@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
         {
             //Tell the game manager you're out of bounds so it can warn you
             m_gameManager.BoundWarning(deathtimer);
+            //Increment the timer
             deathtimer -= dt;
             //tractor beam
             pos += -pos.normalized * 3f * dt;
@@ -88,6 +89,7 @@ public class PlayerController : MonoBehaviour
 
         }else if(deathtimer < 10.00f)
         {
+            //If you aren't out of bounds and the death timer is out of sync, resync it
             deathtimer = 10.00f;
         }
         //end of out of bounds logic
@@ -104,20 +106,21 @@ public class PlayerController : MonoBehaviour
                 DamagePlayer();
             }
 
-            // Acceleration controls
+            // Acceleration controls, Higher increments of acceleration (both from the player and friction) give a better sense of control, this idea is largely inspired by celeste
+            //Currently the player comes from full speed to a complete stop in about 26 meters (recognize this is with a starting velocity of 0)
             if (Input.GetKey(KeyCode.W))
             {
-                if (speed < 1.5f)
+                if (speed < 2.0f)
                 {
-                    speed += 0.1f * Time.deltaTime;
+                    speed += 0.5f * dt;
                 }
+            }else if (Input.GetKey(KeyCode.S)){
+                speed -= 0.2f * dt;
             }
-            if (Input.GetKey(KeyCode.S))
+
+            if (speed > 0)
             {
-                if (speed > 0.0f)
-                {
-                    speed -= 0.1f * Time.deltaTime;
-                }
+                speed -= 0.3f * dt;
             }
 
             // Rotation Controls via keyboard (Roll)
@@ -138,18 +141,25 @@ public class PlayerController : MonoBehaviour
             //Since acc is dependent on the transform.forward
 
             //Vector changes applied
-
-            acc = transform.forward * speed;
-            if (vel.magnitude >= 5.0f)
+            //If there is no force, then don't bother with these calculations, instead, start decelerating the velocity
+            if (speed > 0)
             {
-                //This means that velocity is already at max
-
-                //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
-                //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
-
-                if ((vel + acc * dt).magnitude > 5.0f)
+                acc = transform.forward * speed;
+                if (vel.magnitude >= 5.0f)
                 {
-                    vel = (vel + acc * dt).normalized * 5.0f;
+                    //This means that velocity is already at max
+
+                    //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
+                    //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
+
+                    if ((vel + acc * dt).magnitude > 5.0f)
+                    {
+                        vel = (vel + acc * dt).normalized * 5.0f;
+                    }
+                    else
+                    {
+                        vel += acc * dt;
+                    }
                 }
                 else
                 {
@@ -158,7 +168,8 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                vel += acc * dt;
+                //Velocity loses 50% of its current speed a second without acceleration
+                vel *= 0.5f * dt;
             }
 
             pos += vel * dt;
