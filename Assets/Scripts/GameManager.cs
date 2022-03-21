@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
-public enum WaveState { IN_PROGRESS, COMPLETED }
+public enum WaveState { IN_PROGRESS, COMPLETED, OVER }
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +39,12 @@ public class GameManager : MonoBehaviour
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
 
+    //For altering the name
+    int nameIndex;
+    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=:;\"~`<>?";
+
+
+
     // Score Types
     // An enemy was hit
     public int scoreEnemyHit = 5;
@@ -58,6 +65,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveTimeText;
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
+    [SerializeField] private Text m_nameText;
+
+    //for storing score/name pairs in I/O
+    List<string> scores;
 
     Color boundColor;
     bool changingColor;
@@ -65,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        nameIndex = 0;
+        scores = new List<string>();
+        m_nameText.text = "__________";
         changingColor = true;
         boundColor = new Color(128, 0, 0);
         score = 0;
@@ -94,8 +108,13 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
+
+        if (Input.GetKey(KeyCode.RightControl))
+        {
+            SafeShutdown();
+        }
         // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             // If the wave is in progress, destroy the current wave
             if (m_waveState == WaveState.IN_PROGRESS)
@@ -106,6 +125,11 @@ public class GameManager : MonoBehaviour
             else if (m_waveState == WaveState.COMPLETED)
             {
                 NewWave();
+            }else if(m_waveState == WaveState.OVER)
+            {
+                //This block needs a scene or state transition to avoid a player writing to file multiple times
+                ReadFromFile();
+                WriteToFile();
             }
         }
 
@@ -113,7 +137,7 @@ public class GameManager : MonoBehaviour
         if(m_waveState == WaveState.IN_PROGRESS)
         {
             m_playTime += Time.deltaTime;
-            // Decrease the timer buy each frame duration
+            // Decrease the timer by each frame duration
             m_spawnTimer -= Time.deltaTime;
 
             // Once the spawn timer equals zero, spawn the next enemy and reset the spawn timer
@@ -126,6 +150,8 @@ public class GameManager : MonoBehaviour
             CheckWaveCompleted();
         }        
         // If a wave has been completed, we are inbetween waves
+        //Note: we should change all these else ifs to a single switch statement
+        //since an enum cant be two states at once making them explicitly mutually exclusive is unnecessary
         else if(m_waveState == WaveState.COMPLETED)
         {
             SetWaveTimerWarning(true);
@@ -140,33 +166,112 @@ public class GameManager : MonoBehaviour
                 SetWaveTimerWarning(false);
                 NewWave();
             }
+        }else if(m_waveState == WaveState.OVER)
+        {
+            if (!m_nameText.gameObject.activeInHierarchy)
+            {
+                m_nameText.gameObject.SetActive(true);
+            }
+
+            if (Input.anyKey)
+            {
+                //Note: Nameindex can range from 0-9
+
+                //We need to use a temp string because indexing a string is read only, so we can't alter each character individually
+                string alteredString = "";
+
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    nameIndex = (nameIndex + 1) % 10;
+                }
+                else if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
+                    //I'll need to do the same for the downarrow logic
+                    if(nameIndex == 0)
+                    {
+                        nameIndex = 9;
+                    }
+                    else
+                    {
+                        nameIndex--;
+                    }
+                }
+                Debug.Log("name index is: " + nameIndex);
+                //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
+                //This adds everything UP TO the space your altering to the temp string
+                //if your altering the first space, theres no previous text to copy
+
+                //adding the start
+                if (nameIndex != 0)
+                {
+                    alteredString += m_nameText.text.ToString().Substring(0, nameIndex);
+                }
+
+                //Adding the current character
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) + 1) % alphabet.Length];
+
+                }
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    if (m_nameText.text.ToString()[nameIndex] == alphabet[0])
+                    {
+                        alteredString += alphabet[alphabet.Length - 1];
+                    }
+                    else
+                    {
+                        alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) - 1)];
+                    }
+                }
+                else
+                {
+                    alteredString += m_nameText.text.ToString()[nameIndex];
+                }
+
+
+                //Adding the end
+                if (nameIndex != 9)
+                {
+                    alteredString += m_nameText.text.ToString().Substring(nameIndex + 1, 9 - nameIndex);
+                }
+                //Rewrite
+                m_nameText.text = alteredString;
+            }
         }
     }
 
     public void BoundWarning(float dtimer)
     {
-        m_outOfBoundTop.gameObject.SetActive(true);
-        m_outOfBoundBot.gameObject.SetActive(true);
-        m_timer.gameObject.SetActive(true);
-        m_timer.text = (Mathf.Round(dtimer*100)/100).ToString() + "s";
-        if (changingColor)
+        if (m_waveState != WaveState.OVER)
         {
-            boundColor.r -= 1;
-        }
-        else
-        {
-            boundColor.r += 1;
-        }
+            m_outOfBoundTop.gameObject.SetActive(true);
+            m_outOfBoundBot.gameObject.SetActive(true);
+            m_timer.gameObject.SetActive(true);
+            m_timer.text = (Mathf.Round(dtimer * 100) / 100).ToString() + "s";
 
-        if(boundColor.r >= 255)
-        {
-            changingColor = true;
-        }else if(boundColor.r <= 0)
-        {
-            changingColor = false;
+            if (changingColor)
+            {
+                boundColor.r -= 1;
+            }
+            else
+            {
+                boundColor.r += 1;
+            }
+
+            if (boundColor.r >= 255)
+            {
+                changingColor = true;
+            }
+            else if (boundColor.r <= 0)
+            {
+                changingColor = false;
+            }
+            m_outOfBoundTop.color = boundColor;
+            m_outOfBoundBot.color = boundColor;
         }
-        m_outOfBoundTop.color = boundColor;
-        m_outOfBoundBot.color = boundColor;
+        
 
     }
 
@@ -174,6 +279,7 @@ public class GameManager : MonoBehaviour
     {
         m_outOfBoundBot.gameObject.SetActive(false);
         m_outOfBoundTop.gameObject.SetActive(false);
+        m_timer.gameObject.SetActive(false);
     }
 
     public void SetWaveTimerWarning(bool b)
@@ -279,17 +385,22 @@ public class GameManager : MonoBehaviour
         // Update the UI
         m_scoreText.text = "Score: " + score;
     }
-
+    /// <summary>
+    /// Applies a bonus based on how much time it took for the player to destroy the wave
+    /// </summary>
     public void TimeBonus()
     {
+        //If the player defeated the wave in under a minute, flat 300 bonus
         if(m_playTime < 60.0f)
         {
             score += 300;
         }
-        else if(m_playTime > 180.0f)
+        //If between 1-3 minutes, use variable, its should be 300 at 60, 0 at 180
+        else if(m_playTime < 180.0f)
         {
-            score += (int)(300 - 2.5 * m_playTime);
+            score += (int)(300 - 2.5 * (m_playTime - 60.0f));
         }
+        //Otherwise give 0 points
     }
 
     /// <summary>
@@ -322,15 +433,70 @@ public class GameManager : MonoBehaviour
             combo-=2;
         }
     }
-
+    /// <summary>
+    /// Safely shutsdown the game
+    /// </summary>
     public void SafeShutdown()
     {
-        //Destroy the enemies
-        TestDestroyCurrentWave();
-        //Freeze the Player
-        player.GetComponent<PlayerController>().freeze = true;
+        //While this hardly a wavestate its much easier to attach this to an enum so it essentially turns off the other two's update methods in the process
+        m_waveState = WaveState.OVER;
+
+
+        //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
+        Time.timeScale = 0f;
         //Display that you've lost
+
         m_gameOverText.gameObject.SetActive(true);
-        //Store score (WIP)
+        //Note: If you were to die by going out of bounds, this could be done easier through the player script
+        //but since the player can die multiple ways we need one method
+        player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
+        player.GetComponent<PlayerController>().GetPlayerUI().gameObject.SetActive(false);
+
+        //Store score With associated name (max 10 characters)(WIP)
+
+
+
+        //Return to main menu (TBA)
+    }
+
+    private void WriteToFile()
+    {
+        Debug.Log("Entering write to file method");
+        if (m_nameText.text == "")
+        {
+            //If the player, for whatever reasons, writes to file with no name, use this placeholder instead
+            m_nameText.text = "LONESLDRR";
+        }
+
+
+        StreamWriter scoreWrite = new StreamWriter("scores.txt");
+        for(int i = 0; i < scores.Count; i+=2)
+        {
+            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1].Trim('_'));
+        }
+
+
+        scoreWrite.WriteLine(m_nameText.text.Trim().ToUpper() + ":" + score.ToString());
+        //ALWAYS REMEMBER TO CLOSE
+        scoreWrite.Close();
+
+    }
+    private void ReadFromFile()
+    {
+        Debug.Log("Entering read from file method");
+        StreamReader scoreRead = new StreamReader("scores.txt");
+        string line = "blah";
+        string[] tempSplit;
+        while((line = scoreRead.ReadLine()) != null)
+        {
+            Debug.Log("entering line: " + line);
+            //A line is comprised of "name:score"
+            tempSplit = line.Split(':');
+            //With this, all even numbered spots of the scores list contain names, and their associate score is 1 ahead of that
+            scores.Add(tempSplit[0]);
+            scores.Add(tempSplit[1]);
+        }
+        //ALWAYS REMEMBER TO CLOSE
+        scoreRead.Close();
     }
 }
