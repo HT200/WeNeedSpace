@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         m_currentShield = m_maxShield;
 
         lasercooldown = 0;
-        speed = 2.0000f;
+        speed = 0.0000f;
         pos = transform.position;
         vel = transform.forward * 0.00f;
         acc = transform.forward * speed;
