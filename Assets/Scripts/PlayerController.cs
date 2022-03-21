@@ -114,6 +114,8 @@ public class PlayerController : MonoBehaviour
                 {
                     speed += 0.5f * dt;
                 }
+            }else if (Input.GetKey(KeyCode.S)){
+                speed -= 0.2f * dt;
             }
 
             if (speed > 0)
