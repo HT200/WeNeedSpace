@@ -8,10 +8,13 @@ public class DetectCollisions : MonoBehaviour
 
     PlayerController playerScript;
 
+    List<Asteroid> m_asteroidList;
+
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerScript = gameManager.player.GetComponent<PlayerController>();
+        m_asteroidList = gameManager.m_asteroidList;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -32,15 +35,24 @@ public class DetectCollisions : MonoBehaviour
                 enemyScript.UpdateHealth(-playerScript.damage);
                 */
             }
-            else if (other.tag == "Bullet" || other.tag =="Asteroid")
+            else if (other.tag == "Bullet" || other.tag == "Asteroid")
             {
-                Destroy(other.gameObject);
                 Destroy(this.gameObject);
+
+                foreach (Asteroid asteroid in m_asteroidList)
+                {
+                    if (asteroid.gameObject == other.gameObject)
+                    {
+                        m_asteroidList.Remove(asteroid);
+                        break;
+                    }
+                }
+                Destroy(other.gameObject);
             }
         }
         else if (this.tag == "Player")
         {
-            if (other.tag == "Enemy" || other.tag =="Asteroid")
+            if (other.tag == "Enemy" || other.tag == "Asteroid")
             {
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AsteroidController : MonoBehaviour
 {
-    List<Asteroid> asteroids;
+    public List<Asteroid> asteroids;
     [SerializeField] private GameObject m_AsteroidBasePrefab;
     int maxAsteroids = 20;
 

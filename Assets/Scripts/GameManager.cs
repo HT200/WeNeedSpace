@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 {
     public GameObject player;
 
+    public List<Asteroid> m_asteroidList;
+
     int score;
     int totalkills;
 
@@ -43,8 +45,6 @@ public class GameManager : MonoBehaviour
     int nameIndex;
     const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
 
-
-
     // Score Types
     // An enemy was hit
     public int scoreEnemyHit = 5;
@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        m_asteroidList = GetComponent<AsteroidController>().asteroids;
         nameIndex = 0;
         scores = new List<string>();
         m_nameText.text = "__________";
