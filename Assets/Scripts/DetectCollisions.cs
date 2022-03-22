@@ -8,13 +8,10 @@ public class DetectCollisions : MonoBehaviour
 
     PlayerController playerScript;
 
-    List<Asteroid> m_asteroidList;
-
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerScript = gameManager.player.GetComponent<PlayerController>();
-        m_asteroidList = gameManager.m_asteroidList;
     }
     void OnTriggerEnter(Collider other)
     {
@@ -38,15 +35,6 @@ public class DetectCollisions : MonoBehaviour
             else if (other.tag == "Bullet" || other.tag == "Asteroid")
             {
                 Destroy(this.gameObject);
-
-                foreach (Asteroid asteroid in m_asteroidList)
-                {
-                    if (asteroid.gameObject == other.gameObject)
-                    {
-                        m_asteroidList.Remove(asteroid);
-                        break;
-                    }
-                }
                 Destroy(other.gameObject);
             }
         }

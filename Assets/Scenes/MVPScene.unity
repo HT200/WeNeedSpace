@@ -228,7 +228,6 @@ GameObject:
   m_Component:
   - component: {fileID: 47062670}
   - component: {fileID: 47062669}
-  - component: {fileID: 47062671}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -249,6 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1611540308}
+  m_AsteroidBasePrefab: {fileID: 5994842482179400335, guid: 7f77e797b897a674e83562dff42c6dcb, type: 3}
   m_timeBetweenSpawns: 1.5
   m_timeBetweenWaves: 3
   m_playTime: 0
@@ -285,19 +285,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &47062671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47062668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a079f338a0bd4345bb74fef82456858, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AsteroidBasePrefab: {fileID: 5994842482179400335, guid: 7f77e797b897a674e83562dff42c6dcb, type: 3}
 --- !u!1 &96312075
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,44 +4,38 @@ using UnityEngine;
 
 public class AsteroidController : MonoBehaviour
 {
-    public List<Asteroid> asteroids;
-    [SerializeField] private GameObject m_AsteroidBasePrefab;
-    int maxAsteroids = 20;
-
     float bounds = 100;
 
     int baseRadius = 4;
     float maxRadiusVariation;
     int baseSubdivisions = 5;
+
+    public Vector3 rotationDirection;
     float rotationSpeed = 12.0f;
+
+    public bool hasPowerup;
 
     void Start()
     {
-        asteroids = new List<Asteroid>();
         maxRadiusVariation = baseRadius / 2;
+        hasPowerup = false;
 
-        for (int k = 0; k < maxAsteroids; k += 1)
-        {
-            createAsteroid(Random.insideUnitSphere * bounds);
-        }
+        createAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
     }
 
     void Update()
     {
         float dt = Time.deltaTime;
 
-        foreach (Asteroid asteroid in asteroids)
-        {
-            asteroid.gameObject.transform.Rotate(asteroid.rotationDirection * rotationSpeed * dt);
-        }
+        transform.Rotate(rotationDirection * rotationSpeed * dt);
     }
 
     /// <summary>
-    /// Creates a single asteroid at the specified location, adds it to the list of asteroids, 
-    /// and gives it a rotation direction.
+    /// Creates a single asteroid at the specified location with the specified rotation direction.
     /// </summary>
-    /// <returns>The asteroid that was created.</returns>
-    GameObject createAsteroid(Vector3 position)
+    /// <param name="position">The position at which to spawn this asteroid.</param>
+    /// <param name="rotation">The direction in which to rotate this asteroid.</param>
+    void createAsteroid(Vector3 position, Vector3 rotation)
     {
         Vector3[] vertices = new Vector3[(baseSubdivisions + 1) * (baseSubdivisions + 1)];
         int[] triangles = new int[vertices.Length * 6];
@@ -103,30 +97,13 @@ public class AsteroidController : MonoBehaviour
             }
         }
 
-        GameObject asteroid = GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
-        Mesh mesh = asteroid.GetComponent<MeshFilter>().mesh;
-
+        Mesh mesh = gameObject.GetComponent<MeshFilter>().mesh;
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
         mesh.uv = uv;
-        asteroid.transform.position = position;
-        Vector3 rotationDirection = Random.onUnitSphere;
 
-        asteroids.Add(new Asteroid(asteroid, rotationDirection));
-        return asteroid;
-    }
-}
-
-public class Asteroid
-{
-    public GameObject gameObject;
-    public Vector3 rotationDirection;
-    public bool hasPowerup;
-
-    public Asteroid(GameObject gameObject, Vector3 rotationDirection)
-    {
-        this.gameObject = gameObject;
-        this.rotationDirection = rotationDirection;
+        transform.position = position;
+        rotationDirection = rotation;
     }
 }
