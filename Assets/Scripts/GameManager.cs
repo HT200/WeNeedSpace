@@ -10,6 +10,10 @@ public class GameManager : MonoBehaviour
 {
     public GameObject player;
 
+    // Asteroid variables
+    [SerializeField] private GameObject m_AsteroidBasePrefab;
+    int m_maxAsteroids = 20;
+
     int score;
     int totalkills;
 
@@ -41,9 +45,7 @@ public class GameManager : MonoBehaviour
 
     //For altering the name
     int nameIndex;
-    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=:;\"~`<>?";
-
-
+    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
 
     // Score Types
     // An enemy was hit
@@ -76,6 +78,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        for(int i = 0; i < m_maxAsteroids; i += 1)
+        {
+            GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
+        }
+
         nameIndex = 0;
         scores = new List<string>();
         m_nameText.text = "__________";
@@ -125,7 +132,8 @@ public class GameManager : MonoBehaviour
             else if (m_waveState == WaveState.COMPLETED)
             {
                 NewWave();
-            }else if(m_waveState == WaveState.OVER)
+            }
+            else if (m_waveState == WaveState.OVER)
             {
                 //This block needs a scene or state transition to avoid a player writing to file multiple times
                 ReadFromFile();
@@ -134,39 +142,40 @@ public class GameManager : MonoBehaviour
         }
 
         // Continue with the wave
-        if(m_waveState == WaveState.IN_PROGRESS)
+        if (m_waveState == WaveState.IN_PROGRESS)
         {
             m_playTime += Time.deltaTime;
             // Decrease the timer by each frame duration
             m_spawnTimer -= Time.deltaTime;
 
             // Once the spawn timer equals zero, spawn the next enemy and reset the spawn timer
-            if(m_spawnTimer <= 0)
+            if (m_spawnTimer <= 0)
             {
                 SpawnEnemy();
             }
 
             // Checks and handles wave completion criteria
             CheckWaveCompleted();
-        }        
+        }
         // If a wave has been completed, we are inbetween waves
         //Note: we should change all these else ifs to a single switch statement
         //since an enum cant be two states at once making them explicitly mutually exclusive is unnecessary
-        else if(m_waveState == WaveState.COMPLETED)
+        else if (m_waveState == WaveState.COMPLETED)
         {
             SetWaveTimerWarning(true);
             // Decrease the timer by each frame duration
             m_waveTimer -= Time.deltaTime;
-            m_waveTimeText.text = (Mathf.Round(m_waveTimer*100)/100).ToString();
+            m_waveTimeText.text = (Mathf.Round(m_waveTimer * 100) / 100).ToString();
 
             // Once the wave timer hits zero, start the next wave
-            if(m_waveTimer <= 0)
+            if (m_waveTimer <= 0)
             {
                 TimeBonus();
                 SetWaveTimerWarning(false);
                 NewWave();
             }
-        }else if(m_waveState == WaveState.OVER)
+        }
+        else if (m_waveState == WaveState.OVER)
         {
             if (!m_nameText.gameObject.activeInHierarchy)
             {
@@ -188,7 +197,7 @@ public class GameManager : MonoBehaviour
                 {
                     //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
                     //I'll need to do the same for the downarrow logic
-                    if(nameIndex == 0)
+                    if (nameIndex == 0)
                     {
                         nameIndex = 9;
                     }
@@ -271,7 +280,7 @@ public class GameManager : MonoBehaviour
             m_outOfBoundTop.color = boundColor;
             m_outOfBoundBot.color = boundColor;
         }
-        
+
 
     }
 
@@ -363,7 +372,7 @@ public class GameManager : MonoBehaviour
 
     void TestDestroyCurrentWave()
     {
-        foreach(Transform childTransform in m_spawnPosition)
+        foreach (Transform childTransform in m_spawnPosition)
         {
             Destroy(childTransform.gameObject);
         }
@@ -391,12 +400,12 @@ public class GameManager : MonoBehaviour
     public void TimeBonus()
     {
         //If the player defeated the wave in under a minute, flat 300 bonus
-        if(m_playTime < 60.0f)
+        if (m_playTime < 60.0f)
         {
             score += 300;
         }
         //If between 1-3 minutes, use variable, its should be 300 at 60, 0 at 180
-        else if(m_playTime < 180.0f)
+        else if (m_playTime < 180.0f)
         {
             score += (int)(300 - 2.5 * (m_playTime - 60.0f));
         }
@@ -430,7 +439,7 @@ public class GameManager : MonoBehaviour
     {
         if (combo > 1)
         {
-            combo-=2;
+            combo -= 2;
         }
     }
     /// <summary>
@@ -470,7 +479,7 @@ public class GameManager : MonoBehaviour
 
 
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
-        for(int i = 0; i < scores.Count; i+=2)
+        for (int i = 0; i < scores.Count; i += 2)
         {
             scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1].Trim('_'));
         }
@@ -487,7 +496,7 @@ public class GameManager : MonoBehaviour
         StreamReader scoreRead = new StreamReader("scores.txt");
         string line = "blah";
         string[] tempSplit;
-        while((line = scoreRead.ReadLine()) != null)
+        while ((line = scoreRead.ReadLine()) != null)
         {
             Debug.Log("entering line: " + line);
             //A line is comprised of "name:score"

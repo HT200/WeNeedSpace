@@ -32,15 +32,15 @@ public class DetectCollisions : MonoBehaviour
                 enemyScript.UpdateHealth(-playerScript.damage);
                 */
             }
-            else if (other.tag == "Bullet")
+            else if (other.tag == "Bullet" || other.tag == "Asteroid")
             {
-                Destroy(other.gameObject);
                 Destroy(this.gameObject);
+                Destroy(other.gameObject);
             }
         }
         else if (this.tag == "Player")
         {
-            if (other.tag == "Enemy")
+            if (other.tag == "Enemy" || other.tag == "Asteroid")
             {
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
