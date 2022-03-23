@@ -330,7 +330,16 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Put  your  roles  here
+  m_Text: 'Player  Movement
+
+    Laser  Firing
+
+    I/O  and  Name  Input
+
+    Out 
+    Of  Bounds  Logic
+
+    Combo  and  Time  Bonuses'
 --- !u!222 &109926363
 CanvasRenderer:
   m_ObjectHideFlags: 0
