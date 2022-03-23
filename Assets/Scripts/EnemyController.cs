@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
     public EnemyType m_enemyType;
 
     protected Vector3 pos;
-    protected Vector3 vel;
+    public Vector3 vel;
     protected Vector3 target;
 
     protected virtual void Start()

@@ -15,19 +15,34 @@ public class AsteroidController : MonoBehaviour
 
     public bool hasPowerup;
 
+    public Vector3 vel;
+
     void Start()
     {
+        vel = Vector3.zero;
         maxRadiusVariation = baseRadius / 2;
         hasPowerup = false;
 
         createAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
+        //Ac = v^2/r = 20/r^2
+        //V must be applied on the transform.right initally
+        //r = transform.position
+        //V = sqrt(Ac * r) = sqrt(20/r^2 * r) = sqrt(20/r)
+
+        //Only activate this code if you want to see something cool (The asteroids orbiting the black hole, albeit slowly)
+        /*
+        createAsteroid(new Vector3(0.0f,0.0f,10.0f), Random.onUnitSphere);
+        transform.forward = transform.position.normalized;
+        vel = transform.right * Mathf.Sqrt(20 / transform.position.magnitude);
+        */
     }
 
     void Update()
     {
         float dt = Time.deltaTime;
+        transform.position += vel *dt;
 
-        transform.Rotate(rotationDirection * rotationSpeed * dt);
+        //transform.Rotate(rotationDirection * rotationSpeed * dt);
     }
 
     /// <summary>
