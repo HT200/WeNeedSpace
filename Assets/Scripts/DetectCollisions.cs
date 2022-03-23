@@ -44,7 +44,7 @@ public class DetectCollisions : MonoBehaviour
             {
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
-                // Destroy(this.gameObject);
+                gameManager.SafeShutdown();            
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
