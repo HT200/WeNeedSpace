@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2088,7 +2088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 1, b: 0, a: 1}
+  m_EffectColor: {r: 0, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: -2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &1348990924
@@ -2124,7 +2124,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Nick  Shaffer
+  m_Text: Nicholas  Shaffer
 --- !u!222 &1348990925
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3279,7 +3279,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Put  your  roles  here
+  m_Text: 'Enemy Behavior
+
+    Environment Assets
+
+    General Programmer'
 --- !u!222 &2011877676
 CanvasRenderer:
   m_ObjectHideFlags: 0
