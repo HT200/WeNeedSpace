@@ -35,6 +35,7 @@ namespace Temp.Enemy
     
         public int Health => health;
         public Vector3 Position => position;
+        protected Vector3 Direction => direction;
     
         void Start()
         {
@@ -143,6 +144,15 @@ namespace Temp.Enemy
 
             // If the enemy is within the future distance of the player, seek the player instead
             return distFromTarget < futureDistance ? Seek(player) : Seek(futurePos);
+        }
+        
+        public Vector3 Evade(float seconds = 1f)
+        {
+            Vector3 futurePos = player.GetFuturePosition(seconds);
+            float futureDistance = Vector3.SqrMagnitude(player.Pos - futurePos);
+            float distFromTarget = GetSqrDistance(player.Pos);
+ 
+            return distFromTarget < futureDistance ? Flee(player) : Flee(futurePos);
         }
     
         /// <summary>
