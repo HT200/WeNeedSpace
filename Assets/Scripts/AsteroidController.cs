@@ -24,16 +24,14 @@ public class AsteroidController : MonoBehaviour
         hasPowerup = false;
 
         createAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
-        //Ac = v^2/r = 20/r^2
+        //Ac = v^2/r = 1000/r
+        // v = sqrt(1000)
         //V must be applied on the transform.right initally
-        //r = transform.position
-        //V = sqrt(Ac * r) = sqrt(20/r^2 * r) = sqrt(20/r)
 
-        //Only activate this code if you want to see something cool (The asteroids orbiting the black hole, albeit slowly)
+        //Only activate this code if you want to see something cool (The asteroids orbiting the black hole)
         /*
-        createAsteroid(new Vector3(0.0f,0.0f,10.0f), Random.onUnitSphere);
         transform.forward = transform.position.normalized;
-        vel = transform.right * Mathf.Sqrt(20 / transform.position.magnitude);
+        vel = transform.right * Mathf.Sqrt(1000);
         */
     }
 

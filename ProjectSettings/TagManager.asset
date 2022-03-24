@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Wall
   - Asteroid
+  - BlackHole
   layers:
   - Default
   - TransparentFX
