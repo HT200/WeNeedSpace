@@ -26,22 +26,24 @@ public class PlayerController : MonoBehaviour
     public float damage = 5.0f;
 
     // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
-    private Vector3 pos;
-    private Vector3 vel;
+    public Vector3 pos;
+    public Vector3 vel;
     private Vector3 acc;
-
     public Vector3 Pos => pos;
+
+    //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
+    bool gameover;
 
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
-    
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameover = false;
         outOfBounds = false;
         deathtimer = 10.00f;
         if (m_gameManager == null)
@@ -70,85 +72,114 @@ public class PlayerController : MonoBehaviour
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
-            Destroy(this.gameObject);
+            gameover = true;
+            m_gameManager.SafeShutdown();
+            m_gameManager.RemoveWarning();
         }
 
         if (outOfBounds)
         {
+            //Tell the game manager you're out of bounds so it can warn you
             m_gameManager.BoundWarning(deathtimer);
+            //Increment the timer
             deathtimer -= dt;
+            //tractor beam
+            pos += -pos.normalized * 3f * dt;
+
+
+
         }else if(deathtimer < 10.00f)
         {
+            //If you aren't out of bounds and the death timer is out of sync, resync it
             deathtimer = 10.00f;
         }
         //end of out of bounds logic
 
 
-        // Use only for development purposes for testing when the Player takes damage
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            DamagePlayer();
-        }
 
-        // Acceleration controls
-        if (Input.GetKey(KeyCode.W))
+        //None of this should be run if the game is over
+        if (!gameover)
         {
-            if (speed < 1.5f)
+
+            // Use only for development purposes for testing when the Player takes damage
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                speed += 0.1f * Time.deltaTime;
+                DamagePlayer();
             }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            if (speed > 0.0f)
+
+            // Acceleration controls, Higher increments of acceleration (both from the player and friction) give a better sense of control, this idea is largely inspired by celeste
+            //Currently the player comes from full speed to a complete stop in about 26 meters (recognize this is with a starting velocity of 0)
+            if (Input.GetKey(KeyCode.W))
             {
-                speed -= 0.1f * Time.deltaTime;
+                if (speed < 2.0f)
+                {
+                    speed += 0.5f * dt;
+                }
+            }else if (Input.GetKey(KeyCode.S)){
+                speed -= 0.2f * dt;
             }
-        }
 
-        // Rotation Controls via keyboard (Roll)
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(0, 0, 0.5f, Space.Self);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(0, 0, -0.5f, Space.Self);
-        }
-
-        //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
-        //Since acc is dependent on the transform.forward
-
-        //Vector changes applied
-
-        acc = transform.forward * speed;
-        if (vel.magnitude >= 5.0f)
-        {
-            //This means that velocity is already at max
-
-            //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
-            //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
-
-            if((vel+acc).magnitude > 5.0f)
+            if (speed > 0)
             {
-                vel = (vel + acc * dt).normalized * 5.0f;
+                speed -= 0.3f * dt;
+            }
+
+            // Rotation Controls via keyboard (Roll)
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.Rotate(0, 0, 0.5f, Space.Self);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.Rotate(0, 0, -0.5f, Space.Self);
+            }
+
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                pos += new Vector3(0.0f, 0.0f, 5.0f) * dt;
+            }
+            //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
+            //Since acc is dependent on the transform.forward
+
+            //Vector changes applied
+            //If there is no force, then don't bother with these calculations, instead, start decelerating the velocity
+            if (speed > 0)
+            {
+                acc = transform.forward * speed;
+                if (vel.magnitude >= 5.0f)
+                {
+                    //This means that velocity is already at max
+
+                    //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
+                    //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
+
+                    if ((vel + acc * dt).magnitude > 5.0f)
+                    {
+                        vel = (vel + acc * dt).normalized * 5.0f;
+                    }
+                    else
+                    {
+                        vel += acc * dt;
+                    }
+                }
+                else
+                {
+                    vel += acc * dt;
+                }
             }
             else
             {
-                vel += acc* dt;
+                //Velocity loses 50% of its current speed a second without acceleration
+                vel *= 0.5f * dt;
             }
-        }
-        else
-        {
-            vel += acc * Time.deltaTime;
-        }
 
-        pos += vel * Time.deltaTime;
-        transform.position = pos;
+            pos += vel * dt;
+            transform.position = pos;
 
-        if (lasercooldown > 0.0f)
-        {
-            lasercooldown -= Time.deltaTime;
+            if (lasercooldown > 0.0f)
+            {
+                lasercooldown -= dt;
+            }
         }
     }
 
@@ -228,6 +259,11 @@ public class PlayerController : MonoBehaviour
         // TODO: Upgrade weapons for more damage?
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
+    }
+    //This is a read only get function so the gamemangager 
+    public PlayerUI GetPlayerUI()
+    {
+        return this.m_playerUI;
     }
     
     /// <summary>

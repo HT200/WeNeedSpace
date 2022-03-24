@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Hard : MonoBehaviour
+namespace Temp.Enemy
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Hard : Enemy
     {
-        
-    }
+        protected override void CalculateSteeringForces()
+        {
+            Vector3 ultimateForce = Vector3.zero;
+            ultimateForce += Pursue();
+            //ultimateForce += Separate();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
+            
+            ApplyForce(ultimateForce);
+        }
     }
 }

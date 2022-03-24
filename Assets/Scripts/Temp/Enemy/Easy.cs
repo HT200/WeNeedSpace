@@ -1,11 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Easy : Enemy
+namespace Temp.Enemy
 {
-    protected override void CalculateSteeringForces()
+    public class Easy : Enemy
     {
+        protected override void CalculateSteeringForces()
+        {
+            Vector3 ultimateForce = Vector3.zero;
+            ultimateForce += Pursue();
+            //ultimateForce += Separate();
 
+            ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
+            
+            ApplyForce(ultimateForce);
+        }
     }
 }
