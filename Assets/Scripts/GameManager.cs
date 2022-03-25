@@ -68,9 +68,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
     [SerializeField] private Text m_nameText;
+    [SerializeField] private Text m_spaceIndicator;
 
     //for storing score/name pairs in I/O
     List<string> scores;
+
+    //Time float for alternating space indicator
+    float switchSpaceActive;
 
     Color boundColor;
     bool changingColor;
@@ -82,7 +86,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
         }
-
+        switchSpaceActive = 0.0f;
         nameIndex = 0;
         scores = new List<string>();
         m_nameText.text = "__________";
@@ -177,10 +181,30 @@ public class GameManager : MonoBehaviour
         }
         else if (m_waveState == WaveState.OVER)
         {
-            if (!m_nameText.gameObject.activeInHierarchy)
+            //This code doesn't function the way it should, the indicator is positioned correctly though
+            /*
+            switchSpaceActive += 0.01f;
+
+            //Blinking the light
+            if (m_spaceIndicator.gameObject.activeInHierarchy)
             {
-                m_nameText.gameObject.SetActive(true);
+                Debug.Log("Spaceindicator is active in the hierarchy");
+                Debug.Log("switchspace active is currently: " + switchSpaceActive);
+                if (switchSpaceActive >= 2.5f)
+                {
+                    Debug.Log("setting Spaceindicator FALSE");
+                    m_spaceIndicator.gameObject.SetActive(false);
+                    switchSpaceActive = 0.0f;
+                }
             }
+            else if (switchSpaceActive >= 2.5f)
+            {
+                Debug.Log("setting Spaceindicator TRUE");
+                m_spaceIndicator.gameObject.SetActive(true);
+                switchSpaceActive = 0.0f;
+            }
+            */
+
 
             if (Input.anyKey)
             {
@@ -210,6 +234,9 @@ public class GameManager : MonoBehaviour
                 //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
                 //This adds everything UP TO the space your altering to the temp string
                 //if your altering the first space, theres no previous text to copy
+
+                //at nameIndex 0, the position of m_spaceIndicator should be -125, at 9, it should be 125
+                m_spaceIndicator.gameObject.transform.position = new Vector3(490 + nameIndex * 25,450.0f,0.0f);
 
                 //adding the start
                 if (nameIndex != 0)
@@ -453,9 +480,10 @@ public class GameManager : MonoBehaviour
 
         //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
         Time.timeScale = 0f;
-        //Display that you've lost
-
+        //Display that you've lost, and show name entry
+        m_spaceIndicator.gameObject.SetActive(true);
         m_gameOverText.gameObject.SetActive(true);
+        m_nameText.gameObject.SetActive(true);
         //Note: If you were to die by going out of bounds, this could be done easier through the player script
         //but since the player can die multiple ways we need one method
         player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
