@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour
         {
             GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
         }
-        switchSpaceActive = 0.0f;
         nameIndex = 0;
         scores = new List<string>();
         m_nameText.text = "__________";

@@ -9,7 +9,7 @@ public class BlackHoleCollision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        vel = new Vector3(0.0f,0.0f,10.0f);
+        vel = new Vector3(0.0f,0.0f,0.0f);
     }
 
     // Update is called once per frame
@@ -31,7 +31,19 @@ public class BlackHoleCollision : MonoBehaviour
         //d=5m, A = 200 m/s^s
         //Past the five meter mark however, its still very strong, but not so strong it throws its  objects out of range, I feel these tweaks give it a good feel but change them if you can find a better balance
         //d=10m A= 100 m/s^s
-        //d=15m A = 
+
+
+        if(other.tag == "Bullet")
+        {
+            if ((this.transform.position - other.transform.position).sqrMagnitude > 25)
+            {
+                other.gameObject.GetComponent<Laser>().vel += (this.transform.position - other.transform.position).normalized * (1000 / (this.transform.position - other.transform.position).magnitude) * Time.deltaTime;
+            }
+            else
+            {
+                Destroy(other.gameObject);
+            }
+        }
         if(other.tag == "Enemy")
         {
             if ((this.transform.position - other.transform.position).sqrMagnitude > 25)

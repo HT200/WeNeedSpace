@@ -20,6 +20,8 @@ public class Laser : MonoBehaviour
 
     float total;
 
+    public Vector3 vel;
+
     void Start()
     {
         total = 0.0f;
@@ -41,6 +43,8 @@ public class Laser : MonoBehaviour
 
         lineRenderer.SetPosition(0, from);
         lineRenderer.SetPosition(1, to);
+
+        vel = transform.forward * speed;
     }
 
 
@@ -49,12 +53,23 @@ public class Laser : MonoBehaviour
         lineRenderer.SetPosition(0, from);  
         lineRenderer.SetPosition(1, to);
 
+        //This is one of the newer additions, it makes it so the black hole can simply alter the vel vector and the laser shot will rotate it self with that automatically
+        transform.forward = vel.normalized;
+        //This is so that its not moving in its original direction should it break out of the black hole's grip
+        //Image firing a bullet around the black hole, with the old code, it wouldve been physically pulled towards the hole, but instead of firing out in a different direction
+        //it wouldve stayed going on its transform.forward vector, which would've been unchanged
+
+
+
+        //This looks a little wonky but makes whats happening very explicitly clear
         var o = gameObject;
         var position = o.transform.position;
         from = position;
         to = o.transform.forward * 3f + position;
 
-        transform.position += transform.forward * speed * Time.deltaTime;
+
+
+        transform.position += vel * Time.deltaTime;
         total += Time.deltaTime;
         if (total >= 5.0f)
         {
