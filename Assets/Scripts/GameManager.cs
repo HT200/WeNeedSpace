@@ -73,8 +73,6 @@ public class GameManager : MonoBehaviour
     //for storing score/name pairs in I/O
     List<string> scores;
 
-    //Time float for alternating space indicator
-    float switchSpaceActive;
 
     Color boundColor;
     bool changingColor;
@@ -181,29 +179,6 @@ public class GameManager : MonoBehaviour
         }
         else if (m_waveState == WaveState.OVER)
         {
-            //This code doesn't function the way it should, the indicator is positioned correctly though
-            /*
-            switchSpaceActive += 0.01f;
-
-            //Blinking the light
-            if (m_spaceIndicator.gameObject.activeInHierarchy)
-            {
-                Debug.Log("Spaceindicator is active in the hierarchy");
-                Debug.Log("switchspace active is currently: " + switchSpaceActive);
-                if (switchSpaceActive >= 2.5f)
-                {
-                    Debug.Log("setting Spaceindicator FALSE");
-                    m_spaceIndicator.gameObject.SetActive(false);
-                    switchSpaceActive = 0.0f;
-                }
-            }
-            else if (switchSpaceActive >= 2.5f)
-            {
-                Debug.Log("setting Spaceindicator TRUE");
-                m_spaceIndicator.gameObject.SetActive(true);
-                switchSpaceActive = 0.0f;
-            }
-            */
 
 
             if (Input.anyKey)
