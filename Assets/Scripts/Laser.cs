@@ -71,7 +71,7 @@ public class Laser : MonoBehaviour
 
         transform.position += vel * Time.deltaTime;
         total += Time.deltaTime;
-        if (total >= 5.0f)
+        if (total >= 10.0f)
         {
             Destroy(gameObject);
         }

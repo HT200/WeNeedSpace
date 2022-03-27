@@ -8,6 +8,9 @@ public enum WaveState { IN_PROGRESS, COMPLETED, OVER }
 
 public class GameManager : MonoBehaviour
 {
+    private Vector3 ogSpaceIndicator;
+    private Vector3 endSpaceIndicator;
+
     public GameObject player;
 
     // Asteroid variables
@@ -80,6 +83,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        ogSpaceIndicator = m_spaceIndicator.gameObject.transform.position;
+        endSpaceIndicator = new Vector3(ogSpaceIndicator.x + 250, ogSpaceIndicator.y, ogSpaceIndicator.z);
         for(int i = 0; i < m_maxAsteroids; i += 1)
         {
             GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
@@ -189,15 +194,33 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
+                    if (nameIndex != 9)
+                    {
+                        m_spaceIndicator.gameObject.transform.position = new Vector3(
+                        m_spaceIndicator.gameObject.transform.position.x + 25,
+                        m_spaceIndicator.gameObject.transform.position.y,
+                        m_spaceIndicator.gameObject.transform.position.z
+                        );
+                    }
+                    else
+                    {
+                        m_spaceIndicator.gameObject.transform.position = ogSpaceIndicator;
+                    }
                     nameIndex = (nameIndex + 1) % 10;
                 }
                 else if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
+                    m_spaceIndicator.gameObject.transform.position = new Vector3(
+                    m_spaceIndicator.gameObject.transform.position.x - 25,
+                    m_spaceIndicator.gameObject.transform.position.y,
+                    m_spaceIndicator.gameObject.transform.position.z
+                    );
                     //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
                     //I'll need to do the same for the downarrow logic
                     if (nameIndex == 0)
                     {
                         nameIndex = 9;
+                        m_spaceIndicator.gameObject.transform.position = endSpaceIndicator;
                     }
                     else
                     {
@@ -208,9 +231,6 @@ public class GameManager : MonoBehaviour
                 //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
                 //This adds everything UP TO the space your altering to the temp string
                 //if your altering the first space, theres no previous text to copy
-
-                //at nameIndex 0, the position of m_spaceIndicator should be -125, at 9, it should be 125
-                m_spaceIndicator.gameObject.transform.position = new Vector3(490 + nameIndex * 25,450.0f,0.0f);
 
                 //adding the start
                 if (nameIndex != 0)
@@ -483,7 +503,7 @@ public class GameManager : MonoBehaviour
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
         for (int i = 0; i < scores.Count; i += 2)
         {
-            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1].Trim('_'));
+            scoreWrite.WriteLine(scores[i].ToUpper().Trim('_') + ":" + scores[i + 1]);
         }
 
 
