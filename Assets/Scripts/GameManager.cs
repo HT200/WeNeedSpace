@@ -292,9 +292,9 @@ public class GameManager : MonoBehaviour
 
         //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
         Time.timeScale = 0f;
-        //Display that you've lost
-
+        //Display that you've lost, and show name entry
         m_gameOverText.gameObject.SetActive(true);
+        m_scoreManager.DisplayNameText();
         //Note: If you were to die by going out of bounds, this could be done easier through the player script
         //but since the player can die multiple ways we need one method
         player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;

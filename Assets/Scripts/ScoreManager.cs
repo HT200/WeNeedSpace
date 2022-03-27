@@ -23,8 +23,12 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private Text m_scoreText;
 
     //for storing score/name pairs in I/O
+    private Vector3 ogSpaceIndicator;
+    private Vector3 endSpaceIndicator;
+
     List<string> scores;
     [SerializeField] private Text m_nameText;
+    [SerializeField] private Text m_spaceIndicator;
 
     //For altering the name
     int nameIndex;
@@ -33,10 +37,14 @@ public class ScoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ogSpaceIndicator = m_spaceIndicator.gameObject.transform.position;
+        endSpaceIndicator = new Vector3(ogSpaceIndicator.x + 250, ogSpaceIndicator.y, ogSpaceIndicator.z);
+
         m_currentScore = 0;
         m_totalKills = 0;
-        scores = new List<string>();
+
         nameIndex = 0;
+        scores = new List<string>();
         m_nameText.text = "__________";
     }
 
@@ -138,15 +146,33 @@ public class ScoreManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
+                if (nameIndex != 9)
+                {
+                    m_spaceIndicator.gameObject.transform.position = new Vector3(
+                    m_spaceIndicator.gameObject.transform.position.x + 25,
+                    m_spaceIndicator.gameObject.transform.position.y,
+                    m_spaceIndicator.gameObject.transform.position.z
+                    );
+                }
+                else
+                {
+                    m_spaceIndicator.gameObject.transform.position = ogSpaceIndicator;
+                }
                 nameIndex = (nameIndex + 1) % 10;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
+                m_spaceIndicator.gameObject.transform.position = new Vector3(
+                m_spaceIndicator.gameObject.transform.position.x - 25,
+                m_spaceIndicator.gameObject.transform.position.y,
+                m_spaceIndicator.gameObject.transform.position.z
+                );
                 //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
                 //I'll need to do the same for the downarrow logic
                 if (nameIndex == 0)
                 {
                     nameIndex = 9;
+                    m_spaceIndicator.gameObject.transform.position = endSpaceIndicator;
                 }
                 else
                 {
@@ -196,6 +222,12 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    public void DisplayNameText()
+    {
+        m_nameText.gameObject.SetActive(true);
+        m_spaceIndicator.gameObject.SetActive(true);
+    }
+
     public void WriteToFile()
     {
         Debug.Log("Entering write to file method");
@@ -208,7 +240,7 @@ public class ScoreManager : MonoBehaviour
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
         for (int i = 0; i < scores.Count; i += 2)
         {
-            scoreWrite.WriteLine(scores[i].ToUpper() + ":" + scores[i + 1].Trim('_'));
+            scoreWrite.WriteLine(scores[i].ToUpper().Trim('_') + ":" + scores[i + 1]);
         }
 
         scoreWrite.WriteLine(m_nameText.text.Trim().ToUpper() + ":" + m_currentScore.ToString());
