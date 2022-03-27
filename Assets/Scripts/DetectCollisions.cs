@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class DetectCollisions : MonoBehaviour
 {
-    public GameManager gameManager;
-
-    PlayerController playerScript;
+    public GameManager m_gameManager;
+    public ScoreManager m_scoreManager;
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        playerScript = gameManager.player.GetComponent<PlayerController>();
+        m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        m_scoreManager = GameObject.Find("GameManager").GetComponent<ScoreManager>();
     }
+
     void OnTriggerEnter(Collider other)
     {
         // Check collision between a bullet and an enemy
@@ -26,8 +26,8 @@ public class DetectCollisions : MonoBehaviour
 
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
-                gameManager.IncrementKill();
-                gameManager.UpdateScore(gameManager.scoreEnemyHit);
+                m_scoreManager.IncrementKill();
+                m_scoreManager.UpdateScoreEnemyHit();
                 /*
                 enemyScript.UpdateHealth(-playerScript.damage);
                 */
@@ -44,13 +44,9 @@ public class DetectCollisions : MonoBehaviour
             {
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
-                gameManager.SafeShutdown();            
+                m_gameManager.SafeShutdown();            
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
-    }
-
-    private void Update()
-    {
     }
 }

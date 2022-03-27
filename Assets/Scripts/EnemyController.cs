@@ -7,6 +7,7 @@ public enum EnemyType { EASY, MEDIUM, HARD }
 public class EnemyController : MonoBehaviour
 {
     public GameManager gameManager;
+    public ScoreManager scoreManager;
     protected GameObject player;
 
     float health = 1.0f;
@@ -53,7 +54,7 @@ public class EnemyController : MonoBehaviour
         print("Enemy Destroyed");
 
         // Add to the player's combo
-        gameManager.SetCombo(gameManager.GetCombo() + 1);
+        scoreManager.SetCombo(scoreManager.GetCombo() + 1);
 
         Destroy(gameObject);
     }
