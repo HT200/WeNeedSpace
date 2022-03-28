@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
+    
     // Enemy variables
     private int m_numEasyEnemies;
     [SerializeField] private int m_easyEnemyWeight;

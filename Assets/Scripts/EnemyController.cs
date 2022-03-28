@@ -8,16 +8,14 @@ public abstract class EnemyController : MonoBehaviour
 {
     private Vector3 position;
     private Vector3 direction;
-    public Vector3 velocity;
+    [HideInInspector] public Vector3 velocity;
     private Vector3 acceleration;
     
     public EnemyType enemyType;
-
-    [SerializeField] private GameObject gManager;
-    [SerializeField] protected GameObject ship;
-    [SerializeField] protected GameManager gameManager;
+    
     [SerializeField] protected ScoreManager scoreManager;
-    [SerializeField] protected PlayerController player;
+    protected PlayerController player;
+    protected GameManager gameManager;
 
     [SerializeField][Min(2f)] protected float maxSpeed = 2f;
     [SerializeField][Min(2f)] protected float maxForce = 2f;
@@ -42,14 +40,14 @@ public abstract class EnemyController : MonoBehaviour
 
     void Start()
     {
-        gameManager = gManager.GetComponent<GameManager>();
-        player = ship.GetComponent<PlayerController>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = gameManager.GetComponent<PlayerController>();
     
         position = transform.position;
         radius = mesh.bounds.extents.x;
         direction = Vector3.forward;
     
-        Vector3 halfToPlayer = position + (player.Pos - position) / 2;
+        Vector3 halfToPlayer = position + (player.pos - position) / 2;
         target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
     }
 
@@ -128,8 +126,8 @@ public abstract class EnemyController : MonoBehaviour
     protected Vector3 Pursue(float seconds = 2f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
-        float futureDistance = Vector3.SqrMagnitude(player.Pos - futurePos);
-        float distFromTarget = GetSqrDistance(player.Pos);
+        float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
+        float distFromTarget = GetSqrDistance(player.pos);
 
         // If the enemy is within the future distance of the player, seek the player instead
         return distFromTarget < futureDistance ? Seek(player) : Seek(futurePos);
@@ -143,8 +141,8 @@ public abstract class EnemyController : MonoBehaviour
     protected Vector3 Evade(float seconds = 1f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
-        float futureDistance = Vector3.SqrMagnitude(player.Pos - futurePos);
-        float distFromTarget = GetSqrDistance(player.Pos);
+        float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
+        float distFromTarget = GetSqrDistance(player.pos);
 
         return distFromTarget < futureDistance ? Flee(player) : Flee(futurePos);
     }
@@ -279,7 +277,7 @@ public abstract class EnemyController : MonoBehaviour
     
     private Vector3 Seek(PlayerController targetObject)
     {
-        return Seek(targetObject.Pos);
+        return Seek(targetObject.pos);
     }
     
     public Vector3 AvoidAsteroid(AsteroidController asteroid)

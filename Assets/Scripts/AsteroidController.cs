@@ -6,7 +6,7 @@ public class AsteroidController : MonoBehaviour
 {
     float bounds = 100;
 
-    int baseRadius = 4;
+    public int baseRadius = 4;
     float maxRadiusVariation;
     int baseSubdivisions = 5;
 

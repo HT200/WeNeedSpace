@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HardEnemy : EnemyController
 {
-    [SerializeField][Min(10f)] private float strafeDistance;
+    [SerializeField][Min(100f)] private float strafeDistance;
     [SerializeField][Min(10f)] private float fireDistance;
     [SerializeField][Min(0.1f)] private float laserCooldown = 1f;
     [SerializeField] private GameObject laserPrefab;
@@ -14,7 +14,7 @@ public class HardEnemy : EnemyController
         float dt = Time.deltaTime;
             
         Vector3 ultimateForce = Vector3.zero;
-        float distanceFromPlayer = GetSqrDistance(player.Pos);
+        float distanceFromPlayer = GetSqrDistance(player.pos);
             
         ultimateForce += distanceFromPlayer < strafeDistance ? Evade() : Pursue();
         ultimateForce += Separate(gameManager.enemyList);

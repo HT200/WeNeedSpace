@@ -141,9 +141,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db4b09ed40174d419c667746ec2c4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  m_enemyType: 2
-  laserfire: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
+  velocity: {x: 0, y: 0, z: 0}
+  enemyType: 0
+  scoreManager: {fileID: 0}
+  maxSpeed: 2
+  maxForce: 2
+  obstacleViewDistance: 5
+  mesh: {fileID: 608598072294651864}
+  personalSpace: 1
+  mass: 1.5
+  health: 1
+  strafeDistance: 100
+  fireDistance: 10
+  laserCooldown: 5
+  laserPrefab: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
 --- !u!114 &512171077511588171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,4 +167,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12611fa0c149f8947a2cfc8bff56b420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  m_gameManager: {fileID: 0}
+  m_scoreManager: {fileID: 0}
