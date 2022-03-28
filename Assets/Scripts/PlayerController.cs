@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 pos;
     public Vector3 vel;
     private Vector3 acc;
+    public Vector3 Pos => pos;
 
     //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
     bool gameover;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
+    
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
@@ -210,6 +212,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Update the player's Health and Shield when they take damage.
     /// This damage amount should always be 1.
@@ -264,5 +267,15 @@ public class PlayerController : MonoBehaviour
     public PlayerUI GetPlayerUI()
     {
         return this.m_playerUI;
+    }
+    
+    /// <summary>
+    /// Get the predicted positions where this vehicle should be in x seconds
+    /// </summary>
+    /// <param name="seconds">how many seconds ahead to look</param>
+    /// <returns>predicted future positions</returns>
+    public Vector3 GetFuturePosition(float seconds)
+    {
+        return pos + vel * seconds;
     }
 }
