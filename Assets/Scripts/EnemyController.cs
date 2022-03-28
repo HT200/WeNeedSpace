@@ -232,8 +232,6 @@ public abstract class EnemyController : MonoBehaviour
 
         // Add to the player's combo
         scoreManager.SetCombo(scoreManager.GetCombo() + 1);
-
-        Destroy(gameObject);
     }
     
     /// <summary>
