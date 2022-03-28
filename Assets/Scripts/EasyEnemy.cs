@@ -1,27 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EasyEnemy : EnemyController
 {
-    protected override void Start()
+    protected override void CalculateSteeringForces()
     {
-        base.Start();
+        Vector3 ultimateForce = Vector3.zero;
+        ultimateForce += Pursue();
+        ultimateForce += Separate(gameManager.enemyList);
 
-        speed = 6.0f;
-    }
-
-    protected override void Update()
-    {
-        Vector3 playerPos = player.transform.position;
-
-        // If this enemy has reached it's previous target, re-target the player
-        if (Vector3.Distance(pos, target) < 1.0f)
-        {
-            target = playerPos;
-            transform.forward = (target - pos).normalized;
-        }
-
-        base.Update();
+        ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
+            
+        ApplyForce(ultimateForce);
     }
 }
