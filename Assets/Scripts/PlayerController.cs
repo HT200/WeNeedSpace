@@ -31,7 +31,6 @@ public class PlayerController : MonoBehaviour
     public Vector3 pos;
     public Vector3 vel;
     private Vector3 acc;
-    public Vector3 Pos => pos;
 
     //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
     bool gameover;
@@ -211,7 +210,6 @@ public class PlayerController : MonoBehaviour
             m_scoreManager.DecrementCombo();
         }
     }
-
 
     /// <summary>
     /// Update the player's Health and Shield when they take damage.

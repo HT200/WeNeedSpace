@@ -33,7 +33,7 @@ public class BlackHoleCollision : MonoBehaviour
         //d=10m A= 100 m/s^s
 
 
-        if(other.tag == "Bullet")
+        if(other.CompareTag("Bullet"))
         {
             if ((this.transform.position - other.transform.position).sqrMagnitude > 25)
             {
@@ -44,18 +44,18 @@ public class BlackHoleCollision : MonoBehaviour
                 Destroy(other.gameObject);
             }
         }
-        if(other.tag == "Enemy")
+        if(other.CompareTag("Enemy"))
         {
             if ((this.transform.position - other.transform.position).sqrMagnitude > 25)
             {
-                other.gameObject.GetComponent<EnemyController>().vel += (this.transform.position - other.transform.position).normalized * (1000 / (this.transform.position - other.transform.position).magnitude) * Time.deltaTime;
+                other.gameObject.GetComponent<EnemyController>().velocity += (this.transform.position - other.transform.position).normalized * (1000 / (this.transform.position - other.transform.position).magnitude) * Time.deltaTime;
             }
             else
             {
                 Destroy(other.gameObject);
             }
         }
-        if(other.tag == "Asteroid")
+        if(other.CompareTag("Asteroid"))
         {
             if ((this.transform.position - other.transform.position).sqrMagnitude > 25)
             {

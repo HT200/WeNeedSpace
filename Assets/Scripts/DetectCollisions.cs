@@ -34,8 +34,8 @@ public class DetectCollisions : MonoBehaviour
             }
             else if (other.tag == "Bullet" || other.tag == "Asteroid")
             {
-                Destroy(this.gameObject);
                 Destroy(other.gameObject);
+                Destroy(this.gameObject);
             }
         }
         else if (this.tag == "Player")
@@ -48,5 +48,9 @@ public class DetectCollisions : MonoBehaviour
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
+    }
+
+    private void Update()
+    {
     }
 }

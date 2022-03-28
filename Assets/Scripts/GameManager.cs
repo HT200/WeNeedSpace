@@ -26,19 +26,19 @@ public class GameManager : MonoBehaviour
     // Enemy variables
     private int m_numEasyEnemies;
     [SerializeField] private int m_easyEnemyWeight;
-    [SerializeField] private GameObject m_easyEnemyPrefab;
+    [SerializeField] private EnemyController m_easyEnemyPrefab;
     private int m_numMediumEnemies;
     [SerializeField] private int m_mediumEnemyWeight;
-    [SerializeField] private GameObject m_mediumEnemyPrefab;
+    [SerializeField] private EnemyController m_mediumEnemyPrefab;
     private int m_numHardEnemies;
     [SerializeField] private int m_hardEnemyWeight;
-    [SerializeField] private GameObject m_hardEnemyPrefab;
+    [SerializeField] private EnemyController m_hardEnemyPrefab;
 
     // Score Manager
     [SerializeField] private ScoreManager m_scoreManager;
 
     // Asteroid variables
-    [SerializeField] private GameObject m_AsteroidBasePrefab;
+    [SerializeField] private AsteroidController m_AsteroidBasePrefab;
     private int m_maxAsteroids = 20;
 
     // UI Element Variables
@@ -50,15 +50,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
 
+    // Reference List
+    public List<EnemyController> enemyList;
+    public List<AsteroidController> asteroidList;
+    
     Color boundColor;
     bool changingColor;
     public bool outOfBounds;
 
     void Start()
     {
+        enemyList = new List<EnemyController>();
+        asteroidList = new List<AsteroidController>();
+        
         for(int i = 0; i < m_maxAsteroids; i += 1)
         {
-            GameObject.Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity);
+            asteroidList.Add(Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity));
         }
 
         changingColor = true;
@@ -69,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     void NewWave()
     {
+        // Reset enemy list
+        enemyList = new List<EnemyController>();
+        
         // Increase the wave variables
         m_waveNumber += 1;
         m_waveWeight = 10 * m_waveNumber;
@@ -140,12 +150,10 @@ public class GameManager : MonoBehaviour
             m_waveTimeText.text = (Mathf.Round(m_waveTimer * 100) / 100).ToString();
 
             // Once the wave timer hits zero, start the next wave
-            if (m_waveTimer <= 0)
-            {
-                m_scoreManager.TimeBonus(m_playTime);
-                SetWaveTimerWarning(false);
-                NewWave();
-            }
+            if (!(m_waveTimer <= 0)) return;
+            m_scoreManager.TimeBonus(m_playTime);
+            SetWaveTimerWarning(false);
+            NewWave();
         }
         else if (m_waveState == WaveState.OVER)
         {
@@ -155,33 +163,31 @@ public class GameManager : MonoBehaviour
 
     public void BoundWarning(float dtimer)
     {
-        if (m_waveState != WaveState.OVER)
+        if (m_waveState == WaveState.OVER) return;
+        m_outOfBoundTop.gameObject.SetActive(true);
+        m_outOfBoundBot.gameObject.SetActive(true);
+        m_timer.gameObject.SetActive(true);
+        m_timer.text = (Mathf.Round(dtimer * 100) / 100) + "s";
+
+        if (changingColor)
         {
-            m_outOfBoundTop.gameObject.SetActive(true);
-            m_outOfBoundBot.gameObject.SetActive(true);
-            m_timer.gameObject.SetActive(true);
-            m_timer.text = (Mathf.Round(dtimer * 100) / 100).ToString() + "s";
-
-            if (changingColor)
-            {
-                boundColor.r -= 1;
-            }
-            else
-            {
-                boundColor.r += 1;
-            }
-
-            if (boundColor.r >= 255)
-            {
-                changingColor = true;
-            }
-            else if (boundColor.r <= 0)
-            {
-                changingColor = false;
-            }
-            m_outOfBoundTop.color = boundColor;
-            m_outOfBoundBot.color = boundColor;
+            boundColor.r -= 1;
         }
+        else
+        {
+            boundColor.r += 1;
+        }
+
+        if (boundColor.r >= 255)
+        {
+            changingColor = true;
+        }
+        else if (boundColor.r <= 0)
+        {
+            changingColor = false;
+        }
+        m_outOfBoundTop.color = boundColor;
+        m_outOfBoundBot.color = boundColor;
     }
 
     public void RemoveWarning()
@@ -210,43 +216,41 @@ public class GameManager : MonoBehaviour
         // Regenerate the player's Shield once a Wave is completed
         player.GetComponent<PlayerController>().RegenerateShield();
     }
+    
+    /// <summary>
+    /// Spawn a specific type of enemy
+    /// </summary>
+    /// <param name="prefab">Enemy's prefab</param>
+    /// <param name="enemyCount">Enemy's index number</param>
+    /// <param name="type">Enemy's type</param>
+    private int SpawnEnemy(EnemyController prefab, int enemyCount, EnemyType type)
+    {
+        var enemy = Instantiate(prefab, m_spawnPosition);
+        enemy.name = type.ToString() + enemyCount;
+        Debug.Log("Spawned " + enemy.name);
+        enemy.enemyType = type;
+        enemyList.Add(enemy);
+        enemyCount--;
+        return enemyCount;
+    }
 
     /// <summary>
-    /// Spawn the enemies for the current wave. This is called in Update, and one enemy
+    /// Spawn the enemies for the current wave. This is called in Update, and one enemy type
     /// is spawned at a time, first easy, then medium, then hard.
     /// </summary>
     private void SpawnEnemy()
     {
         // Spawn the easy enemies first
-        if (m_numEasyEnemies > 0)
-        {
-            GameObject easyEnemy = GameObject.Instantiate(m_easyEnemyPrefab, m_spawnPosition);
-            easyEnemy.name = "EasyEnemy" + m_numEasyEnemies;
-            easyEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.EASY;
-            Debug.Log("Spawned " + easyEnemy.name);
-            // Decrease the number of medium enemies left to spawn
-            m_numEasyEnemies -= 1;
-        }
+        if (m_numEasyEnemies > 0) 
+            m_numEasyEnemies = SpawnEnemy(m_easyEnemyPrefab, m_numEasyEnemies, EnemyType.EASY);
+        
         // Then spawn the medium enemies
-        else if (m_numMediumEnemies > 0)
-        {
-            GameObject mediumEnemy = GameObject.Instantiate(m_mediumEnemyPrefab, m_spawnPosition);
-            mediumEnemy.name = "MediumEnemy" + m_numMediumEnemies;
-            mediumEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.MEDIUM;
-            Debug.Log("Spawned " + mediumEnemy.name);
-            // Decrease the number of medium enemies left to spawn
-            m_numMediumEnemies -= 1;
-        }
+        else if (m_numMediumEnemies > 0) 
+            m_numMediumEnemies = SpawnEnemy(m_mediumEnemyPrefab, m_numMediumEnemies, EnemyType.MEDIUM);
+
         // Then spawn the hard enemies
         else if (m_numHardEnemies > 0)
-        {
-            GameObject hardEnemy = GameObject.Instantiate(m_hardEnemyPrefab, m_spawnPosition);
-            hardEnemy.name = "HardEnemy" + m_numHardEnemies;
-            hardEnemy.GetComponent<EnemyController>().m_enemyType = EnemyType.HARD;
-            Debug.Log("Spawned " + hardEnemy.name);
-            // Decrease the number of hard enemies left to spawn
-            m_numHardEnemies -= 1;
-        }
+            m_numHardEnemies = SpawnEnemy(m_hardEnemyPrefab, m_numHardEnemies, EnemyType.HARD);
 
         // Reset the spawn timer
         m_spawnTimer = m_timeBetweenSpawns;
