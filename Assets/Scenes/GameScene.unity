@@ -2012,7 +2012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_gameManager: {fileID: 47062669}
-  m_scoreManager: {fileID: 0}
+  m_scoreManager: {fileID: 691575955}
   m_playerUI: {fileID: 1184171804}
   m_camera: {fileID: 1051222111}
   m_maxHealth: 3

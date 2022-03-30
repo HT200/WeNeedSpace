@@ -255,12 +255,15 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Update the player's damage output
     /// </summary>
+    /*
     public void UpdateDamage(int change)
     {
         // TODO: Upgrade weapons for more damage?
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
     }
+    */
+
     //This is a read only get function so the gamemangager 
     public PlayerUI GetPlayerUI()
     {
