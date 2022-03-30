@@ -43,6 +43,10 @@ public class ScoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        names = new List<string>();
+        scores = new List<int>();
+        HighScores = new List<string>();
+
         ogSpaceIndicator = m_spaceIndicator.gameObject.transform.position;
         endSpaceIndicator = new Vector3(ogSpaceIndicator.x + 250, ogSpaceIndicator.y, ogSpaceIndicator.z);
 
@@ -235,6 +239,7 @@ public class ScoreManager : MonoBehaviour
 
     public void WriteToFile()
     {
+        SortLists();
         Debug.Log("Entering write to file method");
         if (m_nameText.text.Trim('_') == "")
         {
@@ -248,7 +253,7 @@ public class ScoreManager : MonoBehaviour
             scoreWrite.WriteLine(HighScores[i].Trim('_').ToUpper() + ":" + HighScores[i + 1]);
         }
 
-        scoreWrite.WriteLine(m_nameText.text.Trim().ToUpper() + ":" + m_currentScore.ToString());
+        scoreWrite.WriteLine(m_nameText.text.Trim('_').ToUpper() + ":" + m_currentScore.ToString());
         //ALWAYS REMEMBER TO CLOSE
         scoreWrite.Close();
     }
@@ -265,9 +270,12 @@ public class ScoreManager : MonoBehaviour
             //A line is comprised of "name:score"
             tempSplit = line.Split(':');
             //With this, all even numbered spots of the scores list contain names, and their associate score is 1 ahead of that
-            names.Add(tempSplit[0]);
+            names.Add(tempSplit[0].Trim('_').ToUpper());
             scores.Add(int.Parse(tempSplit[1]));
         }
+
+        names.Add(m_nameText.text.Trim('_').ToUpper());
+        scores.Add(m_currentScore);
         //ALWAYS REMEMBER TO CLOSE
         scoreRead.Close();
     }

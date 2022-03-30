@@ -165,7 +165,7 @@ MonoBehaviour:
   m_hardEnemyPrefab: {fileID: -6827203077869378770, guid: aed4d2795e495974abab2449867916d0, type: 3}
   m_scoreManager: {fileID: 691575955}
   m_AsteroidBasePrefab: {fileID: -5733182261058485309, guid: 7f77e797b897a674e83562dff42c6dcb, type: 3}
-  m_waveText: {fileID: 0}
+  m_waveText: {fileID: 48858187}
   m_outOfBoundTop: {fileID: 1324601956}
   m_outOfBoundBot: {fileID: 1011113061}
   m_timer: {fileID: 297346378}
@@ -813,7 +813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200ad0b8132503f469f3762c6da2e41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_scoreText: {fileID: 0}
+  m_scoreText: {fileID: 1511157344}
   m_nameText: {fileID: 1311979757}
   m_spaceIndicator: {fileID: 1209716570}
 --- !u!4 &691575956
@@ -2531,7 +2531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gameManager: {fileID: 47062669}
   m_scoreManager: {fileID: 691575955}
-  m_playerUI: {fileID: 0}
+  m_playerUI: {fileID: 1943052823}
   m_camera: {fileID: 1051222111}
   m_maxHealth: 3
   m_maxShield: 3
