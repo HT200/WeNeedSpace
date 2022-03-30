@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
             GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
 
             // Convert the crosshair/mouse position to a 3D point in world space (assume the UI is 10 units away from the camera)
-            Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10));
+            Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50));
             // Point the newly created laser GameObject towards the point in world space
             temp.transform.LookAt(worldPos);
             Laser tempScript = temp.GetComponent<Laser>();

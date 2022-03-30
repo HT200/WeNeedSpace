@@ -9,23 +9,23 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private GameObject m_player;
 
     // UI Colors
-    public Color m_crosshairColor;
-    public Color m_healthShieldOutlineColor;
-    public Color m_healthBarFillColor;
-    public Color m_shieldBarFillColor;
+    [SerializeField] private Color m_crosshairColor;
+    [SerializeField] private Color m_healthShieldOutlineColor;
+    [SerializeField] private Color m_healthBarFillColor;
+    [SerializeField] private Color m_shieldBarFillColor;
 
     // Crosshair Sprites and Transforms
-    public Image m_crosshairImage;
-    public Image m_thresholdImage;
+    [SerializeField] private Image m_crosshairImage;
+    [SerializeField] private Image m_thresholdImage;
     private RectTransform m_crosshairTransform;
     private RectTransform m_thresholdTransform;
 
     // Shield Bar Images
-    public Image m_shieldBarOutlineImage;
-    public Image m_shieldBarFillImage;
+    [SerializeField] private Image m_shieldBarOutlineImage;
+    [SerializeField] private Image m_shieldBarFillImage;
     // Health Bar Images
-    public Image m_healthBarOutlineImage;
-    public Image m_healthBarFillImage;
+    [SerializeField] private Image m_healthBarOutlineImage;
+    [SerializeField] private Image m_healthBarFillImage;
 
     // Start is called before the first frame update
     void Start()

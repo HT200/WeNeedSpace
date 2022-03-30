@@ -12,14 +12,14 @@ public class GameManager : MonoBehaviour
     // Wave variables
     private int m_waveNumber = 0;
     private int m_waveWeight = 0;
+    private float m_wavePlayTime = 0.0f;
     private WaveState m_waveState;
 
     // Timer variables
-    private float m_spawnTimer;
+    private float m_spawnCooldownTimer;
     [SerializeField] private float m_timeBetweenSpawns = 1.5f;
-    private float m_waveTimer;
+    private float m_waveCooldownTimer;
     [SerializeField] private float m_timeBetweenWaves = 10f;
-    [SerializeField] private float m_playTime = 0.0f;
 
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
@@ -27,13 +27,13 @@ public class GameManager : MonoBehaviour
     // Enemy variables
     private int m_numEasyEnemies;
     [SerializeField] private int m_easyEnemyWeight;
-    [SerializeField] private EnemyController m_easyEnemyPrefab;
+    [SerializeField] private GameObject m_easyEnemyPrefab;
     private int m_numMediumEnemies;
     [SerializeField] private int m_mediumEnemyWeight;
-    [SerializeField] private EnemyController m_mediumEnemyPrefab;
+    [SerializeField] private GameObject m_mediumEnemyPrefab;
     private int m_numHardEnemies;
     [SerializeField] private int m_hardEnemyWeight;
-    [SerializeField] private EnemyController m_hardEnemyPrefab;
+    [SerializeField] private GameObject m_hardEnemyPrefab;
 
     // Score Manager
     [SerializeField] private ScoreManager m_scoreManager;
@@ -44,9 +44,9 @@ public class GameManager : MonoBehaviour
 
     // UI Element Variables
     [SerializeField] private Text m_waveText;
-    [SerializeField] private Text m_outOfBoundTop;
-    [SerializeField] private Text m_outOfBoundBot;
-    [SerializeField] private Text m_timer;
+    [SerializeField] private Text m_outOfBoundsTop;
+    [SerializeField] private Text m_outOfBoundsBot;
+    [SerializeField] private Text m_outOfBoundsTimer;
     [SerializeField] private Text m_waveTimeText;
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         enemyList = new List<EnemyController>();
         asteroidList = new List<AsteroidController>();
         
-        for(int i = 0; i < m_maxAsteroids; i += 1)
+        for(int i = 0; i < m_maxAsteroids; i++)
         {
             asteroidList.Add(Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity));
         }
@@ -87,11 +87,11 @@ public class GameManager : MonoBehaviour
         DetermineWaveEnemies();
 
         // Initialize the timers
-        m_spawnTimer = m_timeBetweenSpawns;
-        m_waveTimer = m_timeBetweenWaves;
-        m_playTime = 0.0f;
+        m_spawnCooldownTimer = m_timeBetweenSpawns;
+        m_waveCooldownTimer = m_timeBetweenWaves;
+        m_wavePlayTime = 0.0f;
 
-        // Immediately start the first wave
+        // Start the next wave
         m_waveState = WaveState.IN_PROGRESS;
         m_waveText.text = "Wave: " + m_waveNumber;
         Debug.Log("Wave " + m_waveNumber + " started!");
@@ -124,51 +124,59 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Continue with the wave
-        if (m_waveState == WaveState.IN_PROGRESS)
+        switch (m_waveState)
         {
-            m_playTime += Time.deltaTime;
-            // Decrease the timer by each frame duration
-            m_spawnTimer -= Time.deltaTime;
+            case WaveState.IN_PROGRESS:
+                // Continue with the wave
+                {
+                    // Increase the wave play time
+                    m_wavePlayTime += Time.deltaTime;
 
-            // Once the spawn timer equals zero, spawn the next enemy and reset the spawn timer
-            if (m_spawnTimer <= 0)
-            {
-                SpawnEnemy();
-            }
+                    // Decrease the timer by each frame duration
+                    m_spawnCooldownTimer -= Time.deltaTime;
 
-            // Checks and handles wave completion criteria
-            CheckWaveCompleted();
-        }
-        // If a wave has been completed, we are inbetween waves
-        //Note: we should change all these else ifs to a single switch statement
-        //since an enum cant be two states at once making them explicitly mutually exclusive is unnecessary
-        else if (m_waveState == WaveState.COMPLETED)
-        {
-            SetWaveTimerWarning(true);
-            // Decrease the timer by each frame duration
-            m_waveTimer -= Time.deltaTime;
-            m_waveTimeText.text = (Mathf.Round(m_waveTimer * 100) / 100).ToString();
+                    // Once the spawn timer equals zero, spawn the next enemy and reset the spawn timer
+                    if (m_spawnCooldownTimer <= 0)
+                    {
+                        SpawnEnemy();
+                    }
 
-            // Once the wave timer hits zero, start the next wave
-            if (!(m_waveTimer <= 0)) return;
-            m_scoreManager.TimeBonus(m_playTime);
-            SetWaveTimerWarning(false);
-            NewWave();
-        }
-        else if (m_waveState == WaveState.OVER)
-        {
-            m_scoreManager.GetName();
+                    // Checks and handles wave completion criteria
+                    CheckWaveCompleted();
+                    break;
+                }
+            case WaveState.COMPLETED:
+                // If a wave has been completed, we are inbetween waves
+                {
+                    SetWaveTimerWarning(true);
+                    // Decrease the timer by each frame duration
+                    m_waveCooldownTimer -= Time.deltaTime;
+                    m_waveTimeText.text = (Mathf.Round(m_waveCooldownTimer * 100) / 100).ToString();
+
+                    // Once the wave timer hits zero, start the next wave
+                    if (m_waveCooldownTimer <= 0)
+                    {
+                        m_scoreManager.TimeBonus(m_wavePlayTime);
+                        SetWaveTimerWarning(false);
+                        NewWave();
+                    }
+                    break;
+                }
+            case WaveState.OVER:
+                {
+                    m_scoreManager.GetName();
+                    break;
+                }
         }
     }
 
     public void BoundWarning(float dtimer)
     {
         if (m_waveState == WaveState.OVER) return;
-        m_outOfBoundTop.gameObject.SetActive(true);
-        m_outOfBoundBot.gameObject.SetActive(true);
-        m_timer.gameObject.SetActive(true);
-        m_timer.text = (Mathf.Round(dtimer * 100) / 100) + "s";
+        m_outOfBoundsTop.gameObject.SetActive(true);
+        m_outOfBoundsBot.gameObject.SetActive(true);
+        m_outOfBoundsTimer.gameObject.SetActive(true);
+        m_outOfBoundsTimer.text = (Mathf.Round(dtimer * 100) / 100) + "s";
 
         if (changingColor)
         {
@@ -187,15 +195,15 @@ public class GameManager : MonoBehaviour
         {
             changingColor = false;
         }
-        m_outOfBoundTop.color = boundColor;
-        m_outOfBoundBot.color = boundColor;
+        m_outOfBoundsTop.color = boundColor;
+        m_outOfBoundsBot.color = boundColor;
     }
 
     public void RemoveWarning()
     {
-        m_outOfBoundBot.gameObject.SetActive(false);
-        m_outOfBoundTop.gameObject.SetActive(false);
-        m_timer.gameObject.SetActive(false);
+        m_outOfBoundsBot.gameObject.SetActive(false);
+        m_outOfBoundsTop.gameObject.SetActive(false);
+        m_outOfBoundsTimer.gameObject.SetActive(false);
     }
 
     public void SetWaveTimerWarning(bool b)
@@ -204,18 +212,27 @@ public class GameManager : MonoBehaviour
         m_waveWarnText.gameObject.SetActive(b);
     }
 
+    /// <summary>
+    /// Determine if the current wave has been completed. The number of enemies variables 
+    /// track how many of each enemy type to spawn. When they are all 0, every enemy in the 
+    /// wave has been spawned. Enemies are spawned as a child of the Spawn Position. When 
+    /// this GameObject has no more children, all enemies have been defeated.
+    /// </summary>
     public void CheckWaveCompleted()
     {
         // If all enemies have been spawned and destroyed, then the wave has been completed
-        if (m_numEasyEnemies != 0 || m_numMediumEnemies != 0 || m_numHardEnemies != 0 ||
-            m_spawnPosition.childCount != 0) return;
+        if (m_numEasyEnemies == 0 && 
+            m_numMediumEnemies == 0 && 
+            m_numHardEnemies == 0 &&
+            m_spawnPosition.childCount == 0)
+        {
+            m_waveState = WaveState.COMPLETED;
+            Debug.Log("Wave " + m_waveNumber + " completed!");
+            m_scoreManager.UpdateScoreWaveCleared();
 
-        m_waveState = WaveState.COMPLETED;
-        Debug.Log("Wave " + m_waveNumber + " completed!");
-        m_scoreManager.UpdateScoreWaveCleared();
-
-        // Regenerate the player's Shield once a Wave is completed
-        player.GetComponent<PlayerController>().RegenerateShield();
+            // Regenerate the player's Shield once a Wave is completed
+            player.GetComponent<PlayerController>().RegenerateShield();
+        }
     }
     
     /// <summary>
@@ -224,15 +241,15 @@ public class GameManager : MonoBehaviour
     /// <param name="prefab">Enemy's prefab</param>
     /// <param name="enemyCount">Enemy's index number</param>
     /// <param name="type">Enemy's type</param>
-    private int SpawnEnemy(EnemyController prefab, int enemyCount, EnemyType type)
+    private int SpawnEnemy(GameObject prefab, int enemyCount, EnemyType type)
     {
-        var enemy = Instantiate(prefab, m_spawnPosition);
+        GameObject enemy = Instantiate(prefab, m_spawnPosition);
         enemy.name = type.ToString() + enemyCount;
         Debug.Log("Spawned " + enemy.name);
-        enemy.enemyType = type;
-        enemyList.Add(enemy);
-        enemyCount--;
-        return enemyCount;
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        enemyController.enemyType = type;
+        enemyList.Add(enemyController);
+        return enemyCount - 1;
     }
 
     /// <summary>
@@ -254,7 +271,7 @@ public class GameManager : MonoBehaviour
             m_numHardEnemies = SpawnEnemy(m_hardEnemyPrefab, m_numHardEnemies, EnemyType.HARD);
 
         // Reset the spawn timer
-        m_spawnTimer = m_timeBetweenSpawns;
+        m_spawnCooldownTimer = m_timeBetweenSpawns;
     }
 
     /// <summary>
