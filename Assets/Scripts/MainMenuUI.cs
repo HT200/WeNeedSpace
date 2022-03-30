@@ -5,45 +5,50 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] private GameObject m_mainmenuUI;
+    [SerializeField] private Camera m_camera;
+    [SerializeField] private GameObject m_mainMenuUI;
     [SerializeField] private GameObject m_leaderboardUI;
-    [SerializeField] private GameObject m_howtoplayUI;
+    [SerializeField] private GameObject m_howToPlayUI;
     [SerializeField] private GameObject m_creditsUI;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
-        
+        m_camera.transform.Rotate(0f, 2 * Time.deltaTime, 0f);
     }
 
-    public void Play()
+    public void BackButton()
     {
-        SceneManager.LoadScene("MVPScene", LoadSceneMode.Single);
+        m_mainMenuUI.SetActive(true);
+        m_leaderboardUI.SetActive(false);
+        m_howToPlayUI.SetActive(false);
+        m_creditsUI.SetActive(false);
     }
 
-    public void Leaderboard()
+    public void PlayButton()
     {
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    }
+
+    public void LeaderboardButton()
+    {
+        m_mainMenuUI.SetActive(false);
         m_leaderboardUI.SetActive(true);
     }
 
-    public void HowToPlay()
+    public void HowToPlayButton()
     {
-        m_howtoplayUI.SetActive(true);
+        m_mainMenuUI.SetActive(false);
+        m_howToPlayUI.SetActive(true);
     }
 
-    public void Credits()
+    public void CreditsButton()
     {
-        m_mainmenuUI.SetActive(false);
+        m_mainMenuUI.SetActive(false);
         m_creditsUI.SetActive(true);
     }
 
-    public void Quit()
+    public void QuitButton()
     {
         Application.Quit();
     }

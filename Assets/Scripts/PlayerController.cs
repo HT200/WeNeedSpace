@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     // Game Manager Reference
     [SerializeField] private GameManager m_gameManager;
+    // Score Manager Reference
+    [SerializeField] private ScoreManager m_scoreManager;
     // Player UI Reference
     [SerializeField] private PlayerUI m_playerUI;
     // Player Camera Reference
@@ -36,6 +38,7 @@ public class PlayerController : MonoBehaviour
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
+    
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
 
@@ -204,10 +207,9 @@ public class PlayerController : MonoBehaviour
 
             // The interval between shots is 1/5th of a second
             lasercooldown = 0.2f;
-            m_gameManager.DecrementCombo();
+            m_scoreManager.DecrementCombo();
         }
     }
-
 
     /// <summary>
     /// Update the player's Health and Shield when they take damage.
@@ -216,7 +218,7 @@ public class PlayerController : MonoBehaviour
     public void DamagePlayer()
     {
         // Player has taken damage so reset the combo
-        m_gameManager.SetCombo(1);
+        m_scoreManager.SetCombo(1);
 
         // If the Shield has been depleted, apply damage to Health instead.
         if (m_currentShield == 0)
@@ -253,15 +255,28 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Update the player's damage output
     /// </summary>
+    /*
     public void UpdateDamage(int change)
     {
         // TODO: Upgrade weapons for more damage?
         Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
         m_damage += change;
     }
+    */
+
     //This is a read only get function so the gamemangager 
     public PlayerUI GetPlayerUI()
     {
         return this.m_playerUI;
+    }
+    
+    /// <summary>
+    /// Get the predicted positions where this vehicle should be in x seconds
+    /// </summary>
+    /// <param name="seconds">how many seconds ahead to look</param>
+    /// <returns>predicted future positions</returns>
+    public Vector3 GetFuturePosition(float seconds)
+    {
+        return pos + vel * seconds;
     }
 }

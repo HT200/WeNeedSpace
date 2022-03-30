@@ -127,8 +127,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 422f5b16d6fa1cf47a6feb9f84b2f14e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  m_enemyType: 0
+  velocity: {x: 0, y: 0, z: 0}
+  enemyType: 0
+  scoreManager: {fileID: 0}
+  maxSpeed: 2
+  maxForce: 2
+  obstacleViewDistance: 5
+  mesh: {fileID: 450730437848365659}
+  personalSpace: 2
+  mass: 1
+  health: 1
 --- !u!114 &-7227588421356990589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,4 +149,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12611fa0c149f8947a2cfc8bff56b420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  m_gameManager: {fileID: 0}
+  m_scoreManager: {fileID: 0}
