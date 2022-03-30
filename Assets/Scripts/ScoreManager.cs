@@ -149,7 +149,7 @@ public class ScoreManager : MonoBehaviour
                 if (nameIndex != 9)
                 {
                     m_spaceIndicator.gameObject.transform.position = new Vector3(
-                    m_spaceIndicator.gameObject.transform.position.x + 25,
+                    m_spaceIndicator.gameObject.transform.position.x + 27,
                     m_spaceIndicator.gameObject.transform.position.y,
                     m_spaceIndicator.gameObject.transform.position.z
                     );
@@ -163,7 +163,7 @@ public class ScoreManager : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 m_spaceIndicator.gameObject.transform.position = new Vector3(
-                m_spaceIndicator.gameObject.transform.position.x - 25,
+                m_spaceIndicator.gameObject.transform.position.x - 27,
                 m_spaceIndicator.gameObject.transform.position.y,
                 m_spaceIndicator.gameObject.transform.position.z
                 );
