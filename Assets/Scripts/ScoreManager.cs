@@ -26,7 +26,6 @@ public class ScoreManager : MonoBehaviour
     private Vector3 ogSpaceIndicator;
     private Vector3 endSpaceIndicator;
 
-    List<string> scores;
     [SerializeField] private Text m_nameText;
     [SerializeField] private Text m_spaceIndicator;
 
@@ -34,9 +33,20 @@ public class ScoreManager : MonoBehaviour
     int nameIndex;
     const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
 
+    List<string> names;
+    List<int> scores;
+
+    List<string> HighScores;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        names = new List<string>();
+        scores = new List<int>();
+        HighScores = new List<string>();
+
         ogSpaceIndicator = m_spaceIndicator.gameObject.transform.position;
         endSpaceIndicator = new Vector3(ogSpaceIndicator.x + 250, ogSpaceIndicator.y, ogSpaceIndicator.z);
 
@@ -44,7 +54,6 @@ public class ScoreManager : MonoBehaviour
         m_totalKills = 0;
 
         nameIndex = 0;
-        scores = new List<string>();
         m_nameText.text = "__________";
     }
 
@@ -149,7 +158,7 @@ public class ScoreManager : MonoBehaviour
                 if (nameIndex != 9)
                 {
                     m_spaceIndicator.gameObject.transform.position = new Vector3(
-                    m_spaceIndicator.gameObject.transform.position.x + 25,
+                    m_spaceIndicator.gameObject.transform.position.x + 27,
                     m_spaceIndicator.gameObject.transform.position.y,
                     m_spaceIndicator.gameObject.transform.position.z
                     );
@@ -163,7 +172,7 @@ public class ScoreManager : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 m_spaceIndicator.gameObject.transform.position = new Vector3(
-                m_spaceIndicator.gameObject.transform.position.x - 25,
+                m_spaceIndicator.gameObject.transform.position.x - 27,
                 m_spaceIndicator.gameObject.transform.position.y,
                 m_spaceIndicator.gameObject.transform.position.z
                 );
@@ -230,20 +239,21 @@ public class ScoreManager : MonoBehaviour
 
     public void WriteToFile()
     {
+        SortLists();
         Debug.Log("Entering write to file method");
-        if (m_nameText.text == "")
+        if (m_nameText.text.Trim('_') == "")
         {
             //If the player, for whatever reasons, writes to file with no name, use this placeholder instead
             m_nameText.text = "LONESLDRR";
         }
 
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
-        for (int i = 0; i < scores.Count; i += 2)
+        for (int i = 0; i < HighScores.Count; i += 2)
         {
-            scoreWrite.WriteLine(scores[i].ToUpper().Trim('_') + ":" + scores[i + 1]);
+            scoreWrite.WriteLine(HighScores[i].Trim('_').ToUpper() + ":" + HighScores[i + 1]);
         }
 
-        scoreWrite.WriteLine(m_nameText.text.Trim().ToUpper() + ":" + m_currentScore.ToString());
+        scoreWrite.WriteLine(m_nameText.text.Trim('_').ToUpper() + ":" + m_currentScore.ToString());
         //ALWAYS REMEMBER TO CLOSE
         scoreWrite.Close();
     }
@@ -260,10 +270,35 @@ public class ScoreManager : MonoBehaviour
             //A line is comprised of "name:score"
             tempSplit = line.Split(':');
             //With this, all even numbered spots of the scores list contain names, and their associate score is 1 ahead of that
-            scores.Add(tempSplit[0]);
-            scores.Add(tempSplit[1]);
+            names.Add(tempSplit[0].Trim('_').ToUpper());
+            scores.Add(int.Parse(tempSplit[1]));
         }
+
+        names.Add(m_nameText.text.Trim('_').ToUpper());
+        scores.Add(m_currentScore);
         //ALWAYS REMEMBER TO CLOSE
         scoreRead.Close();
+    }
+
+    public void SortLists()
+    {
+        int max = -1;
+        int index = 0;
+        for (int p = 0; p < scores.Count; p++)
+        {
+            max = -1;
+            index = 0;
+            for (int i = 0; i < scores.Count; i++)
+            {
+                if (scores[i] > max)
+                {
+                    index = i;
+                    max = scores[i];
+                }
+            }
+            HighScores.Add(names[index]);
+            HighScores.Add(scores[index].ToString());
+            scores[index] = 0;
+        }
     }
 }
