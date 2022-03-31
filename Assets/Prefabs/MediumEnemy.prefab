@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a5cab54c3746b4547aa323d4f18baf3d, type: 2}
+  - {fileID: 2100000, guid: b21f3839c15c1924ca7bff8818f28d4b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -141,8 +141,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1671792261a6f54796464f621dd11df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  m_enemyType: 1
+  velocity: {x: 0, y: 0, z: 0}
+  enemyType: 0
+  scoreManager: {fileID: 0}
+  maxSpeed: 2
+  maxForce: 2
+  obstacleViewDistance: 0
+  mesh: {fileID: 0}
+  personalSpace: 1
+  mass: 0
+  health: 0
 --- !u!114 &1111115949860172942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,4 +163,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12611fa0c149f8947a2cfc8bff56b420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  m_gameManager: {fileID: 0}
+  m_scoreManager: {fileID: 0}

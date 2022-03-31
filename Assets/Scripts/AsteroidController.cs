@@ -38,7 +38,7 @@ public class AsteroidController : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-        transform.position += vel *dt;
+        transform.position += vel * dt;
 
         transform.Rotate(rotationDirection * rotationSpeed * dt);
     }

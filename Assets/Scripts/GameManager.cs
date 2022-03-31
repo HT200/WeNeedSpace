@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     // Mothership spawn location
     [SerializeField] private Transform m_spawnPosition;
-    
+
     // Enemy variables
     private int m_numEasyEnemies;
     [SerializeField] private int m_easyEnemyWeight;
@@ -51,10 +51,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
 
+    // Audio
+    public AudioClip m_asteroidExplosionAudio;
+    public AudioClip m_shipExplosionAudio;
+    public AudioClip m_laserAudio;
+    public AudioClip m_acceleration;
+
     // Reference List
     public List<EnemyController> enemyList;
     public List<AsteroidController> asteroidList;
-    
+
     Color boundColor;
     bool changingColor;
     public bool outOfBounds;
@@ -63,8 +69,8 @@ public class GameManager : MonoBehaviour
     {
         enemyList = new List<EnemyController>();
         asteroidList = new List<AsteroidController>();
-        
-        for(int i = 0; i < m_maxAsteroids; i++)
+
+        for (int i = 0; i < m_maxAsteroids; i++)
         {
             asteroidList.Add(Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity));
         }
@@ -79,7 +85,7 @@ public class GameManager : MonoBehaviour
     {
         // Reset enemy list
         enemyList = new List<EnemyController>();
-        
+
         // Increase the wave variables
         m_waveNumber += 1;
         m_waveWeight = 10 * m_waveNumber;
@@ -221,8 +227,8 @@ public class GameManager : MonoBehaviour
     public void CheckWaveCompleted()
     {
         // If all enemies have been spawned and destroyed, then the wave has been completed
-        if (m_numEasyEnemies == 0 && 
-            m_numMediumEnemies == 0 && 
+        if (m_numEasyEnemies == 0 &&
+            m_numMediumEnemies == 0 &&
             m_numHardEnemies == 0 &&
             m_spawnPosition.childCount == 0)
         {
@@ -234,7 +240,7 @@ public class GameManager : MonoBehaviour
             player.GetComponent<PlayerController>().RegenerateShield();
         }
     }
-    
+
     /// <summary>
     /// Spawn a specific type of enemy
     /// </summary>
@@ -259,11 +265,11 @@ public class GameManager : MonoBehaviour
     private void SpawnEnemy()
     {
         // Spawn the easy enemies first
-        if (m_numEasyEnemies > 0) 
+        if (m_numEasyEnemies > 0)
             m_numEasyEnemies = SpawnEnemy(m_easyEnemyPrefab, m_numEasyEnemies, EnemyType.EASY);
-        
+
         // Then spawn the medium enemies
-        else if (m_numMediumEnemies > 0) 
+        else if (m_numMediumEnemies > 0)
             m_numMediumEnemies = SpawnEnemy(m_mediumEnemyPrefab, m_numMediumEnemies, EnemyType.MEDIUM);
 
         // Then spawn the hard enemies

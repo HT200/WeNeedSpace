@@ -38,9 +38,13 @@ public class PlayerController : MonoBehaviour
     // Laser variables
     public GameObject laserfire;
     float lasercooldown;
-    
+
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
+
+    // Audio
+    [SerializeField] private AudioSource m_accelerationAudioSource;
+    [SerializeField] private AudioSource m_laserAudioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -90,7 +94,8 @@ public class PlayerController : MonoBehaviour
 
 
 
-        }else if(deathtimer < 10.00f)
+        }
+        else if (deathtimer < 10.00f)
         {
             //If you aren't out of bounds and the death timer is out of sync, resync it
             deathtimer = 10.00f;
@@ -115,10 +120,30 @@ public class PlayerController : MonoBehaviour
             {
                 if (speed < 2.0f)
                 {
+                    if (!m_accelerationAudioSource.isPlaying)
+                    {
+                        m_accelerationAudioSource.pitch = 1;
+                        m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
+                    }
                     speed += 0.5f * dt;
                 }
-            }else if (Input.GetKey(KeyCode.S)){
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                if (!m_accelerationAudioSource.isPlaying)
+                {
+                    m_accelerationAudioSource.pitch = 0.6f;
+                    m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
+                }
                 speed -= 0.2f * dt;
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                StartCoroutine(AudioFadeOut.FadeOut(m_accelerationAudioSource, 0.5f));
+            }
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                StartCoroutine(AudioFadeOut.FadeOut(m_accelerationAudioSource, 0.5f));
             }
 
             if (speed > 0)
@@ -192,6 +217,8 @@ public class PlayerController : MonoBehaviour
     {
         if (lasercooldown <= 0.0f)
         {
+            m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
+            
             // Currently this has the laser instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
             // In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
             // Additionally it might be best to tweak the code so it doesnt perform physical movement on a frame by frame basis but
@@ -269,7 +296,7 @@ public class PlayerController : MonoBehaviour
     {
         return this.m_playerUI;
     }
-    
+
     /// <summary>
     /// Get the predicted positions where this vehicle should be in x seconds
     /// </summary>
