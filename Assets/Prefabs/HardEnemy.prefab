@@ -145,15 +145,16 @@ MonoBehaviour:
   enemyType: 0
   scoreManager: {fileID: 0}
   gameManager: {fileID: 0}
-  maxSpeed: 5
-  maxForce: 5
+  maxSpeed: 10
+  maxForce: 20
   obstacleViewDistance: 5
   mesh: {fileID: 608598072294651864}
   personalSpace: 3
   mass: 1.5
   health: 1
-  strafeDistance: 100
-  fireDistance: 10
+  strafeDistance: 1000
+  strafeArea: 500
+  fireDistance: 2000
   laserCooldown: 5
   laserPrefab: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
 --- !u!114 &512171077511588171

@@ -3,11 +3,13 @@ using UnityEngine;
 public class HardEnemy : EnemyController
 {
     [SerializeField][Min(100f)] private float strafeDistance;
+    [SerializeField][Min(100f)] private float strafeArea;
     [SerializeField][Min(10f)] private float fireDistance;
     [SerializeField][Min(0.1f)] private float laserCooldown = 1f;
     [SerializeField] private GameObject laserPrefab;
         
     private float laserTimer = 0;
+    private bool strafe = false;
 
     protected override void CalculateSteeringForces()
     {
@@ -15,8 +17,11 @@ public class HardEnemy : EnemyController
             
         Vector3 ultimateForce = Vector3.zero;
         float distanceFromPlayer = GetSqrDistance(player.pos);
-            
-        ultimateForce += distanceFromPlayer < strafeDistance ? Evade() : Pursue();
+
+        if (distanceFromPlayer < strafeDistance - strafeArea) strafe = true;
+        if (strafe && distanceFromPlayer > strafeDistance) strafe = false;
+        
+        ultimateForce += strafe ? Evade() : Pursue();
         ultimateForce += Separate(gameManager.enemyList);
 
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);

@@ -131,8 +131,8 @@ MonoBehaviour:
   enemyType: 0
   scoreManager: {fileID: 0}
   gameManager: {fileID: 0}
-  maxSpeed: 5
-  maxForce: 5
+  maxSpeed: 10
+  maxForce: 10
   obstacleViewDistance: 5
   mesh: {fileID: 450730437848365659}
   personalSpace: 3
