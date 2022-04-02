@@ -10,7 +10,7 @@ public class DetectCollisions : MonoBehaviour
     void Start()
     {
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        m_scoreManager = GameObject.Find("GameManager").GetComponent<ScoreManager>();
+        m_scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -20,9 +20,17 @@ public class DetectCollisions : MonoBehaviour
         {
             if (other.tag == "Enemy")
             {
-                //This line isnt necessary, as the enemies all die in one hit currently so no health mechanics, no need for script
-
-                //EnemyController enemyScript = other.gameObject.GetComponent<EnemyController>();
+                // Update list of enemies
+                for (int i = 0; i < m_gameManager.enemyList.Count; i++)
+                {
+                    if(m_gameManager.enemyList[i].gameObject == other.gameObject)
+                    {
+                        print(m_gameManager.enemyList.Count);
+                        m_gameManager.enemyList.RemoveAt(i);
+                        print(m_gameManager.enemyList.Count);
+                        break;
+                    }
+                }
 
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
@@ -32,7 +40,22 @@ public class DetectCollisions : MonoBehaviour
                 enemyScript.UpdateHealth(-playerScript.damage);
                 */
             }
-            else if (other.tag == "Bullet" || other.tag == "Asteroid")
+            else if (other.tag == "Asteroid")
+            {
+                // Update list of asteroids
+                for (int i = 0; i < m_gameManager.asteroidList.Count; i++)
+                {
+                    if(m_gameManager.asteroidList[i].gameObject == other.gameObject)
+                    {
+                        m_gameManager.asteroidList.RemoveAt(i);
+                        break;
+                    }
+                }
+
+                Destroy(other.gameObject);
+                Destroy(this.gameObject);
+            }
+            else if (other.tag == "Bullet")
             {
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
