@@ -144,11 +144,12 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   enemyType: 0
   scoreManager: {fileID: 0}
-  maxSpeed: 2
-  maxForce: 2
+  gameManager: {fileID: 0}
+  maxSpeed: 5
+  maxForce: 5
   obstacleViewDistance: 5
   mesh: {fileID: 608598072294651864}
-  personalSpace: 1
+  personalSpace: 3
   mass: 1.5
   health: 1
   strafeDistance: 100

@@ -144,13 +144,14 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   enemyType: 0
   scoreManager: {fileID: 0}
-  maxSpeed: 2
-  maxForce: 2
+  gameManager: {fileID: 0}
+  maxSpeed: 5
+  maxForce: 5
   obstacleViewDistance: 0
-  mesh: {fileID: 0}
-  personalSpace: 1
-  mass: 0
-  health: 0
+  mesh: {fileID: 8422810614183661827}
+  personalSpace: 3
+  mass: 1
+  health: 1
 --- !u!114 &1111115949860172942
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -41,16 +41,16 @@ public abstract class EnemyController : MonoBehaviour
     void Start()
     {
         //Why do we have the enemycontroller search for the gamemanager when the gamemanager is the one that spawns them? we can just set this when we instantiate it
-        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = gameManager.player.GetComponent<PlayerController>();
     
         position = transform.position;
         radius = mesh.bounds.extents.x;
-        //When is its orientation set? how do this work? instantiation only gives it a position I believe.
         direction = Vector3.forward;
+        
         Vector3 halfToPlayer = position + (player.pos - position) / 2;
-        //Honest to god what the fuck is this?
         target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
+        Debug.Log(target);
     }
 
     // Update is called once per frame
@@ -131,6 +131,8 @@ public abstract class EnemyController : MonoBehaviour
         float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
         float distFromTarget = GetSqrDistance(player.pos);
 
+        Debug.Log(futureDistance);
+
         // If the enemy is within the future distance of the player, seek the player instead
         return distFromTarget < futureDistance ? Seek(player) : Seek(futurePos);
     }
@@ -143,10 +145,8 @@ public abstract class EnemyController : MonoBehaviour
     protected Vector3 Evade(float seconds = 1f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
-        float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
-        float distFromTarget = GetSqrDistance(player.pos);
 
-        return distFromTarget < futureDistance ? Flee(player) : Flee(futurePos);
+        return Flee(futurePos);
     }
 
     /// <summary>
