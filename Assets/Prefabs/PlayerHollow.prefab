@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 5885776242587747013}
   - component: {fileID: 7350334031783742816}
   - component: {fileID: 4748296568723978666}
-  - component: {fileID: 1657236561846118461}
-  - component: {fileID: 5628368977351460476}
   m_Layer: 0
   m_Name: PlayerHollow
   m_TagString: Untagged
@@ -83,30 +81,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1657236561846118461
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6549829122536773759}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.1155407, y: 0.028921751, z: 0.049240854}
-  m_Center: {x: 0, y: 0, z: -0.035905752}
---- !u!136 &5628368977351460476
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6549829122536773759}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.019723412
-  m_Height: 0.12489637
-  m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 0}

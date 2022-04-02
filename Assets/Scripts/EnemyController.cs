@@ -15,7 +15,7 @@ public abstract class EnemyController : MonoBehaviour
     
     [SerializeField] protected ScoreManager scoreManager;
     protected PlayerController player;
-    protected GameManager gameManager;
+    public GameManager gameManager;
 
     [SerializeField][Min(2f)] protected float maxSpeed = 2f;
     [SerializeField][Min(2f)] protected float maxForce = 2f;
@@ -40,14 +40,16 @@ public abstract class EnemyController : MonoBehaviour
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        player = gameManager.GetComponent<PlayerController>();
+        //Why do we have the enemycontroller search for the gamemanager when the gamemanager is the one that spawns them? we can just set this when we instantiate it
+        //gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = gameManager.player.GetComponent<PlayerController>();
     
         position = transform.position;
         radius = mesh.bounds.extents.x;
+        //When is its orientation set? how do this work? instantiation only gives it a position I believe.
         direction = Vector3.forward;
-    
         Vector3 halfToPlayer = position + (player.pos - position) / 2;
+        //Honest to god what the fuck is this?
         target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
     }
 

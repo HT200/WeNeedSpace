@@ -163,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                pos += new Vector3(0.0f, 0.0f, 5.0f) * dt;
+                pos += new Vector3(0.0f, 0.0f, -5.0f) * dt;
             }
             //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
             //Since acc is dependent on the transform.forward

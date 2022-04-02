@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Spawned " + enemy.name);
         EnemyController enemyController = enemy.GetComponent<EnemyController>();
         enemyController.enemyType = type;
+        enemyController.gameManager = this;
         enemyList.Add(enemyController);
         return enemyCount - 1;
     }
