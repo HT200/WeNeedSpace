@@ -21,7 +21,6 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField][Min(2f)] protected float maxForce = 2f;
     
     private float radius;
-    private Vector3 target;
     private Vector3 right = Vector3.right;
     [SerializeField][Min(3f)] private float obstacleViewDistance;
 
@@ -33,6 +32,7 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField][Min(1)] private int health;
 
     private bool goSpawn = false;
+    private Vector3 target;
 
     public int Health => health;
     protected Vector3 Position => position;
@@ -47,17 +47,14 @@ public abstract class EnemyController : MonoBehaviour
         position = transform.position;
         radius = mesh.bounds.extents.x;
         direction = Vector3.forward;
-        
-        Vector3 halfToPlayer = position + (player.pos - position) / 2;
-        target = halfToPlayer + Random.onUnitSphere * halfToPlayer.magnitude;
-        Debug.Log(target);
+
+        //target = new Vector3(position.x + Random.Range(-20, 20), );
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!goSpawn) MoveToSpawnTarget();
-        else CalculateSteeringForces();
+        CalculateSteeringForces();
     
         UpdatePosition();
         transform.position = position;
@@ -99,7 +96,7 @@ public abstract class EnemyController : MonoBehaviour
         Vector3 desiredVelocity = targetPosition - position;
 
         desiredVelocity = desiredVelocity.normalized * maxSpeed;
-
+        
         // Calculate the seek steering force
         return desiredVelocity - velocity;
     }
@@ -130,8 +127,6 @@ public abstract class EnemyController : MonoBehaviour
         Vector3 futurePos = player.GetFuturePosition(seconds);
         float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
         float distFromTarget = GetSqrDistance(player.pos);
-
-        Debug.Log(futureDistance);
 
         // If the enemy is within the future distance of the player, seek the player instead
         return distFromTarget < futureDistance ? Seek(player) : Seek(futurePos);
@@ -224,6 +219,20 @@ public abstract class EnemyController : MonoBehaviour
     {
         return asteroids.Aggregate(Vector3.zero, (current, asteroid) => current + AvoidAsteroid(asteroid));
     }
+    
+    /// <summary>
+    /// Move the enemy to the spawn target
+    /// </summary>
+    private void MoveToSpawnTarget()
+    {
+        Vector3 ultimateForce = Vector3.zero;
+        ultimateForce += Seek(target);
+        ultimateForce += Separate(gameManager.enemyList);
+        //ultimateForce += AvoidAllObstacles();
+        ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
+        
+        ApplyForce(ultimateForce);
+    } 
 
     /// <summary>
     /// Destroy this enemy
@@ -246,20 +255,6 @@ public abstract class EnemyController : MonoBehaviour
 
         if (health > 0) return;
         DestroyEnemy();
-    }
-
-    /// <summary>
-    /// Move the enemy to the spawn target
-    /// </summary>
-    private void MoveToSpawnTarget()
-    {
-        Vector3 ultimateForce = Vector3.zero;
-        ultimateForce += Seek(target);
-        ultimateForce += Separate(gameManager.enemyList);
-        //ultimateForce += AvoidAllObstacles();
-        ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
-        
-        ApplyForce(ultimateForce);
     }
 
     protected abstract void CalculateSteeringForces();
