@@ -187,11 +187,11 @@ MonoBehaviour:
   m_timeBetweenSpawns: 1.5
   m_timeBetweenWaves: 3
   m_spawnPosition: {fileID: 41248021}
-  m_easyEnemyWeight: 1
+  m_easyEnemyWeight: 4
   m_easyEnemyPrefab: {fileID: 2108155773921516430, guid: 60819d44fd37f384ba33bd6c1a762087, type: 3}
   m_mediumEnemyWeight: 2
   m_mediumEnemyPrefab: {fileID: 8062333733843316950, guid: 0f79d00672b72e64c894705bb9d04f10, type: 3}
-  m_hardEnemyWeight: 4
+  m_hardEnemyWeight: 1
   m_hardEnemyPrefab: {fileID: 1401411994979112461, guid: aed4d2795e495974abab2449867916d0, type: 3}
   m_scoreManager: {fileID: 691575955}
   m_AsteroidBasePrefab: {fileID: -5733182261058485309, guid: 7f77e797b897a674e83562dff42c6dcb, type: 3}

@@ -31,7 +31,7 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField][Min(1f)] private float mass;
     [SerializeField][Min(1)] private int health;
 
-    private bool goSpawn = false;
+    private bool goSpawn = true;
     private Vector3 target;
 
     public int Health => health;
@@ -48,13 +48,16 @@ public abstract class EnemyController : MonoBehaviour
         radius = mesh.bounds.extents.x;
         direction = Vector3.forward;
 
-        //target = new Vector3(position.x + Random.Range(-20, 20), );
+        target = new Vector3(position.x + Random.Range(-10, 10), position.y + Random.Range(-10, 10), position.z - 5);
+
+        Debug.Log(target);
     }
 
     // Update is called once per frame
     void Update()
     {
-        CalculateSteeringForces();
+        if (goSpawn) MoveToSpawnTarget();
+        else CalculateSteeringForces();
     
         UpdatePosition();
         transform.position = position;
@@ -122,7 +125,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="seconds">Future timeframe</param>
     /// <returns></returns>
-    protected Vector3 Pursue(float seconds = 2f)
+    protected Vector3 Pursue(float seconds = 1f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
         float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
@@ -137,11 +140,13 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="seconds">Future timeframe</param>
     /// <returns></returns>
-    protected Vector3 Evade(float seconds = 1f)
+    protected Vector3 Evade(float seconds = 0.5f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
-
-        return Flee(futurePos);
+        float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
+        float distFromTarget = GetSqrDistance(player.pos);
+ 
+        return distFromTarget < futureDistance ? Flee(player) : Flee(futurePos);
     }
 
     /// <summary>
@@ -230,6 +235,8 @@ public abstract class EnemyController : MonoBehaviour
         ultimateForce += Separate(gameManager.enemyList);
         //ultimateForce += AvoidAllObstacles();
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
+
+        if (GetSqrDistance(target) <= 0.01f) goSpawn = false;
         
         ApplyForce(ultimateForce);
     } 
