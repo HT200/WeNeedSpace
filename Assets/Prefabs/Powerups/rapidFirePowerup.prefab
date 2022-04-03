@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5994842482179400335
+--- !u!1 &2728025994153000527
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,26 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5440297389230666460}
-  - component: {fileID: 1248214162518976917}
-  - component: {fileID: 6145485788590632036}
-  - component: {fileID: 8969084421799525058}
-  - component: {fileID: 2300786235995285562}
-  - component: {fileID: -5733182261058485309}
+  - component: {fileID: 3355240668757042421}
+  - component: {fileID: 1819434500178455376}
+  - component: {fileID: 4529241613610442650}
+  - component: {fileID: 6283120357402040538}
+  - component: {fileID: -9011539180507792012}
   m_Layer: 0
-  m_Name: Asteroid
-  m_TagString: Asteroid
+  m_Name: rapidFirePowerup
+  m_TagString: Powerup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5440297389230666460
+--- !u!4 &3355240668757042421
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
+  m_GameObject: {fileID: 2728025994153000527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -35,21 +34,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1248214162518976917
+--- !u!33 &1819434500178455376
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
-  m_Mesh: {fileID: 0}
---- !u!23 &6145485788590632036
+  m_GameObject: {fileID: 2728025994153000527}
+  m_Mesh: {fileID: -5495902117074765545, guid: aa873577ce64619428d1584bed3e6fa7, type: 3}
+--- !u!23 &4529241613610442650
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
+  m_GameObject: {fileID: 2728025994153000527}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -62,7 +61,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8cf5a82a760e2414bb927db52a46dfc0, type: 2}
+  - {fileID: 2100000, guid: ea54a1c45240cde43b0421e304b14ede, type: 2}
+  - {fileID: 2100000, guid: 23ff8c2dcdb690341b9e68758a3cbd1c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,53 +84,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8969084421799525058
-SphereCollider:
+--- !u!65 &6283120357402040538
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
+  m_GameObject: {fileID: 2728025994153000527}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2300786235995285562
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 14
-  m_CollisionDetection: 0
---- !u!114 &-5733182261058485309
+  m_Size: {x: 1.0385232, y: 1.0340992, z: 0.20000002}
+  m_Center: {x: 0.01804009, y: -0.016721308, z: -0.0000000037252903}
+--- !u!114 &-9011539180507792012
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994842482179400335}
+  m_GameObject: {fileID: 2728025994153000527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a079f338a0bd4345bb74fef82456858, type: 3}
+  m_Script: {fileID: 11500000, guid: f064a4313a8081743a6b7d0570b1e422, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseRadius: 4
-  rotationDirection: {x: 0, y: 0, z: 0}
-  m_powerups:
-  - {fileID: 2724097321979932840, guid: 840b70537b417d346993c3f87e2bc537, type: 3}
-  - {fileID: 2728025994153000527, guid: 4b21eb5bcb3edf74f96f13426bb72ff3, type: 3}
-  - {fileID: 5901339592101916949, guid: 920ff7e1ff3a483489f12968f03dc89f, type: 3}
-  - {fileID: 1244342496416905335, guid: e13d19e36f0baaf43824476574f91556, type: 3}
-  hasPowerup: 0
-  vel: {x: 0, y: 0, z: 0}
+  m_powerup: 3

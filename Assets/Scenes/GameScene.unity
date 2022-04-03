@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.038225524, g: 0.027932411, b: 0.021871708, a: 1}
+  m_IndirectSpecularColor: {r: 0.038273145, g: 0.02770548, b: 0.02189529, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -943,6 +943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200ad0b8132503f469f3762c6da2e41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_scoreMultiplier: 1
   m_scoreText: {fileID: 1511157344}
   m_nameText: {fileID: 1311979757}
   m_spaceIndicator: {fileID: 1209716570}
@@ -1343,6 +1344,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1611540310}
     m_Modifications:
+    - target: {fileID: 1657236561846118461, guid: 9c06df0d66e2b58468df0abc8af3b754, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5885776242587747013, guid: 9c06df0d66e2b58468df0abc8af3b754, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1403,9 +1408,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerHollow
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
-    - {fileID: 0}
+    - target: {fileID: 6549829122536773759, guid: 9c06df0d66e2b58468df0abc8af3b754, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c06df0d66e2b58468df0abc8af3b754, type: 3}
 --- !u!1 &1011113059
 GameObject:
@@ -2761,6 +2768,11 @@ MonoBehaviour:
   pos: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   laserfire: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
+  lasercooldown: 0
+  m_laserCooldownDefault: 0.2
+  tripleShot: 0
+  m_laserSpeed: 0
+  m_laserSpeedDefault: 20
   m_accelerationAudioSource: {fileID: 1611540313}
   m_laserAudioSource: {fileID: 1611540311}
 --- !u!4 &1611540310

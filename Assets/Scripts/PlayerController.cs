@@ -37,7 +37,11 @@ public class PlayerController : MonoBehaviour
 
     // Laser variables
     public GameObject laserfire;
-    float lasercooldown;
+    public float lasercooldown;
+    public float m_laserCooldownDefault = 0.2f;
+    public bool tripleShot = false;
+    public float m_laserSpeed;
+    public float m_laserSpeedDefault = 20.0f;
 
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
@@ -60,6 +64,7 @@ public class PlayerController : MonoBehaviour
         // Initialize current Health and Shield values to their maximums
         m_currentHealth = m_maxHealth;
         m_currentShield = m_maxShield;
+        m_laserSpeed = m_laserSpeedDefault;
 
         lasercooldown = 0;
         speed = 0.0000f;
@@ -217,23 +222,43 @@ public class PlayerController : MonoBehaviour
     {
         if (lasercooldown <= 0.0f)
         {
-            m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
-            
-            // Currently this has the laser instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
-            // In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
-            // Additionally it might be best to tweak the code so it doesnt perform physical movement on a frame by frame basis but
-            // instead uses actual time since the last frame to account for differing computer speeds
-            GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+            if (!tripleShot)
+            {
+                m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
 
-            // Convert the crosshair/mouse position to a 3D point in world space (assume the UI is 10 units away from the camera)
-            Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50));
-            // Point the newly created laser GameObject towards the point in world space
-            temp.transform.LookAt(worldPos);
-            Laser tempScript = temp.GetComponent<Laser>();
-            tempScript.speed = 20.0f;
+                // Currently this has the laser instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
+                // In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
+                // Additionally it might be best to tweak the code so it doesnt perform physical movement on a frame by frame basis but
+                // instead uses actual time since the last frame to account for differing computer speeds
+                GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
 
-            // The interval between shots is 1/5th of a second
-            lasercooldown = 0.2f;
+                // Convert the crosshair/mouse position to a 3D point in world space (assume the UI is 10 units away from the camera)
+                Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50));
+                // Point the newly created laser GameObject towards the point in world space
+                temp.transform.LookAt(worldPos);
+                Laser tempScript = temp.GetComponent<Laser>();
+                tempScript.speed = m_laserSpeed;
+            }
+            else
+            {
+                m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
+                m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
+                m_laserAudioSource.PlayOneShot(m_gameManager.m_laserAudio, m_laserAudioSource.volume);
+                float laserSpread = 40.0f;
+
+                GameObject left = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+                left.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - laserSpread, Input.mousePosition.y, 50)));
+                left.GetComponent<Laser>().speed = m_laserSpeed;
+                GameObject middle = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+                middle.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50)));
+                middle.GetComponent<Laser>().speed = m_laserSpeed;
+                GameObject right = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
+                right.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + laserSpread, Input.mousePosition.y, 50)));
+                right.GetComponent<Laser>().speed = m_laserSpeed;
+            }
+
+            // The interval between shots is 1/5th of a second by default
+            lasercooldown = m_laserCooldownDefault;
             m_scoreManager.DecrementCombo();
         }
     }
@@ -259,6 +284,30 @@ public class PlayerController : MonoBehaviour
             m_currentShield -= 1;
         }
 
+        UpdateHealthAndShield();
+    }
+
+    /// <summary>
+    /// Update the player's Health and Shield when they receive health.
+    /// The healing amount should always be 1.
+    /// </summary>
+    public void HealPlayer()
+    {
+        // If the player's health is not full
+        if (m_currentShield < 3)
+        {
+            Debug.Log("Player Health increased from " + m_currentHealth + " to " + (m_currentHealth + 1));
+            m_currentHealth += 1;
+        }
+
+        UpdateHealthAndShield();
+    }
+
+    /// <summary>
+    /// Update the Health and Shield Bars.
+    /// </summary>
+    void UpdateHealthAndShield()
+    {
         // Update the UI using Health and Shield percentages of their max values.
         float healthPercent = (float)m_currentHealth / (float)m_maxHealth;
         float shieldPercent = (float)m_currentShield / (float)m_maxShield;
