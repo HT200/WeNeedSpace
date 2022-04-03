@@ -36,6 +36,13 @@ public class DetectCollisions : MonoBehaviour
                 // Update list of asteroids
                 UpdateAsteroidList(other.gameObject);
 
+                // Spawn a powerup if this asteroid has one
+                AsteroidController script = other.GetComponent<AsteroidController>();
+                if (script.hasPowerup)
+                {
+                    // script.SpawnPowerup();
+                }
+
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
             }
@@ -64,6 +71,11 @@ public class DetectCollisions : MonoBehaviour
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
                 // Destroy(this.gameObject);
+            }
+            else if (other.tag == "Powerup")
+            {
+                StartCoroutine(other.GetComponent<PowerupController>().Apply());
+                Destroy(other.gameObject);
             }
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)

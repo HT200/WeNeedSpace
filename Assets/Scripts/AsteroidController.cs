@@ -13,6 +13,7 @@ public class AsteroidController : MonoBehaviour
     public Vector3 rotationDirection;
     float rotationSpeed = 12.0f;
 
+    [SerializeField] GameObject[] m_powerups;
     public bool hasPowerup;
 
     public Vector3 vel;
@@ -21,9 +22,18 @@ public class AsteroidController : MonoBehaviour
     {
         vel = Vector3.zero;
         maxRadiusVariation = baseRadius / 2;
-        hasPowerup = false;
 
-        createAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
+        if (Random.Range(0f, 1f) < 0.2f)
+        {
+            hasPowerup = true;
+        }
+        else
+        {
+            hasPowerup = false;
+        }
+
+
+        CreateAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
         //Ac = v^2/r = 1000/r
         // v = sqrt(1000)
         //V must be applied on the transform.right initally
@@ -48,7 +58,7 @@ public class AsteroidController : MonoBehaviour
     /// </summary>
     /// <param name="position">The position at which to spawn this asteroid.</param>
     /// <param name="rotation">The direction in which to rotate this asteroid.</param>
-    void createAsteroid(Vector3 position, Vector3 rotation)
+    void CreateAsteroid(Vector3 position, Vector3 rotation)
     {
         Vector3[] vertices = new Vector3[(baseSubdivisions + 1) * (baseSubdivisions + 1)];
         int[] triangles = new int[vertices.Length * 6];
@@ -118,5 +128,12 @@ public class AsteroidController : MonoBehaviour
 
         transform.position = position;
         rotationDirection = rotation;
+    }
+
+    public void SpawnPowerup()
+    {
+        int randomPowerup = Random.Range(0, m_powerups.Length);
+
+        GameObject.Instantiate(m_powerups[randomPowerup], transform.position, Quaternion.identity);
     }
 }

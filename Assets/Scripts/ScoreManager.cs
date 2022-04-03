@@ -17,6 +17,7 @@ public class ScoreManager : MonoBehaviour
 
     // Combo for accurate shots
     private int m_scoreCombo = 20;
+    public int m_scoreMultiplier = 1;
     // TODO: Add more...
 
     // UI Elements
@@ -83,9 +84,9 @@ public class ScoreManager : MonoBehaviour
     private void UpdateScore(int updateAmount)
     {
         // Log the Score update
-        Debug.Log("Updating Score from " + m_currentScore + " to " + (m_currentScore + updateAmount));
+        Debug.Log("Updating Score from " + m_currentScore + " to " + (m_currentScore + updateAmount * m_scoreMultiplier));
         // Add to the player's score
-        m_currentScore += updateAmount;
+        m_currentScore += updateAmount * m_scoreMultiplier;
         // Update the UI
         m_scoreText.text = "Score: " + m_currentScore;
     }

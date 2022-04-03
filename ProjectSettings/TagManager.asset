@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Asteroid
   - BlackHole
+  - Powerup
   layers:
   - Default
   - TransparentFX
