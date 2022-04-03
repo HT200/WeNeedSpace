@@ -132,10 +132,10 @@ MonoBehaviour:
   scoreManager: {fileID: 0}
   gameManager: {fileID: 0}
   maxSpeed: 10
-  maxForce: 10
-  obstacleViewDistance: 5
+  maxForce: 60
+  obstacleViewDistance: 10
   mesh: {fileID: 450730437848365659}
-  personalSpace: 3
+  personalSpace: 4
   mass: 1
   health: 1
 --- !u!114 &-7227588421356990589

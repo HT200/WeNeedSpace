@@ -47,8 +47,9 @@ public abstract class EnemyController : MonoBehaviour
         position = transform.position;
         radius = mesh.bounds.extents.x;
         direction = Vector3.forward;
-
-        target = new Vector3(position.x + Random.Range(-10, 10), position.y + Random.Range(-10, 10), position.z - 5);
+        
+        float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
+        target = new Vector3(position.x + Random.Range(-10, 10), position.y + Random.Range(-10, 10), fourthToPlayer);
 
         Debug.Log(target);
     }
@@ -231,14 +232,14 @@ public abstract class EnemyController : MonoBehaviour
     private void MoveToSpawnTarget()
     {
         Vector3 ultimateForce = Vector3.zero;
-        ultimateForce += Seek(target);
-        ultimateForce += Separate(gameManager.enemyList);
-        //ultimateForce += AvoidAllObstacles();
+        ultimateForce += GetSqrDistance(player.pos) < GetSqrDistance(target) ? Pursue() : Seek(target);
+        ultimateForce += Separate(gameManager.enemyList) / 3;
+        //ultimateForce += AvoidAllAsteroids(gameManager.asteroidList);
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
 
         if (GetSqrDistance(target) <= 0.01f) goSpawn = false;
-        
-        ApplyForce(ultimateForce);
+
+            ApplyForce(ultimateForce);
     } 
 
     /// <summary>
@@ -281,10 +282,10 @@ public abstract class EnemyController : MonoBehaviour
     {
         return Seek(targetObject.pos);
     }
-    
+
     public Vector3 AvoidAsteroid(AsteroidController asteroid)
     {
-        return AvoidAsteroid(asteroid.transform.position, asteroid.baseRadius);
+        return AvoidAsteroid(asteroid.transform.position, 3);
     }
     #endregion
 }

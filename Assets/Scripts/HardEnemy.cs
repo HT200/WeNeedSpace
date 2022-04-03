@@ -23,6 +23,9 @@ public class HardEnemy : EnemyController
         
         ultimateForce += strafe ? Evade() : Pursue();
         ultimateForce += Separate(gameManager.enemyList);
+        //ultimateForce += AvoidAllAsteroids(gameManager.asteroidList);
+        
+        if (strafe) Debug.Log(gameObject.name);
 
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
             
@@ -30,6 +33,8 @@ public class HardEnemy : EnemyController
 
         if (!(distanceFromPlayer < fireDistance)) return;
 
+        if (strafe) laserTimer = laserCooldown / 4;
+        
         if (laserTimer <= 0)
         {
             Quaternion rotation = Quaternion.LookRotation(Direction, Vector3.zero);
