@@ -153,7 +153,7 @@ MonoBehaviour:
   mass: 1.5
   health: 1
   strafeDistance: 8000
-  strafeArea: 5000
+  strafeArea: 3000
   fireDistance: 10000
   laserCooldown: 5
   laserPrefab: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
