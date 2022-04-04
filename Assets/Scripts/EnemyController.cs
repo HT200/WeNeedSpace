@@ -49,7 +49,7 @@ public abstract class EnemyController : MonoBehaviour
         direction = Vector3.forward;
         
         float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
-        target = new Vector3(position.x + Random.Range(-10, 10), position.y + Random.Range(-10, 10), fourthToPlayer);
+        target = new Vector3(position.x + Random.Range(-30, 30), position.y + Random.Range(-10, 10), fourthToPlayer);
 
         Debug.Log(target);
     }
@@ -189,23 +189,21 @@ public abstract class EnemyController : MonoBehaviour
     {
         // Get a vector from this vehicle to the obstacle
         Vector3 vToObs = obstaclePos - position;
-        
+
         // Check if the obstacle is behind the vehicle
-        float fwdToObsDot /*forward to obstacle dot products*/ = Vector3.Dot(Vector3.forward, vToObs);
+        float fwdToObsDot /*forward to obstacle dot products*/ = Vector3.Dot(direction, vToObs);
         
         // If the obstacle is behind the object
         if (fwdToObsDot < 0) return Vector3.zero;
 
         // Check to see if the obstacle is too far to the left or right
         float rightToObsDot = Vector3.Dot(Vector3.right, vToObs);
-        
-        // If the obstacle is too far on the left/right
         if (Mathf.Abs(rightToObsDot) > obstacleRadius + radius) return Vector3.zero;
 
         // Check to see if the obstacle is in our view range
         if (fwdToObsDot > obstacleViewDistance) return Vector3.zero;
 
-        // Create a weight based on how close we are to the obstacle
+        // Create a weight based on how close the enemy is to the obstacle
         float weight = obstacleViewDistance / Mathf.Max(fwdToObsDot, 0.001f);
 
         Vector3 desiredVelocity;
@@ -214,7 +212,7 @@ public abstract class EnemyController : MonoBehaviour
         if (rightToObsDot > 0) desiredVelocity = right * -maxSpeed;
         else desiredVelocity = right * maxSpeed;
 
-        // Calculate our steering force from our desired velocity
+        // Calculate steering force from our desired velocity
         Vector3 steeringForce = (desiredVelocity - velocity) * weight;
 
         // return our steering force
