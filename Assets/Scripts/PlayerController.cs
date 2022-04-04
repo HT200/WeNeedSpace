@@ -35,6 +35,11 @@ public class PlayerController : MonoBehaviour
     //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
     bool gameover;
 
+    //Black Hole Variables
+    public GameObject BlackHoleObject;
+    public int blackHoleCount;
+    private float blackHoleCooldown;
+
     // Laser variables
     public GameObject laserfire;
     public float lasercooldown;
@@ -53,6 +58,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        blackHoleCooldown = 0.0f;
+        blackHoleCount = 2;
         gameover = false;
         outOfBounds = false;
         deathtimer = 10.00f;
@@ -119,6 +126,12 @@ public class PlayerController : MonoBehaviour
                 DamagePlayer();
             }
 
+            //Firing Black Hole
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                FireBlackHole();
+            }
+
             // Acceleration controls, Higher increments of acceleration (both from the player and friction) give a better sense of control, this idea is largely inspired by celeste
             //Currently the player comes from full speed to a complete stop in about 26 meters (recognize this is with a starting velocity of 0)
             if (Input.GetKey(KeyCode.W))
@@ -165,11 +178,6 @@ public class PlayerController : MonoBehaviour
             {
                 transform.Rotate(0, 0, -0.5f, Space.Self);
             }
-
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                pos += new Vector3(0.0f, 0.0f, -5.0f) * dt;
-            }
             //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
             //Since acc is dependent on the transform.forward
 
@@ -202,7 +210,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 //Velocity loses 50% of its current speed a second without acceleration
-                vel *= 0.5f * dt;
+                vel -= vel * 0.5f * dt;
             }
 
             pos += vel * dt;
@@ -211,6 +219,10 @@ public class PlayerController : MonoBehaviour
             if (lasercooldown > 0.0f)
             {
                 lasercooldown -= dt;
+            }
+            if(blackHoleCooldown > 0.0f)
+            {
+                blackHoleCooldown -= dt;
             }
         }
     }
@@ -260,6 +272,17 @@ public class PlayerController : MonoBehaviour
             // The interval between shots is 1/5th of a second by default
             lasercooldown = m_laserCooldownDefault;
             m_scoreManager.DecrementCombo();
+        }
+    }
+
+    public void FireBlackHole()
+    {
+        if(blackHoleCooldown <= 0.0f && blackHoleCount != 0)
+        {
+            Debug.Log("Current transform forward: " + transform.forward);
+            GameObject temp = Instantiate(BlackHoleObject, transform.position + transform.forward * 10.0f, transform.rotation);
+            blackHoleCount--;
+            blackHoleCooldown = 15.0f;
         }
     }
 

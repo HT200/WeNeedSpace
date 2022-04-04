@@ -2558,7 +2558,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score: 1000'
+  m_Text: 'Score: 0'
 --- !u!222 &1511157345
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2767,6 +2767,8 @@ MonoBehaviour:
   damage: 5
   pos: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
+  BlackHoleObject: {fileID: 5340678443088692733, guid: c080b40d5d1c056489ddadf655d057f0, type: 3}
+  blackHoleCount: 0
   laserfire: {fileID: 779460830986738915, guid: e16905291ec74874e85ae5935ff65419, type: 3}
   lasercooldown: 0
   m_laserCooldownDefault: 0.2

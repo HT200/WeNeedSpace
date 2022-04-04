@@ -4,18 +4,24 @@ using UnityEngine;
 
 public class BlackHoleCollision : MonoBehaviour
 {
-    private Vector3 vel;
-
+    public Vector3 vel;
+    private float deathTimer;
     // Start is called before the first frame update
     void Start()
     {
-        vel = new Vector3(0.0f,0.0f,0.0f);
+        deathTimer = 15.00f;
+        vel = transform.forward * 10.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += vel*Time.deltaTime;
+        transform.position += vel * Time.deltaTime;
+        deathTimer -= Time.deltaTime;
+        if (deathTimer <= 0.0f)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
 
