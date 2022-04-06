@@ -341,6 +341,7 @@ public class PlayerController : MonoBehaviour
         if (m_currentHealth == 0 && m_currentShield == 0)
         {
             // Handle Game Over here
+            m_gameManager.SafeShutdown();
         }
     }
 

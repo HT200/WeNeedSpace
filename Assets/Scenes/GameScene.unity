@@ -3330,8 +3330,8 @@ MonoBehaviour:
   m_player: {fileID: 1611540308}
   m_crosshairColor: {r: 0, g: 1, b: 0, a: 1}
   m_healthShieldOutlineColor: {r: 0, g: 1, b: 0, a: 1}
-  m_healthBarFillColor: {r: 1, g: 1, b: 1, a: 0.39215687}
-  m_shieldBarFillColor: {r: 1, g: 1, b: 1, a: 0.39215687}
+  m_healthBarFillColor: {r: 0.9622642, g: 0, b: 0, a: 1}
+  m_shieldBarFillColor: {r: 0.30320394, g: 0.6320958, b: 0.9622642, a: 1}
   m_crosshairImage: {fileID: 762457522}
   m_thresholdImage: {fileID: 633738166}
   m_shieldBarOutlineImage: {fileID: 1757173636}
