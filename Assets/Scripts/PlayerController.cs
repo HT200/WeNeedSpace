@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     // The player's health and damage output (temporary values?)
     public float health = 100.0f;
     public float damage = 5.0f;
+    float iFramesCooldown;
 
     // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
     public Vector3 pos;
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;
         blackHoleCount = 2;
         gameover = false;
@@ -86,7 +88,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-
+        if(iFramesCooldown > 0.0f)
+        {
+            iFramesCooldown -= dt;
+        }
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
@@ -293,22 +298,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void DamagePlayer()
     {
-        // Player has taken damage so reset the combo
-        m_scoreManager.SetCombo(1);
 
-        // If the Shield has been depleted, apply damage to Health instead.
-        if (m_currentShield == 0)
+        if (iFramesCooldown <= 0.0f)
         {
-            Debug.Log("Player Health damaged from " + m_currentHealth + " to " + (m_currentHealth - 1));
-            m_currentHealth -= 1;
-        }
-        else
-        {
-            Debug.Log("Player Shield damaged from " + m_currentShield + " to " + (m_currentShield - 1));
-            m_currentShield -= 1;
-        }
+            // Player has taken damage so reset the combo
+            m_scoreManager.SetCombo(1);
 
-        UpdateHealthAndShield();
+            // If the Shield has been depleted, apply damage to Health instead.
+            if (m_currentShield == 0)
+            {
+                Debug.Log("Player Health damaged from " + m_currentHealth + " to " + (m_currentHealth - 1));
+                m_currentHealth -= 1;
+            }
+            else
+            {
+                Debug.Log("Player Shield damaged from " + m_currentShield + " to " + (m_currentShield - 1));
+                m_currentShield -= 1;
+            }
+
+            UpdateHealthAndShield();
+            iFramesCooldown = 0.3f;
+        }
     }
 
     /// <summary>
