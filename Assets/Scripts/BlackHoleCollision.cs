@@ -6,6 +6,7 @@ public class BlackHoleCollision : MonoBehaviour
 {
     public Vector3 vel;
     private float deathTimer;
+    public GameManager m_gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +59,7 @@ public class BlackHoleCollision : MonoBehaviour
             }
             else
             {
+                m_gameManager.UpdateEnemyList(other.gameObject);
                 Destroy(other.gameObject);
             }
         }
@@ -69,6 +71,7 @@ public class BlackHoleCollision : MonoBehaviour
             }
             else
             {
+                m_gameManager.UpdateAsteroidList(other.gameObject);
                 Destroy(other.gameObject);
             }
         }

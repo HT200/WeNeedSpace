@@ -333,4 +333,37 @@ public class GameManager : MonoBehaviour
 
         //Return to main menu (TBA)
     }
+    /// <summary>
+    /// Update the list of enemies when an enemy is destroyed
+    /// </summary>
+    /// <param name="toDelete">The game object of the enemy that is to be removed.</param>
+    public void UpdateEnemyList(GameObject toDelete)
+    {
+        for (int i = 0; i < enemyList.Count; i++)
+        {
+            if (enemyList[i].gameObject == toDelete)
+            {
+                print(enemyList.Count);
+                enemyList.RemoveAt(i);
+                print(enemyList.Count);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Update the list of asteroids when an asteroid is destroyed
+    /// </summary>
+    /// <param name="toDelete">The game object of the asteroid that is to be removed.</param>
+    public void UpdateAsteroidList(GameObject toDelete)
+    {
+        for (int i = 0; i < asteroidList.Count; i++)
+        {
+            if (asteroidList[i].gameObject == toDelete)
+            {
+                asteroidList.RemoveAt(i);
+                break;
+            }
+        }
+    }
 }

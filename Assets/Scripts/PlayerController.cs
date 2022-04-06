@@ -281,6 +281,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Current transform forward: " + transform.forward);
             GameObject temp = Instantiate(BlackHoleObject, transform.position + transform.forward * 10.0f, transform.rotation);
+            temp.GetComponent<BlackHoleCollision>().m_gameManager = m_gameManager;
             blackHoleCount--;
             blackHoleCooldown = 15.0f;
         }
