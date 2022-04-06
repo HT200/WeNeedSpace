@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum WaveState { IN_PROGRESS, COMPLETED, OVER }
 
@@ -127,6 +128,7 @@ public class GameManager : MonoBehaviour
                 //This block needs a scene or state transition to avoid a player writing to file multiple times
                 m_scoreManager.ReadFromFile();
                 m_scoreManager.WriteToFile();
+                SceneManager.LoadScene("MainMenyScene", LoadSceneMode.Single);
             }
         }
 
