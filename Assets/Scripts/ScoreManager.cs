@@ -39,8 +39,6 @@ public class ScoreManager : MonoBehaviour
 
     List<string> HighScores;
 
-
-
     // Start is called before the first frame update
     void Start()
     {

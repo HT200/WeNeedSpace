@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuUI : MonoBehaviour
 {
@@ -57,6 +56,9 @@ public class PauseMenuUI : MonoBehaviour
     /// </summary>
     public void Quit()
     {
-        // TODO: Close the current game scene and reload the Main Menu Scene
+        // Temporarily resume the game before returning to the Main Menu 
+        // so everything is reset, mainly time scale
+        Resume();
+        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
 }
