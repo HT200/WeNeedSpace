@@ -31,8 +31,9 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField][Min(1f)] private float mass;
     [SerializeField][Min(1)] private int health;
 
-    private bool goSpawn = true;
-    private Vector3 target;
+    private bool m_goSpawn = true;
+    private Vector3 m_target;
+    private RaycastHit hit;
 
     public int Health => health;
     protected Vector3 Position => position;
@@ -49,15 +50,15 @@ public abstract class EnemyController : MonoBehaviour
         direction = Vector3.forward;
         
         float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
-        target = new Vector3(position.x + Random.Range(-30, 30), position.y + Random.Range(-10, 10), fourthToPlayer);
+        m_target = new Vector3(position.x + Random.Range(-30, 30), position.y + Random.Range(-10, 10), fourthToPlayer);
 
-        Debug.Log(target);
+        Debug.Log(m_target);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (goSpawn) MoveToSpawnTarget();
+        if (m_goSpawn) MoveToSpawnTarget();
         else CalculateSteeringForces();
     
         UpdatePosition();
@@ -185,57 +186,36 @@ public abstract class EnemyController : MonoBehaviour
         return separationForce;
     }
 
-    public Vector3 AvoidAsteroid(Vector3 obstaclePos, float obstacleRadius)
+    /// <summary>
+    /// Avoid Asteroids if there's one ahead of the enemy ship
+    /// </summary>
+    /// <returns>Steering Force</returns>
+    protected Vector3 AvoidAsteroid()
     {
-        // Get a vector from this vehicle to the obstacle
-        Vector3 vToObs = obstaclePos - position;
+        if (hit.articulationBody == null) return Vector3.zero;
 
-        // Check if the obstacle is behind the vehicle
-        float fwdToObsDot /*forward to obstacle dot products*/ = Vector3.Dot(direction, vToObs);
-        
-        // If the obstacle is behind the object
-        if (fwdToObsDot < 0) return Vector3.zero;
+        if (Physics.Raycast(position, direction, obstacleViewDistance)
+            && hit.transform.CompareTag("Asteroid"))
+        {
+            Debug.Log("Asteroid Ahead");
+            return hit.normal * 20;
+        }
 
-        // Check to see if the obstacle is too far to the left or right
-        float rightToObsDot = Vector3.Dot(Vector3.right, vToObs);
-        if (Mathf.Abs(rightToObsDot) > obstacleRadius + radius) return Vector3.zero;
-
-        // Check to see if the obstacle is in our view range
-        if (fwdToObsDot > obstacleViewDistance) return Vector3.zero;
-
-        // Create a weight based on how close the enemy is to the obstacle
-        float weight = obstacleViewDistance / Mathf.Max(fwdToObsDot, 0.001f);
-
-        Vector3 desiredVelocity;
-        
-        // If the obstacle is on the right, steer left; else steer right
-        if (rightToObsDot > 0) desiredVelocity = right * -maxSpeed;
-        else desiredVelocity = right * maxSpeed;
-
-        // Calculate steering force from our desired velocity
-        Vector3 steeringForce = (desiredVelocity - velocity) * weight;
-
-        // return our steering force
-        return steeringForce;
+        return Vector3.zero;
     }
 
-    public Vector3 AvoidAllAsteroids(List<AsteroidController> asteroids)
-    {
-        return asteroids.Aggregate(Vector3.zero, (current, asteroid) => current + AvoidAsteroid(asteroid));
-    }
-    
     /// <summary>
     /// Move the enemy to the spawn target
     /// </summary>
     private void MoveToSpawnTarget()
     {
         Vector3 ultimateForce = Vector3.zero;
-        ultimateForce += GetSqrDistance(player.pos) < GetSqrDistance(target) ? Pursue() : Seek(target);
+        ultimateForce += GetSqrDistance(player.pos) < GetSqrDistance(m_target) ? Pursue() : Seek(m_target);
         ultimateForce += Separate(gameManager.enemyList) / 3;
-        //ultimateForce += AvoidAllAsteroids(gameManager.asteroidList);
+        ultimateForce += AvoidAsteroid();
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
 
-        if (GetSqrDistance(target) <= 0.01f) goSpawn = false;
+        if (GetSqrDistance(m_target) <= 0.01f) m_goSpawn = false;
 
             ApplyForce(ultimateForce);
     } 
@@ -279,11 +259,6 @@ public abstract class EnemyController : MonoBehaviour
     private Vector3 Seek(PlayerController targetObject)
     {
         return Seek(targetObject.pos);
-    }
-
-    public Vector3 AvoidAsteroid(AsteroidController asteroid)
-    {
-        return AvoidAsteroid(asteroid.transform.position, 3);
     }
     #endregion
 }

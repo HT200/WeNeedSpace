@@ -23,7 +23,7 @@ public class HardEnemy : EnemyController
         
         ultimateForce += strafe ? Evade() : Pursue();
         ultimateForce += Separate(gameManager.enemyList);
-        //ultimateForce += AvoidAllAsteroids(gameManager.asteroidList);
+        ultimateForce += AvoidAsteroid();
         
         if (strafe) Debug.Log(gameObject.name);
 
