@@ -98,6 +98,9 @@ public class GameManager : MonoBehaviour
         m_waveCooldownTimer = m_timeBetweenWaves;
         m_wavePlayTime = 0.0f;
 
+        //Shield regeneration
+        player.GetComponent<PlayerController>().RegenerateShield();
+
         // Start the next wave
         m_waveState = WaveState.IN_PROGRESS;
         m_waveText.text = "Wave: " + m_waveNumber;
