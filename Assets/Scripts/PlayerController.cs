@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
             //Increment the timer
             deathtimer -= dt;
             //tractor beam
-            pos += -pos.normalized * 3f * dt;
+            vel += -pos.normalized * 6f * dt;
 
 
 
@@ -126,10 +126,12 @@ public class PlayerController : MonoBehaviour
         {
 
             // Use only for development purposes for testing when the Player takes damage
+            /*
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 DamagePlayer();
             }
+            */
 
             //Firing Black Hole
             if (Input.GetKeyDown(KeyCode.R))
@@ -141,14 +143,14 @@ public class PlayerController : MonoBehaviour
             //Currently the player comes from full speed to a complete stop in about 26 meters (recognize this is with a starting velocity of 0)
             if (Input.GetKey(KeyCode.W))
             {
-                if (speed < 2.0f)
+                if (speed < 4.0f)
                 {
                     if (!m_accelerationAudioSource.isPlaying)
                     {
                         m_accelerationAudioSource.pitch = 1;
                         m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
                     }
-                    speed += 0.5f * dt;
+                    speed += 1.5f * dt;
                 }
             }
             else if (Input.GetKey(KeyCode.S))
@@ -158,7 +160,10 @@ public class PlayerController : MonoBehaviour
                     m_accelerationAudioSource.pitch = 0.6f;
                     m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
                 }
-                speed -= 0.2f * dt;
+                if (speed > 0.0f)
+                {
+                    speed -= 0.2f * dt;
+                }
             }
             if (Input.GetKeyUp(KeyCode.W))
             {
@@ -191,16 +196,16 @@ public class PlayerController : MonoBehaviour
             if (speed > 0)
             {
                 acc = transform.forward * speed;
-                if (vel.magnitude >= 5.0f)
+                if (vel.magnitude >= 15.0f)
                 {
                     //This means that velocity is already at max
 
                     //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
                     //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-                    if ((vel + acc * dt).magnitude > 5.0f)
+                    if ((vel + acc * dt).magnitude > 15.0f)
                     {
-                        vel = (vel + acc * dt).normalized * 5.0f;
+                        vel = (vel + acc * dt).normalized * 15.0f;
                     }
                     else
                     {

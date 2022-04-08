@@ -61,7 +61,7 @@ public class DetectCollisions : MonoBehaviour
 
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
-                m_gameManager.SafeShutdown();
+                m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
             }
             else if (other.tag == "Asteroid")
             {
@@ -70,7 +70,7 @@ public class DetectCollisions : MonoBehaviour
 
                 //This should cause an explosion, for now it means destroying the enemy
                 Destroy(other.gameObject);
-                m_gameManager.SafeShutdown();
+                m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
             }
             else if (other.tag == "Powerup")
             {
