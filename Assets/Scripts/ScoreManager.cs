@@ -240,19 +240,12 @@ public class ScoreManager : MonoBehaviour
     {
         SortLists();
         Debug.Log("Entering write to file method");
-        if (m_nameText.text.Trim('_') == "")
-        {
-            //If the player, for whatever reasons, writes to file with no name, use this placeholder instead
-            m_nameText.text = "LONESLDRR";
-        }
 
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
         for (int i = 0; i < HighScores.Count; i += 2)
         {
             scoreWrite.WriteLine(HighScores[i].Trim('_').ToUpper() + ":" + HighScores[i + 1]);
         }
-
-        scoreWrite.WriteLine(m_nameText.text.Trim('_').ToUpper() + ":" + m_currentScore.ToString());
         //ALWAYS REMEMBER TO CLOSE
         scoreWrite.Close();
     }
@@ -272,8 +265,14 @@ public class ScoreManager : MonoBehaviour
             names.Add(tempSplit[0].Trim('_').ToUpper());
             scores.Add(int.Parse(tempSplit[1]));
         }
-
-        names.Add(m_nameText.text.Trim('_').ToUpper());
+        if (m_nameText.text.Trim('_') != "")
+        {
+            names.Add(m_nameText.text.Trim('_').ToUpper());
+        }
+        else
+        {
+            names.Add("LONESLDR");
+        }
         scores.Add(m_currentScore);
         //ALWAYS REMEMBER TO CLOSE
         scoreRead.Close();
@@ -297,7 +296,7 @@ public class ScoreManager : MonoBehaviour
             }
             HighScores.Add(names[index]);
             HighScores.Add(scores[index].ToString());
-            scores[index] = 0;
+            scores[index] = -1;
         }
     }
 }

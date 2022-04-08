@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum WaveState { IN_PROGRESS, COMPLETED, OVER }
 
@@ -97,6 +98,9 @@ public class GameManager : MonoBehaviour
         m_waveCooldownTimer = m_timeBetweenWaves;
         m_wavePlayTime = 0.0f;
 
+        //Shield regeneration
+        player.GetComponent<PlayerController>().RegenerateShield();
+
         // Start the next wave
         m_waveState = WaveState.IN_PROGRESS;
         m_waveText.text = "Wave: " + m_waveNumber;
@@ -127,6 +131,7 @@ public class GameManager : MonoBehaviour
                 //This block needs a scene or state transition to avoid a player writing to file multiple times
                 m_scoreManager.ReadFromFile();
                 m_scoreManager.WriteToFile();
+                SceneManager.LoadScene("MainMenyScene", LoadSceneMode.Single);
             }
         }
 

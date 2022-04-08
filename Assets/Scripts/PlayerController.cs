@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     // The player's health and damage output (temporary values?)
     public float health = 100.0f;
     public float damage = 5.0f;
+    float iFramesCooldown;
 
     // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
     public Vector3 pos;
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;
         blackHoleCount = 2;
         gameover = false;
@@ -86,7 +88,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-
+        if(iFramesCooldown > 0.0f)
+        {
+            iFramesCooldown -= dt;
+        }
         //Out of bounds logic
         if (deathtimer <= 0.0f)
         {
@@ -102,7 +107,7 @@ public class PlayerController : MonoBehaviour
             //Increment the timer
             deathtimer -= dt;
             //tractor beam
-            pos += -pos.normalized * 3f * dt;
+            vel += -pos.normalized * 6f * dt;
 
 
 
@@ -121,10 +126,12 @@ public class PlayerController : MonoBehaviour
         {
 
             // Use only for development purposes for testing when the Player takes damage
+            /*
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 DamagePlayer();
             }
+            */
 
             //Firing Black Hole
             if (Input.GetKeyDown(KeyCode.R))
@@ -136,14 +143,14 @@ public class PlayerController : MonoBehaviour
             //Currently the player comes from full speed to a complete stop in about 26 meters (recognize this is with a starting velocity of 0)
             if (Input.GetKey(KeyCode.W))
             {
-                if (speed < 2.0f)
+                if (speed < 4.0f)
                 {
                     if (!m_accelerationAudioSource.isPlaying)
                     {
                         m_accelerationAudioSource.pitch = 1;
                         m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
                     }
-                    speed += 0.5f * dt;
+                    speed += 1.5f * dt;
                 }
             }
             else if (Input.GetKey(KeyCode.S))
@@ -153,7 +160,10 @@ public class PlayerController : MonoBehaviour
                     m_accelerationAudioSource.pitch = 0.6f;
                     m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
                 }
-                speed -= 0.2f * dt;
+                if (speed > 0.0f)
+                {
+                    speed -= 0.2f * dt;
+                }
             }
             if (Input.GetKeyUp(KeyCode.W))
             {
@@ -186,16 +196,16 @@ public class PlayerController : MonoBehaviour
             if (speed > 0)
             {
                 acc = transform.forward * speed;
-                if (vel.magnitude >= 5.0f)
+                if (vel.magnitude >= 15.0f)
                 {
                     //This means that velocity is already at max
 
                     //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
                     //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-                    if ((vel + acc * dt).magnitude > 5.0f)
+                    if ((vel + acc * dt).magnitude > 15.0f)
                     {
-                        vel = (vel + acc * dt).normalized * 5.0f;
+                        vel = (vel + acc * dt).normalized * 15.0f;
                     }
                     else
                     {
@@ -293,22 +303,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void DamagePlayer()
     {
-        // Player has taken damage so reset the combo
-        m_scoreManager.SetCombo(1);
 
-        // If the Shield has been depleted, apply damage to Health instead.
-        if (m_currentShield == 0)
+        if (iFramesCooldown <= 0.0f)
         {
-            Debug.Log("Player Health damaged from " + m_currentHealth + " to " + (m_currentHealth - 1));
-            m_currentHealth -= 1;
-        }
-        else
-        {
-            Debug.Log("Player Shield damaged from " + m_currentShield + " to " + (m_currentShield - 1));
-            m_currentShield -= 1;
-        }
+            // Player has taken damage so reset the combo
+            m_scoreManager.SetCombo(1);
 
-        UpdateHealthAndShield();
+            // If the Shield has been depleted, apply damage to Health instead.
+            if (m_currentShield == 0)
+            {
+                Debug.Log("Player Health damaged from " + m_currentHealth + " to " + (m_currentHealth - 1));
+                m_currentHealth -= 1;
+            }
+            else
+            {
+                Debug.Log("Player Shield damaged from " + m_currentShield + " to " + (m_currentShield - 1));
+                m_currentShield -= 1;
+            }
+
+            UpdateHealthAndShield();
+            iFramesCooldown = 0.3f;
+        }
     }
 
     /// <summary>
@@ -341,6 +356,7 @@ public class PlayerController : MonoBehaviour
         if (m_currentHealth == 0 && m_currentShield == 0)
         {
             // Handle Game Over here
+            m_gameManager.SafeShutdown();
         }
     }
 

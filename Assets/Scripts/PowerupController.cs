@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Powerup { X2SCORE, HEALTHUP, TRIPLESHOT, RAPIDFIRE }
+public enum Powerup { X2SCORE, HEALTHUP, TRIPLESHOT, RAPIDFIRE, BLACKHOLE }
 
 public class PowerupController : MonoBehaviour
 {
@@ -45,6 +45,10 @@ public class PowerupController : MonoBehaviour
                 Apply = new PowerupBehavior(rapidFirePowerup);
                 m_powerupDuration = 10.0f;
                 break;
+            case Powerup.BLACKHOLE:
+                Apply = new PowerupBehavior(blackHolePowerup);
+                m_powerupDuration = 0.0f;
+                break;
         }
     }
 
@@ -58,7 +62,7 @@ public class PowerupController : MonoBehaviour
     IEnumerator x2Powerup()
     {
         m_scoreManager.m_scoreMultiplier = 2;
-        
+
         yield return new WaitForSecondsRealtime(m_powerupDuration);
 
         m_scoreManager.m_scoreMultiplier = 1;
@@ -85,5 +89,11 @@ public class PowerupController : MonoBehaviour
         yield return new WaitForSecondsRealtime(m_powerupDuration);
 
         m_playerController.m_laserSpeed = m_playerController.m_laserSpeedDefault;
+    }
+    IEnumerator blackHolePowerup()
+    {
+        m_playerController.blackHoleCount++;
+
+        yield return new WaitForSecondsRealtime(m_powerupDuration);
     }
 }
