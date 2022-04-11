@@ -84,7 +84,7 @@ public class PowerupController : MonoBehaviour
     IEnumerator rapidFirePowerup()
     {
         m_playerController.lasercooldown = m_playerController.m_laserCooldownDefault;
-        m_playerController.m_laserSpeed = 40.0f;
+        m_playerController.m_laserSpeed = 120.0f;
 
         yield return new WaitForSecondsRealtime(m_powerupDuration);
 

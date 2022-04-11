@@ -24,16 +24,26 @@ public class MapCollision : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(this.tag =="Wall" && other.tag == "Player")
+        if(this.tag =="Wall")
         {
-            //The player is out of bounds: put logic here
+            if (other.tag == "Player")
+            {
+                //The player is out of bounds: put logic here
 
-            //1.tell player they're gonna die
-            playerScript.outOfBounds = true;
-            //2.player tells UI they're gonna die
-            //3.Player/UI starts countdown til death
-            //4.Within player script, if the countdown reaches 0 destroy the player
-            //5.Also within player script, start the tractor beam using their current position
+                //1.tell player they're gonna die
+                playerScript.outOfBounds = true;
+                //2.player tells UI they're gonna die
+                //3.Player/UI starts countdown til death
+                //4.Within player script, if the countdown reaches 0 destroy the player
+                //5.Also within player script, start the tractor beam using their current position
+            }
+
+            if(other.tag == "Enemy")
+            {
+                Debug.Log("Enemy being pulled");
+                other.gameObject.GetComponent<EnemyController>().velocity -= other.gameObject.transform.position.normalized * 6.0f;
+            }
+
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -50,3 +60,5 @@ public class MapCollision : MonoBehaviour
         }
     }
 }
+
+
