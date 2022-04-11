@@ -252,6 +252,9 @@ public class ScoreManager : MonoBehaviour
 
     public void ReadFromFile()
     {
+        names.Clear();
+        scores.Clear();
+        HighScores.Clear();
         Debug.Log("Entering read from file method");
         StreamReader scoreRead = new StreamReader("scores.txt");
         string line = "blah";
