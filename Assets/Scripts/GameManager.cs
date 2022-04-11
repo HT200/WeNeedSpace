@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
                 //This block needs a scene or state transition to avoid a player writing to file multiple times
                 m_scoreManager.ReadFromFile();
                 m_scoreManager.WriteToFile();
-                SceneManager.LoadScene("MainMenyScene", LoadSceneMode.Single);
+                SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
             }
         }
 

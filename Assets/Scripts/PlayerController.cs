@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     public float m_laserCooldownDefault = 0.2f;
     public bool tripleShot = false;
     public float m_laserSpeed;
-    public float m_laserSpeedDefault = 20.0f;
+    public float m_laserSpeedDefault;
 
     //This is a bit a misnomer, this is actually the current force at the back of thie ship, its used to meter the max/min acceleration
     float speed;
@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_laserSpeedDefault = 80.0f;
         iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;
         blackHoleCount = 2;
@@ -162,7 +163,7 @@ public class PlayerController : MonoBehaviour
                 }
                 if (speed > 0.0f)
                 {
-                    speed -= 0.2f * dt;
+                    speed -= 1.2f * dt;
                 }
             }
             if (Input.GetKeyUp(KeyCode.W))
@@ -182,11 +183,11 @@ public class PlayerController : MonoBehaviour
             // Rotation Controls via keyboard (Roll)
             if (Input.GetKey(KeyCode.A))
             {
-                transform.Rotate(0, 0, 0.5f, Space.Self);
+                transform.Rotate(0, 0, 0.1f, Space.Self);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                transform.Rotate(0, 0, -0.5f, Space.Self);
+                transform.Rotate(0, 0, -0.1f, Space.Self);
             }
             //ALL ROTATIONS SHOULD BE APPLIED BEFORE VECTOR CHANGES
             //Since acc is dependent on the transform.forward
@@ -250,16 +251,14 @@ public class PlayerController : MonoBehaviour
 
                 // Currently this has the laser instantiated at the cylinder end, and the rotation is perfectly alignned with the "cannon"
                 // In the future it might be best to have the rotation be slightly randomized to allow for "bullet" spread
-                // Additionally it might be best to tweak the code so it doesnt perform physical movement on a frame by frame basis but
-                // instead uses actual time since the last frame to account for differing computer speeds
                 GameObject temp = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
-
-                // Convert the crosshair/mouse position to a 3D point in world space (assume the UI is 10 units away from the camera)
+                // Convert the crosshair/mouse position to a 3D point in world space (assume the UI is 50 units away from the camera)
                 Vector3 worldPos = m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50));
                 // Point the newly created laser GameObject towards the point in world space
                 temp.transform.LookAt(worldPos);
                 Laser tempScript = temp.GetComponent<Laser>();
                 tempScript.speed = m_laserSpeed;
+
             }
             else
             {

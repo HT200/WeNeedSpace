@@ -80,8 +80,4 @@ public class DetectCollisions : MonoBehaviour
         }
         //Since detecting collision works both ways, we dont need to create reciprocal if statements for the enemy (all combinations are already handled)
     }
-
-    private void Update()
-    {
-    }
 }
