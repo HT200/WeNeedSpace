@@ -41,7 +41,7 @@ public class MapCollision : MonoBehaviour
             if(other.tag == "Enemy")
             {
                 Debug.Log("Enemy being pulled");
-                other.gameObject.GetComponent<EnemyController>().velocity -= other.gameObject.transform.position.normalized * 6.0f;
+                other.gameObject.GetComponent<EnemyController>().velocity -= other.gameObject.transform.position.normalized * 6.0f * Time.deltaTime;
             }
 
         }

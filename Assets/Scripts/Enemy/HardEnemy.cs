@@ -25,7 +25,7 @@ public class HardEnemy : EnemyController
         ultimateForce += Separate(gameManager.enemyList);
         ultimateForce += AvoidAsteroid();
         
-        if (strafe) Debug.Log(gameObject.name);
+        //if (strafe) Debug.Log(gameObject.name);
 
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
             

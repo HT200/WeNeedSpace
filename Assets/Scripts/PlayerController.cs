@@ -365,6 +365,7 @@ public class PlayerController : MonoBehaviour
     public void RegenerateShield()
     {
         m_currentShield = m_maxShield;
+        UpdateHealthAndShield();
     }
 
     /// <summary>
