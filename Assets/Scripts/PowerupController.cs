@@ -61,7 +61,7 @@ public class PowerupController : MonoBehaviour
 
     IEnumerator x2Powerup()
     {
-        m_scoreManager.m_scoreMultiplier = 2;
+        m_scoreManager.m_scoreMultiplier += 2;
 
         yield return new WaitForSecondsRealtime(m_powerupDuration);
 

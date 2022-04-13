@@ -51,6 +51,7 @@ public class ScoreManager : MonoBehaviour
 
         m_currentScore = 0;
         m_totalKills = 0;
+        m_scoreMultiplier = 1;
 
         nameIndex = 0;
         m_nameText.text = "__________";

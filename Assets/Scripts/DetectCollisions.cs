@@ -40,7 +40,7 @@ public class DetectCollisions : MonoBehaviour
                 AsteroidController script = other.GetComponent<AsteroidController>();
                 if (script.hasPowerup)
                 {
-                    // script.SpawnPowerup();
+                    script.SpawnPowerup();
                 }
 
                 Destroy(other.gameObject);
