@@ -10,8 +10,8 @@ public class BlackHoleCollision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        deathTimer = 15.00f;
-        vel = transform.forward * 10.0f;
+        deathTimer = 10.00f;
+        vel = transform.forward * 16.0f;
     }
 
     // Update is called once per frame
