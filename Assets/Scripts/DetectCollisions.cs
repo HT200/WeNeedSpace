@@ -27,9 +27,6 @@ public class DetectCollisions : MonoBehaviour
                 Destroy(this.gameObject);
                 m_scoreManager.IncrementKill();
                 m_scoreManager.UpdateScoreEnemyHit();
-                /*
-                enemyScript.UpdateHealth(-playerScript.damage);
-                */
             }
             else if (other.tag == "Asteroid")
             {

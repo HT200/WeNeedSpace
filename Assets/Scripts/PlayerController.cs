@@ -19,13 +19,9 @@ public class PlayerController : MonoBehaviour
     private int m_currentHealth;
     [SerializeField] private int m_maxShield = 3;
     private int m_currentShield;
-    // Damage value (temporary)
-    public int m_damage = 1;
     float deathtimer;
     public bool outOfBounds;
     // The player's health and damage output (temporary values?)
-    public float health = 100.0f;
-    public float damage = 5.0f;
     float iFramesCooldown;
 
     // All the physics vectors for updating movement (since thrust is changed on a frame by frame basis it doesnt need to be here)
@@ -368,26 +364,14 @@ public class PlayerController : MonoBehaviour
         UpdateHealthAndShield();
     }
 
-    /// <summary>
-    /// Update the player's damage output
-    /// </summary>
-    /*
-    public void UpdateDamage(int change)
-    {
-        // TODO: Upgrade weapons for more damage?
-        Debug.Log("Player Damage updated from " + m_damage + " to " + (m_damage + change));
-        m_damage += change;
-    }
-    */
-
-    //This is a read only get function so the gamemangager 
+    //This is a read only get function so the gamemangager can find it
     public PlayerUI GetPlayerUI()
     {
         return this.m_playerUI;
     }
 
     /// <summary>
-    /// Get the predicted positions where this vehicle should be in x seconds
+    /// Get the predicted positions where this vehicle should be in x seconds (used for enemy predictions)
     /// </summary>
     /// <param name="seconds">how many seconds ahead to look</param>
     /// <returns>predicted future positions</returns>
