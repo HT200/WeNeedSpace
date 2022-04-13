@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Powerup { X2SCORE, HEALTHUP, TRIPLESHOT, RAPIDFIRE, BLACKHOLE }
+public enum Powerup { HEALTHUP, X2SCORE, TRIPLESHOT, RAPIDFIRE, BLACKHOLE }
 
 public class PowerupController : MonoBehaviour
 {
@@ -29,13 +29,13 @@ public class PowerupController : MonoBehaviour
 
         switch (m_powerup)
         {
-            case Powerup.X2SCORE:
-                Apply = new PowerupBehavior(x2Powerup);
-                m_powerupDuration = 10.0f;
-                break;
             case Powerup.HEALTHUP:
                 Apply = new PowerupBehavior(healthUpPowerup);
                 m_powerupDuration = 0.0f;
+                break;
+            case Powerup.X2SCORE:
+                Apply = new PowerupBehavior(x2Powerup);
+                m_powerupDuration = 10.0f;
                 break;
             case Powerup.TRIPLESHOT:
                 Apply = new PowerupBehavior(tripleShotPowerup);

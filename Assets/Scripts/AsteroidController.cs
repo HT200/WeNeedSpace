@@ -136,7 +136,16 @@ public class AsteroidController : MonoBehaviour
 
     public void SpawnPowerup()
     {
-        int randomPowerup = Random.Range(0, m_powerups.Length);
+        int randomPowerup;
+        // 10% chance for Black Hole (index 4) powerup
+        // 30% chance for Health (index 0) powerup
+        // 20% chance for x2 (index 1), Triple Shot (index 2), and Rapid Fire (index 3) powerups
+        float percentage = Random.Range(0f, 1f);
+        if (percentage >= 0.0f && percentage < 0.1f) randomPowerup = (int)Powerup.BLACKHOLE;
+        else if (percentage >= 0.1f && percentage < 0.4f) randomPowerup = (int)Powerup.HEALTHUP;
+        else if (percentage >= 0.4f && percentage < 0.6f) randomPowerup = (int)Powerup.X2SCORE;
+        else if (percentage >= 0.6f && percentage < 0.8f) randomPowerup = (int)Powerup.TRIPLESHOT;
+        else randomPowerup = (int)Powerup.RAPIDFIRE;
 
         GameObject.Instantiate(m_powerups[randomPowerup], transform.position, Quaternion.identity);
     }
