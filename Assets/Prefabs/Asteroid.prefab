@@ -132,5 +132,6 @@ MonoBehaviour:
   - {fileID: 2728025994153000527, guid: 4b21eb5bcb3edf74f96f13426bb72ff3, type: 3}
   - {fileID: 5901339592101916949, guid: 920ff7e1ff3a483489f12968f03dc89f, type: 3}
   - {fileID: 1244342496416905335, guid: e13d19e36f0baaf43824476574f91556, type: 3}
+  - {fileID: 5114179649225406681, guid: a61abfb9c2527a8428f26273c3983f19, type: 3}
   hasPowerup: 0
   vel: {x: 0, y: 0, z: 0}
