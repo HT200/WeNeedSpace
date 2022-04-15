@@ -2,47 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AsteroidController : MonoBehaviour
+public class AsteroidController : AsteroidManager
 {
-    float bounds = 100;
+    public int m_baseRadius = 4;
+    float m_maxRadiusVariation;
+    int m_baseSubdivisions = 5;
 
-    public int baseRadius = 4;
-    float maxRadiusVariation;
-    int baseSubdivisions = 5;
-
-    public Vector3 rotationDirection;
-    float rotationSpeed = 12.0f;
+    public Vector3 m_rotationDirection;
+    float m_rotationSpeed = 12.0f;
 
     [SerializeField] GameObject[] m_powerups;
-    public bool hasPowerup;
+    public bool m_hasPowerup;
 
     public Vector3 vel;
 
     void Start()
     {
-        vel = Vector3.zero;
-        maxRadiusVariation = baseRadius / 2;
+        m_maxRadiusVariation = m_baseRadius / 2;
+        
+        FormAsteroid(Random.onUnitSphere);
 
+        // Decide if this asteroid has a powerup
         if (Random.Range(0f, 1f) < 0.2f)
         {
-            hasPowerup = true;
+            m_hasPowerup = true;
         }
         else
         {
-            hasPowerup = false;
+            m_hasPowerup = false;
         }
 
-
-        CreateAsteroid(Random.insideUnitSphere * bounds, Random.onUnitSphere);
-        //Ac = v^2/r = 1000/r
-        // v = sqrt(1000)
-        //V must be applied on the transform.right initally
-
-        //Only activate this code if you want to see something cool (The asteroids orbiting the black hole)
-        /*
-        transform.forward = transform.position.normalized;
-        vel = transform.right * Mathf.Sqrt(1000);
-        */
+        vel = Vector3.zero;
     }
 
     void Update()
@@ -54,36 +44,35 @@ public class AsteroidController : MonoBehaviour
             vel -= vel * 0.5f * dt;
         }
 
-        transform.Rotate(rotationDirection * rotationSpeed * dt);
+        transform.Rotate(m_rotationDirection * m_rotationSpeed * dt);
     }
 
     /// <summary>
-    /// Creates a single asteroid at the specified location with the specified rotation direction.
+    /// Form a single asteroid with the specified rotation direction.
     /// </summary>
-    /// <param name="position">The position at which to spawn this asteroid.</param>
     /// <param name="rotation">The direction in which to rotate this asteroid.</param>
-    void CreateAsteroid(Vector3 position, Vector3 rotation)
+    void FormAsteroid(Vector3 rotation)
     {
-        Vector3[] vertices = new Vector3[(baseSubdivisions + 1) * (baseSubdivisions + 1)];
+        Vector3[] vertices = new Vector3[(m_baseSubdivisions + 1) * (m_baseSubdivisions + 1)];
         int[] triangles = new int[vertices.Length * 6];
         Vector2[] uv = new Vector2[vertices.Length];
 
         Vector3 point;
-        float theta = 2.0f * Mathf.PI / baseSubdivisions;
-        float phi = Mathf.PI / baseSubdivisions;
+        float theta = 2.0f * Mathf.PI / m_baseSubdivisions;
+        float phi = Mathf.PI / m_baseSubdivisions;
 
         List<List<Vector3>> lon = new List<List<Vector3>>();
         int index = 0;
         bool northPole = false;
         bool southPole = false;
         bool firstLon = false;
-        for (int i = 0; i <= baseSubdivisions; i += 1)
+        for (int i = 0; i <= m_baseSubdivisions; i += 1)
         {
             List<Vector3> lat = new List<Vector3>();
-            for (int j = 0; j <= baseSubdivisions; j += 1)
+            for (int j = 0; j <= m_baseSubdivisions; j += 1)
             {
-                float variation = Random.Range(0.0f, maxRadiusVariation);
-                float magnitude = baseRadius + variation;
+                float variation = Random.Range(0.0f, m_maxRadiusVariation);
+                float magnitude = m_baseRadius + variation;
 
                 point = new Vector3(
                     Mathf.Cos(theta * i) * Mathf.Sin(phi * j),
@@ -92,17 +81,17 @@ public class AsteroidController : MonoBehaviour
                 );
                 point = point.normalized * magnitude;
                 if (northPole && j == 0) { point = lon[0][0]; }
-                if (southPole && j == baseSubdivisions) { point = lon[0][baseSubdivisions]; }
-                if (firstLon && i == baseSubdivisions) { point = lon[0][j]; }
+                if (southPole && j == m_baseSubdivisions) { point = lon[0][m_baseSubdivisions]; }
+                if (firstLon && i == m_baseSubdivisions) { point = lon[0][j]; }
 
                 lat.Add(point);
 
                 vertices[index] = point;
-                uv[index] = new Vector2(point.x / (float)baseSubdivisions, point.z / (float)baseSubdivisions);
+                uv[index] = new Vector2(point.x / (float)m_baseSubdivisions, point.z / (float)m_baseSubdivisions);
                 index += 1;
 
                 if (j == 0) { northPole = true; }
-                if (j == baseSubdivisions) { southPole = true; }
+                if (j == m_baseSubdivisions) { southPole = true; }
                 if (i == 0) { firstLon = true; }
             }
 
@@ -130,8 +119,7 @@ public class AsteroidController : MonoBehaviour
         mesh.RecalculateNormals();
         mesh.uv = uv;
 
-        transform.position = position;
-        rotationDirection = rotation;
+        m_rotationDirection = rotation;
     }
 
     public void SpawnPowerup()

@@ -35,7 +35,7 @@ public class DetectCollisions : MonoBehaviour
 
                 // Spawn a powerup if this asteroid has one
                 AsteroidController script = other.GetComponent<AsteroidController>();
-                if (script.hasPowerup)
+                if (script.m_hasPowerup)
                 {
                     script.SpawnPowerup();
                 }

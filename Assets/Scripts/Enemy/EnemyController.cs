@@ -52,7 +52,7 @@ public abstract class EnemyController : MonoBehaviour
         float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
         m_target = new Vector3(position.x + Random.Range(-30, 30), position.y + Random.Range(-10, 10), fourthToPlayer);
 
-        Debug.Log(m_target);
+        // Debug.Log(m_target);
     }
 
     // Update is called once per frame
