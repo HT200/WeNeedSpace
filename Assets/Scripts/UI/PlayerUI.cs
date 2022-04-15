@@ -9,10 +9,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private GameObject m_player;
 
     // UI Colors
-    [SerializeField] private Color m_crosshairColor;
-    [SerializeField] private Color m_healthShieldOutlineColor;
-    [SerializeField] private Color m_healthBarFillColor;
-    [SerializeField] private Color m_shieldBarFillColor;
+    [SerializeField] private Color m_uiColor;
+    [SerializeField] private Color m_healthBarColor;
 
     // Crosshair Sprites and Transforms
     [SerializeField] private Image m_crosshairImage;
@@ -33,6 +31,9 @@ public class PlayerUI : MonoBehaviour
         // Get the crosshair image transforms
         m_crosshairTransform = m_crosshairImage.GetComponent<RectTransform>();
         m_thresholdTransform = m_thresholdImage.GetComponent<RectTransform>();
+
+        // Initialize with full Health and Shield
+        UpdateHealthAndShield(1f, 1f);
 
         ColorUI();
     }
@@ -58,8 +59,9 @@ public class PlayerUI : MonoBehaviour
             // distance from the threshold: the further away, the faster you rotate
             m_player.transform.Rotate(new Vector3(-directionToMouse.y * distance * 0.1f, directionToMouse.x * distance * 0.1f, 0f));
         }
-        // Otherwise, if the crosshair is inside the threshold and the player wants to shoot, fire a laser
-        else if (Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0))
+
+        // If the player wants to shoot, fire a laser
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space))
         {
             m_player.GetComponent<PlayerController>().FireLaser();
         }
@@ -83,15 +85,18 @@ public class PlayerUI : MonoBehaviour
     /// </summary>
     private void ColorUI()
     {
-        // The Crosshair and Threshold images get the Crosshair Color
-        m_crosshairImage.color = m_crosshairColor;
-        m_thresholdImage.color = m_crosshairColor;
+        // Half the opacity of the UI color
+        Color transparentUIColor = m_uiColor * new Color(1, 1, 1, 0.5f);
+
+        // The Crosshair and Threshold images get the transparent Color
+        m_crosshairImage.color = transparentUIColor;
+        m_thresholdImage.color = transparentUIColor;
         // The Shield and Health Bar Outline images get the Outline Color
-        m_shieldBarOutlineImage.color = m_healthShieldOutlineColor;
-        m_healthBarOutlineImage.color = m_healthShieldOutlineColor;
+        m_shieldBarOutlineImage.color = m_uiColor;
+        m_healthBarOutlineImage.color = m_uiColor;
         // The Shield and Health Bar Fill images get their respective colors
-        m_shieldBarFillImage.color = m_shieldBarFillColor;
-        m_healthBarFillImage.color = m_healthBarFillColor;
+        m_shieldBarFillImage.color = transparentUIColor;
+        m_healthBarFillImage.color = m_healthBarColor;
     }
 
     /// <summary>

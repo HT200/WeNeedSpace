@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.038273145, g: 0.02770548, b: 0.02189529, a: 1}
+  m_IndirectSpecularColor: {r: 0.038225524, g: 0.027932411, b: 0.021871708, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -946,7 +946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 1, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!114 &676628624
@@ -971,7 +971,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 40a3faac62bb05e4c9dd6fef949ac2e3, type: 3}
-    m_FontSize: 32
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1646,7 +1646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.27058825}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.49411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1790,8 +1790,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -19.864}
-  m_SizeDelta: {x: 103.1522, y: 37.5898}
+  m_AnchoredPosition: {x: 0, y: -23.6152}
+  m_SizeDelta: {x: 160.9922, y: 47.2297}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1069223522
 MonoBehaviour:
@@ -1955,7 +1955,7 @@ RectTransform:
   - {fileID: 762457521}
   - {fileID: 633738165}
   m_Father: {fileID: 1943052822}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2489,7 +2489,6 @@ RectTransform:
   m_Children:
   - {fileID: 1981690908}
   - {fileID: 243578421}
-  - {fileID: 1576850855}
   - {fileID: 1943052822}
   m_Father: {fileID: 1330918457}
   m_RootOrder: 2
@@ -2811,17 +2810,17 @@ RectTransform:
   m_GameObject: {fileID: 1576850854}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2, z: 1}
+  m_LocalScale: {x: 2.4999998, y: 2, z: 1}
   m_Children:
   - {fileID: 749444254}
   - {fileID: 1560440191}
-  m_Father: {fileID: 1393117620}
-  m_RootOrder: 2
+  m_Father: {fileID: 1943052822}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -40}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0.0000018809369, y: -40}
+  m_SizeDelta: {x: 100, y: 34.384}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1611325039
 GameObject:
@@ -3413,7 +3412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 1, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
 --- !u!114 &1874516150
@@ -3486,14 +3485,15 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1576850855}
   - {fileID: 1199382885}
   m_Father: {fileID: 1393117620}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1943052823
 MonoBehaviour:
@@ -3508,10 +3508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_player: {fileID: 1611540308}
-  m_crosshairColor: {r: 0, g: 1, b: 1, a: 1}
-  m_healthShieldOutlineColor: {r: 0, g: 1, b: 1, a: 1}
-  m_healthBarFillColor: {r: 0.9622642, g: 0, b: 0, a: 1}
-  m_shieldBarFillColor: {r: 0.30320394, g: 0.6320958, b: 0.9622642, a: 1}
+  m_uiColor: {r: 0, g: 1, b: 1, a: 1}
+  m_healthBarColor: {r: 1, g: 0, b: 0, a: 1}
   m_crosshairImage: {fileID: 762457522}
   m_thresholdImage: {fileID: 633738166}
   m_shieldBarOutlineImage: {fileID: 1757173636}
