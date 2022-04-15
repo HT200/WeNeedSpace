@@ -67,6 +67,11 @@ public class MiniMapController : MonoBehaviour
                 lineRenderer.startWidth = startWidth;
                 lineRenderer.endWidth = startWidth * 2;
                 lineRenderer.startColor = startColor;
+                
+                if(enemy.enemyType == EnemyType.EASY) endColor = Color.green;
+                if(enemy.enemyType == EnemyType.MEDIUM) endColor = Color.blue;
+                if(enemy.enemyType == EnemyType.HARD) endColor = Color.red;
+
                 lineRenderer.endColor = endColor;
             }
         }
