@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
             */
 
             //Firing Black Hole
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) && blackHoleCooldown <= 0.0f && blackHoleCount != 0)
             {
                 FireBlackHole();
             }
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
                         m_accelerationAudioSource.pitch = 1;
                         m_accelerationAudioSource.PlayOneShot(m_gameManager.m_acceleration, m_accelerationAudioSource.volume);
                     }
-                    speed += 1.5f * dt;
+                    speed += 2.0f * dt;
                 }
             }
             else if (Input.GetKey(KeyCode.S))
@@ -171,9 +171,9 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(AudioFadeOut.FadeOut(m_accelerationAudioSource, 0.5f));
             }
 
-            if (speed > 0)
+            if (speed > 0.0f)
             {
-                speed -= 0.3f * dt;
+                speed -= 0.6f * dt;
             }
 
             // Rotation Controls via keyboard (Roll)
@@ -282,14 +282,11 @@ public class PlayerController : MonoBehaviour
 
     public void FireBlackHole()
     {
-        if(blackHoleCooldown <= 0.0f && blackHoleCount != 0)
-        {
-            Debug.Log("Current transform forward: " + transform.forward);
-            GameObject temp = Instantiate(BlackHoleObject, transform.position + transform.forward * 10.0f, transform.rotation);
-            temp.GetComponent<BlackHoleCollision>().m_gameManager = m_gameManager;
-            blackHoleCount--;
-            blackHoleCooldown = 15.0f;
-        }
+        Debug.Log("Current transform forward: " + transform.forward);
+        GameObject temp = Instantiate(BlackHoleObject, transform.position + transform.forward * 10.0f, transform.rotation);
+        temp.GetComponent<BlackHoleCollision>().m_gameManager = m_gameManager;
+        blackHoleCount--;
+        blackHoleCooldown = 15.0f;
     }
 
     /// <summary>
