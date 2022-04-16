@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
             if (speed > 0)
             {
                 acc = transform.forward * speed;
-                if (vel.magnitude >= 15.0f)
+                if (vel.magnitude >= 10.0f)
                 {
                     //This means that velocity is already at max
 
