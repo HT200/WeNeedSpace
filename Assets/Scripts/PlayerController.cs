@@ -200,9 +200,9 @@ public class PlayerController : MonoBehaviour
                     //If velocity is at max, you cant acclerate FORWARD, but you can accelerate in the sense of turning
                     //To replicate this, if at max speed, update only the direction of the velocity not the magnitude (unless acceleration would take you out of max speed)
 
-                    if ((vel + acc * dt).magnitude > 15.0f)
+                    if ((vel + acc * dt).magnitude > 10.0f)
                     {
-                        vel = (vel + acc * dt).normalized * 15.0f;
+                        vel = (vel + acc * dt * 2).normalized * 10.0f;
                     }
                     else
                     {
