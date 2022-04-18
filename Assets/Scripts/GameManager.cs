@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_outOfBoundsTop;
     [SerializeField] private Text m_outOfBoundsBot;
     [SerializeField] private Text m_outOfBoundsTimer;
-    [SerializeField] private Text m_waveTimeText;
     [SerializeField] private Text m_waveWarnText;
     [SerializeField] private Text m_gameOverText;
 
@@ -151,9 +150,6 @@ public class GameManager : MonoBehaviour
                 // If a wave has been completed, we are inbetween waves
                 {
                     SetWaveTimerWarning(true);
-                    // Decrease the timer by each frame duration
-                    m_waveCooldownTimer -= Time.deltaTime;
-                    m_waveTimeText.text = (Mathf.Round(m_waveCooldownTimer * 100) / 100).ToString();
 
                     // Once the wave timer hits zero, start the next wave
                     if (m_waveCooldownTimer <= 0)
@@ -210,8 +206,10 @@ public class GameManager : MonoBehaviour
 
     public void SetWaveTimerWarning(bool b)
     {
-        m_waveTimeText.gameObject.SetActive(b);
+        // Decrease the timer by each frame duration
         m_waveWarnText.gameObject.SetActive(b);
+        m_waveCooldownTimer -= Time.deltaTime;
+        m_waveWarnText.text = "Next Wave in: " + Mathf.Ceil(m_waveCooldownTimer).ToString();
     }
 
     /// <summary>

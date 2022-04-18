@@ -54,7 +54,7 @@ public class ScoreManager : MonoBehaviour
         m_scoreMultiplier = 1;
 
         nameIndex = 0;
-        m_nameText.text = "__________";
+        m_nameText.text = "AAAAAAAAAA";
     }
 
     /// <summary>
@@ -158,9 +158,9 @@ public class ScoreManager : MonoBehaviour
                 if (nameIndex != 9)
                 {
                     m_spaceIndicator.gameObject.transform.position = new Vector3(
-                    m_spaceIndicator.gameObject.transform.position.x + 27,
-                    m_spaceIndicator.gameObject.transform.position.y,
-                    m_spaceIndicator.gameObject.transform.position.z
+                        m_spaceIndicator.gameObject.transform.position.x + 27,
+                        m_spaceIndicator.gameObject.transform.position.y,
+                        m_spaceIndicator.gameObject.transform.position.z
                     );
                 }
                 else
@@ -172,9 +172,9 @@ public class ScoreManager : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 m_spaceIndicator.gameObject.transform.position = new Vector3(
-                m_spaceIndicator.gameObject.transform.position.x - 27,
-                m_spaceIndicator.gameObject.transform.position.y,
-                m_spaceIndicator.gameObject.transform.position.z
+                    m_spaceIndicator.gameObject.transform.position.x - 27,
+                    m_spaceIndicator.gameObject.transform.position.y,
+                    m_spaceIndicator.gameObject.transform.position.z
                 );
                 //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
                 //I'll need to do the same for the downarrow logic
