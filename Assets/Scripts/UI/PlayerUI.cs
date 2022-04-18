@@ -17,6 +17,8 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Image m_thresholdImage;
     private RectTransform m_crosshairTransform;
     private RectTransform m_thresholdTransform;
+    private float m_thresholdWidth;
+    private float m_thresholdHeight;
 
     // Shield Bar Images
     [SerializeField] private Image m_shieldBarOutlineImage;
@@ -31,6 +33,12 @@ public class PlayerUI : MonoBehaviour
         // Get the crosshair image transforms
         m_crosshairTransform = m_crosshairImage.GetComponent<RectTransform>();
         m_thresholdTransform = m_thresholdImage.GetComponent<RectTransform>();
+
+        // Calculate the width and height of the crosshair threshold image
+        Vector3[] corners = new Vector3[4];
+        m_thresholdTransform.GetWorldCorners(corners);
+        m_thresholdWidth = (corners[2] - corners[1]).x;
+        m_thresholdHeight = (corners[1] - corners[0]).y;
 
         // Initialize with full Health and Shield
         UpdateHealthAndShield(1f, 1f);
@@ -116,8 +124,8 @@ public class PlayerUI : MonoBehaviour
     private float DistancePastThreshold(Vector3 ellipsisCenter)
     {
         // Compute (rx^2 and ry^2): half the dimensions of the Threshold Image, then squared
-        float xRadius = Mathf.Pow(m_thresholdTransform.rect.width * m_thresholdTransform.localScale.x / 2, 2);
-        float yRadius = Mathf.Pow(m_thresholdTransform.rect.height * m_thresholdTransform.localScale.y / 2, 2);
+        float xRadius = Mathf.Pow(m_thresholdWidth / 2, 2);
+        float yRadius = Mathf.Pow(m_thresholdHeight / 2, 2);
         // Compute each half of the ellipsis equation
         float xComponent = Mathf.Pow(Input.mousePosition.x - ellipsisCenter.x, 2) / xRadius; // (x - h)^2 / (rx)^2
         float yComponent = Mathf.Pow(Input.mousePosition.y - ellipsisCenter.y, 2) / yRadius; // (y - k)^2 / (ry)^2
