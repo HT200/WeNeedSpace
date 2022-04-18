@@ -39,10 +39,6 @@ public class GameManager : MonoBehaviour
     // Score Manager
     [SerializeField] private ScoreManager m_scoreManager;
 
-    // Asteroid variables
-    [SerializeField] private AsteroidController m_AsteroidBasePrefab;
-    private int m_maxAsteroids = 20;
-
     // UI Element Variables
     [SerializeField] private Text m_waveText;
     [SerializeField] private Text m_outOfBoundsTop;
@@ -70,11 +66,6 @@ public class GameManager : MonoBehaviour
     {
         enemyList = new List<EnemyController>();
         asteroidList = new List<AsteroidController>();
-
-        for (int i = 0; i < m_maxAsteroids; i++)
-        {
-            asteroidList.Add(Instantiate(m_AsteroidBasePrefab, Vector3.zero, Quaternion.identity));
-        }
 
         changingColor = true;
         boundColor = new Color(128, 0, 0);
@@ -256,7 +247,7 @@ public class GameManager : MonoBehaviour
     {
         GameObject enemy = Instantiate(prefab, m_spawnPosition);
         enemy.name = type.ToString() + enemyCount;
-        Debug.Log("Spawned " + enemy.name);
+        // Debug.Log("Spawned " + enemy.name);
         EnemyController enemyController = enemy.GetComponent<EnemyController>();
         enemyController.enemyType = type;
         enemyController.gameManager = this;

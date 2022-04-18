@@ -40,8 +40,7 @@ public class MapCollision : MonoBehaviour
 
             if(other.tag == "Enemy")
             {
-                Debug.Log("Enemy being pulled");
-                other.gameObject.GetComponent<EnemyController>().velocity -= other.gameObject.transform.position.normalized * 6.0f * Time.deltaTime;
+                other.gameObject.GetComponent<EnemyController>().outOfBounds = true;
             }
 
         }
@@ -50,12 +49,18 @@ public class MapCollision : MonoBehaviour
     {
         if(this.tag=="Wall" && other.tag == "Player")
         {
-            //Player returns into the map: put logic here
-            //1.End countdown
-            playerScript.outOfBounds = false;
-            gameManager.RemoveWarning();
-            //2.Player stops warning, tells UI script to stop warning
-
+            if (other.tag == "PLayer")
+            {
+                //Player returns into the map: put logic here
+                //1.End countdown
+                playerScript.outOfBounds = false;
+                gameManager.RemoveWarning();
+                //2.Player stops warning, tells UI script to stop warning
+            }
+            if(other.tag  == "Enemy")
+            {
+                other.gameObject.GetComponent<EnemyController>().outOfBounds = false;
+            }
 
         }
     }

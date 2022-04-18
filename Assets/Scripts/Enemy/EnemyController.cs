@@ -35,6 +35,8 @@ public abstract class EnemyController : MonoBehaviour
     private Vector3 m_target;
     private RaycastHit hit;
 
+    public bool outOfBounds;
+
     public int Health => health;
     protected Vector3 Position => position;
     protected Vector3 Direction => direction;
@@ -52,7 +54,8 @@ public abstract class EnemyController : MonoBehaviour
         float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
         m_target = new Vector3(position.x + Random.Range(-30, 30), position.y + Random.Range(-10, 10), fourthToPlayer);
 
-        Debug.Log(m_target);
+        // Debug.Log(m_target);
+        outOfBounds = false;
     }
 
     // Update is called once per frame
@@ -60,7 +63,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         if (m_goSpawn) MoveToSpawnTarget();
         else CalculateSteeringForces();
-    
+        if (outOfBounds) velocity -= position.normalized * 6.0f * Time.deltaTime;  
         UpdatePosition();
         transform.position = position;
     }
