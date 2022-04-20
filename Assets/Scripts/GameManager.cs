@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text m_outOfBoundsBot;
     [SerializeField] private Text m_outOfBoundsTimer;
     [SerializeField] private Text m_waveWarnText;
-    [SerializeField] private Text m_gameOverText;
+    [SerializeField] private GameObject m_gameOverParentUI;
 
     // Audio
     public AudioClip m_asteroidExplosionAudio;
@@ -102,27 +102,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKey(KeyCode.RightControl))
         {
             SafeShutdown();
-        }
-        // Use only for development purposes. Pressing Enter should destroy all enemies to complete the current wave
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            // If the wave is in progress, destroy the current wave
-            if (m_waveState == WaveState.IN_PROGRESS)
-            {
-                TestDestroyCurrentWave();
-            }
-            // Otherwise we immediately restart the next wave
-            else if (m_waveState == WaveState.COMPLETED)
-            {
-                NewWave();
-            }
-            else if (m_waveState == WaveState.OVER)
-            {
-                //This block needs a scene or state transition to avoid a player writing to file multiple times
-                m_scoreManager.ReadFromFile();
-                m_scoreManager.WriteToFile();
-                SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
-            }
         }
 
         switch (m_waveState)
@@ -297,14 +276,6 @@ public class GameManager : MonoBehaviour
         m_waveWeight -= (m_numEasyEnemies * m_easyEnemyWeight);
     }
 
-    void TestDestroyCurrentWave()
-    {
-        foreach (Transform childTransform in m_spawnPosition)
-        {
-            Destroy(childTransform.gameObject);
-        }
-    }
-
     /// <summary>
     /// Safely shutsdown the game
     /// </summary>
@@ -315,9 +286,8 @@ public class GameManager : MonoBehaviour
 
         //Freeze time (this only works on things that run on dt, so player UI must be disabled seperately so you can't rotate)
         Time.timeScale = 0f;
-        //Display that you've lost, and show name entry
-        m_gameOverText.gameObject.SetActive(true);
-        m_scoreManager.DisplayNameText();
+        // Display that the player has lost and show their name entry
+        m_gameOverParentUI.SetActive(true);
         //Note: If you were to die by going out of bounds, this could be done easier through the player script
         //but since the player can die multiple ways we need one method
         player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
@@ -327,6 +297,7 @@ public class GameManager : MonoBehaviour
 
         //Return to main menu (TBA)
     }
+
     /// <summary>
     /// Update the list of enemies when an enemy is destroyed
     /// </summary>

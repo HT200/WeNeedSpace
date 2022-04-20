@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -27,16 +28,14 @@ public class ScoreManager : MonoBehaviour
     private Vector3 ogSpaceIndicator;
     private Vector3 endSpaceIndicator;
 
-    [SerializeField] private Text m_nameText;
-    [SerializeField] private Text m_spaceIndicator;
-
     //For altering the name
-    int nameIndex;
-    const string alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
+    private int m_nameIndex;
+    [SerializeField] private GameObject m_nameTextParent;
+    private List<Text> m_nameTextCharList;
+    private const string m_alphabet = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+=;\"~`<>?";
 
     List<string> names;
     List<int> scores;
-
     List<string> HighScores;
 
     // Start is called before the first frame update
@@ -46,15 +45,25 @@ public class ScoreManager : MonoBehaviour
         scores = new List<int>();
         HighScores = new List<string>();
 
-        ogSpaceIndicator = m_spaceIndicator.gameObject.transform.position;
-        endSpaceIndicator = new Vector3(ogSpaceIndicator.x + 250, ogSpaceIndicator.y, ogSpaceIndicator.z);
-
         m_currentScore = 0;
         m_totalKills = 0;
         m_scoreMultiplier = 1;
 
-        nameIndex = 0;
-        m_nameText.text = "AAAAAAAAAA";
+        m_nameIndex = 0;
+        m_nameTextCharList = new List<Text>();
+        if (m_nameTextParent != null)
+        {
+            // Add each child Text component to the internal List
+            foreach(Transform child in m_nameTextParent.transform)
+            {
+                m_nameTextCharList.Add(child.GetComponent<Text>());
+            }
+        }
+    }
+
+    void Update()
+    {
+        m_nameTextCharList[m_nameIndex].color = Color.red;
     }
 
     /// <summary>
@@ -139,114 +148,81 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Note: m_nameIndex ranges from 0-9
+    /// </summary>
     public void GetName()
     {
-        if (!m_nameText.gameObject.activeInHierarchy)
+        if (!m_nameTextParent.gameObject.activeInHierarchy)
         {
-            m_nameText.gameObject.SetActive(true);
+            m_nameTextParent.gameObject.SetActive(true);
         }
 
-        if (Input.anyKey)
+        // Get the current character and make it red
+        Text currentChar = m_nameTextCharList[m_nameIndex];
+        currentChar.color = Color.red;
+
+        // Update the current index
+        if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            //Note: Nameindex can range from 0-9
+            // Make the current character white before updating the index
+            currentChar.color = Color.white;
+            m_nameIndex = (m_nameIndex + 1) % 10;
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            // Make the current character white before updating the index
+            currentChar.color = Color.white;
 
-            //We need to use a temp string because indexing a string is read only, so we can't alter each character individually
-            string alteredString = "";
-
-            if (Input.GetKeyDown(KeyCode.RightArrow))
+            // For whatever reason, modulus doesn't work with negative numbers (even though it should?).
+            // I've replicated the effect with this. Need to do the same for the down arrow logic.
+            if (m_nameIndex == 0)
             {
-                if (nameIndex != 9)
-                {
-                    m_spaceIndicator.gameObject.transform.position = new Vector3(
-                        m_spaceIndicator.gameObject.transform.position.x + 27,
-                        m_spaceIndicator.gameObject.transform.position.y,
-                        m_spaceIndicator.gameObject.transform.position.z
-                    );
-                }
-                else
-                {
-                    m_spaceIndicator.gameObject.transform.position = ogSpaceIndicator;
-                }
-                nameIndex = (nameIndex + 1) % 10;
-            }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                m_spaceIndicator.gameObject.transform.position = new Vector3(
-                    m_spaceIndicator.gameObject.transform.position.x - 27,
-                    m_spaceIndicator.gameObject.transform.position.y,
-                    m_spaceIndicator.gameObject.transform.position.z
-                );
-                //For whatever reason,  modulus doesn't work with negative numbers (even though it should?). I've replicated the effect with this
-                //I'll need to do the same for the downarrow logic
-                if (nameIndex == 0)
-                {
-                    nameIndex = 9;
-                    m_spaceIndicator.gameObject.transform.position = endSpaceIndicator;
-                }
-                else
-                {
-                    nameIndex--;
-                }
-            }
-            Debug.Log("name index is: " + nameIndex);
-            //Note: Name index is in the length parameter of the substring, this is only ok because its starting at index 0, subtring(int, int) is not giving two indices and taking everything between them, one is the start the other is the length
-            //This adds everything UP TO the space your altering to the temp string
-            //if your altering the first space, theres no previous text to copy
-
-            //adding the start
-            if (nameIndex != 0)
-            {
-                alteredString += m_nameText.text.ToString().Substring(0, nameIndex);
-            }
-
-            //Adding the current character
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) + 1) % alphabet.Length];
-
-            }
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                if (m_nameText.text.ToString()[nameIndex] == alphabet[0])
-                {
-                    alteredString += alphabet[alphabet.Length - 1];
-                }
-                else
-                {
-                    alteredString += alphabet[(alphabet.IndexOf(m_nameText.text.ToString()[nameIndex]) - 1)];
-                }
+                m_nameIndex = 9;
             }
             else
             {
-                alteredString += m_nameText.text.ToString()[nameIndex];
+                m_nameIndex--;
             }
-
-            //Adding the end
-            if (nameIndex != 9)
-            {
-                alteredString += m_nameText.text.ToString().Substring(nameIndex + 1, 9 - nameIndex);
-            }
-            //Rewrite
-            m_nameText.text = alteredString;
         }
-    }
 
-    public void DisplayNameText()
-    {
-        m_nameText.gameObject.SetActive(true);
-        m_spaceIndicator.gameObject.SetActive(true);
+        // Update the current character
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text.ToString()) + 1) % m_alphabet.Length].ToString();
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (m_alphabet.IndexOf(currentChar.text.ToString()) == 0)
+            {
+                currentChar.text = m_alphabet[m_alphabet.Length - 1].ToString();
+            }
+            else
+            {
+                currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text.ToString()) - 1) % m_alphabet.Length].ToString();
+            }
+        }
+
+        // Submit the current player's name
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            // This block needs a scene or state transition to avoid a player writing to file multiple times
+            ReadFromFile();
+            WriteToFile();
+            SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
+        }
     }
 
     public void WriteToFile()
     {
         SortLists();
-        Debug.Log("Entering write to file method");
 
         StreamWriter scoreWrite = new StreamWriter("scores.txt");
         for (int i = 0; i < HighScores.Count; i += 2)
         {
             scoreWrite.WriteLine(HighScores[i].Trim('_').ToUpper() + ":" + HighScores[i + 1]);
         }
+
         //ALWAYS REMEMBER TO CLOSE
         scoreWrite.Close();
     }
@@ -256,7 +232,7 @@ public class ScoreManager : MonoBehaviour
         names.Clear();
         scores.Clear();
         HighScores.Clear();
-        Debug.Log("Entering read from file method");
+
         StreamReader scoreRead = new StreamReader("scores.txt");
         string line = "blah";
         string[] tempSplit;
@@ -269,15 +245,15 @@ public class ScoreManager : MonoBehaviour
             names.Add(tempSplit[0].Trim('_').ToUpper());
             scores.Add(int.Parse(tempSplit[1]));
         }
-        if (m_nameText.text.Trim('_') != "")
+
+        string currPlayerName = "";
+        foreach (Text child in m_nameTextCharList)
         {
-            names.Add(m_nameText.text.Trim('_').ToUpper());
+            currPlayerName += child.text.ToString();
         }
-        else
-        {
-            names.Add("LONESLDR");
-        }
+        names.Add(currPlayerName);
         scores.Add(m_currentScore);
+
         //ALWAYS REMEMBER TO CLOSE
         scoreRead.Close();
     }
