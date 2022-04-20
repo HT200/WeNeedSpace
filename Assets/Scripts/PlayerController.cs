@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public GameObject Speedlines;
     // Game Manager Reference
     [SerializeField] private GameManager m_gameManager;
     // Score Manager Reference
@@ -55,6 +57,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         m_laserSpeedDefault = 80.0f;
         iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;
@@ -231,6 +234,39 @@ public class PlayerController : MonoBehaviour
             {
                 blackHoleCooldown -= dt;
             }
+
+
+            //Particle System
+
+            //at speedlines at v -> lim 0 should be: Radius 16, Rate over time 15, Start Speed 5
+            //at Speedline v = 10 -> Radius = 13, Rate: 30, Start speed 15
+            //Also to have the lines sort of "twist" when your turning
+            if(vel.sqrMagnitude <= 5 && Speedlines.activeInHierarchy)
+            {
+                Speedlines.SetActive(false);
+            }
+            else if(vel.sqrMagnitude >= 5 && !Speedlines.activeInHierarchy)
+            {
+                Speedlines.SetActive(true);
+            }
+
+            if (Speedlines.activeInHierarchy)
+            {
+                //Vel goes from 0 to 10
+
+                var ps = Speedlines.GetComponent<ParticleSystem>();
+                var newshape = ps.shape;
+                var newMain = ps.main;
+                var newEmission = ps.emission;
+                newshape.radius = 16 - (vel.magnitude * 0.3f);
+                newMain.startSpeed = 5 + vel.magnitude;
+                newEmission.rateOverTime = 15 + vel.magnitude * 1.5f;
+
+                Speedlines.transform.forward = -vel;
+            }
+
+
+
         }
     }
 

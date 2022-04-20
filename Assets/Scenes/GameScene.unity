@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.038273145, g: 0.02770548, b: 0.02189529, a: 1}
+  m_IndirectSpecularColor: {r: 0.038225524, g: 0.027932411, b: 0.021871708, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2885,6 +2885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a9efc3364b056c4ea58f3c82789deda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speedlines: {fileID: 1635549443}
   m_gameManager: {fileID: 47062669}
   m_scoreManager: {fileID: 691575955}
   m_playerUI: {fileID: 1943052823}
@@ -3188,7 +3189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!199 &1635549444
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -3263,7 +3264,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635549443}
   serializedVersion: 7
-  lengthInSec: 5
+  lengthInSec: 0.3
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -3882,7 +3883,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 10
+    type: 4
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -7969,7 +7970,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635549443}
   m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1611540310}
