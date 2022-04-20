@@ -6,11 +6,13 @@ public class DetectCollisions : MonoBehaviour
 {
     public GameManager m_gameManager;
     public ScoreManager m_scoreManager;
+    public MiniMapController m_miniMapController;
 
     void Start()
     {
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         m_scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        m_miniMapController = GameObject.Find("MiniMap").GetComponent<MiniMapController>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -57,8 +59,15 @@ public class DetectCollisions : MonoBehaviour
                 m_gameManager.UpdateEnemyList(other.gameObject);
 
                 //This should cause an explosion, for now it means destroying the enemy
-                Destroy(other.gameObject);
                 m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
+                // m_miniMapController.DamageIndicator(other.transform.position);
+                Destroy(other.gameObject);
+            }
+            if (other.tag == "Bullet")
+            {
+                m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
+                // m_miniMapController.DamageIndicator(other.transform.position);
+                Destroy(other.gameObject);
             }
             else if (other.tag == "Asteroid")
             {
@@ -66,8 +75,9 @@ public class DetectCollisions : MonoBehaviour
                 m_gameManager.UpdateAsteroidList(other.gameObject);
 
                 //This should cause an explosion, for now it means destroying the enemy
-                Destroy(other.gameObject);
                 m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
+                // m_miniMapController.DamageIndicator(other.transform.position);
+                Destroy(other.gameObject);
             }
             else if (other.tag == "Powerup")
             {
