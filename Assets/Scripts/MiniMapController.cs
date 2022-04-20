@@ -6,6 +6,7 @@ public class MiniMapController : MonoBehaviour
 {
     // Game Manager Reference
     GameManager m_gameManager;
+    GameObject player;
 
     // Game space bounds, center, and radius
     [SerializeField] GameObject m_gameSpace;
@@ -32,6 +33,7 @@ public class MiniMapController : MonoBehaviour
     void Start()
     {
         m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = m_gameManager.player;
 
         SphereCollider bounds = m_gameSpace.GetComponent<SphereCollider>();
         m_gameSpaceCenter = bounds.center;
@@ -60,7 +62,7 @@ public class MiniMapController : MonoBehaviour
             // Add enemies back to the mini-map
             foreach (EnemyController enemy in m_gameEnemies)
             {
-                GameObject indicator = Instantiate(m_enemyIndicator, Vector3.zero, Quaternion.identity);
+                GameObject indicator = Instantiate(m_enemyIndicator, transform);
                 m_miniMapEnemies.Add(indicator);
 
                 LineRenderer lineRenderer = indicator.GetComponent<LineRenderer>();
@@ -81,8 +83,9 @@ public class MiniMapController : MonoBehaviour
             EnemyController enemy = m_gameEnemies[i];
             LineRenderer lineRenderer = m_miniMapEnemies[i].GetComponent<LineRenderer>();
 
-            Vector3 from = transform.position + (enemy.transform.position - transform.position).normalized * m_miniMapInnerRadius;
-            Vector3 to = transform.position + (enemy.transform.position - transform.position).normalized * m_miniMapOuterRadius;
+            Vector3 playerPos = player.transform.position;
+            Vector3 from = transform.position + (enemy.transform.position - playerPos).normalized * m_miniMapInnerRadius;
+            Vector3 to = transform.position + (enemy.transform.position - playerPos).normalized * m_miniMapOuterRadius;
             lineRenderer.SetPosition(0, from);
             lineRenderer.SetPosition(1, to);
         }
