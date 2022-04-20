@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.038225524, g: 0.027932411, b: 0.021871708, a: 1}
+  m_IndirectSpecularColor: {r: 0.038273145, g: 0.02770548, b: 0.02189529, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1239,7 +1239,6 @@ GameObject:
   - component: {fileID: 812927971}
   - component: {fileID: 812927975}
   - component: {fileID: 812927974}
-  - component: {fileID: 812927972}
   - component: {fileID: 812927976}
   m_Layer: 0
   m_Name: MiniMap
@@ -1263,22 +1262,6 @@ Transform:
   m_Father: {fileID: 1611540310}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &812927972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 812927970}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 384a3ec274e80d842a3d91586a965000, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_gameSpace: {fileID: 1280558356}
-  m_spawnPosition: {fileID: 41248021}
-  m_playerMiniMapPrefab: {fileID: 3370521978687391967, guid: 586d6b60d68ac924b9086d9e815c40b7, type: 3}
-  m_enemyMiniMapPrefab: {fileID: 69799974094126478, guid: 874a89c260978eb4a9a7aa2962131fbe, type: 3}
 --- !u!23 &812927974
 MeshRenderer:
   m_ObjectHideFlags: 0
