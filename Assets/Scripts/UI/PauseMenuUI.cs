@@ -7,7 +7,17 @@ public class PauseMenuUI : MonoBehaviour
 
     [SerializeField] private GameObject m_pauseMenuUI;
     [SerializeField] private PlayerUI m_playerUIComponent;
-    
+
+    private GameManager m_gameManager;
+
+    void Start()
+    {
+        if (m_gameManager == null)
+        {
+            m_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -18,7 +28,7 @@ public class PauseMenuUI : MonoBehaviour
             {
                 Resume();
             }
-            else
+            else if (m_gameManager.m_waveState != WaveState.OVER)
             {
                 Pause();
             }
@@ -32,9 +42,10 @@ public class PauseMenuUI : MonoBehaviour
     /// </summary>
     void Pause()
     {
+        Time.timeScale = 0f;
         m_pauseMenuUI.SetActive(true);
         m_playerUIComponent.enabled = false;
-        Time.timeScale = 0f;
+        Cursor.visible = true;
         GameIsPaused = true;
     }
 
@@ -45,9 +56,10 @@ public class PauseMenuUI : MonoBehaviour
     /// </summary>
     public void Resume()
     {
+        Time.timeScale = 1f;
         m_pauseMenuUI.SetActive(false);
         m_playerUIComponent.enabled = true;
-        Time.timeScale = 1f;
+        Cursor.visible = false;
         GameIsPaused = false;
     }
 

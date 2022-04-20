@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private int m_waveNumber = 0;
     private int m_waveWeight = 0;
     private float m_wavePlayTime = 0.0f;
-    private WaveState m_waveState;
+    public WaveState m_waveState; // must be accessible by PauseMenu
 
     // Timer variables
     private float m_spawnCooldownTimer;

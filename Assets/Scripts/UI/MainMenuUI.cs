@@ -9,7 +9,12 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private GameObject m_howToPlayUI;
     [SerializeField] private GameObject m_creditsUI;
 
-    // Update is called once per frame
+    void Start()
+    {
+        Cursor.visible = true;
+        Time.timeScale = 1f;
+    }
+
     void Update()
     {
         m_camera.transform.Rotate(0f, 2 * Time.deltaTime, 0f);
@@ -25,6 +30,7 @@ public class MainMenuUI : MonoBehaviour
 
     public void PlayButton()
     {
+        Cursor.visible = false;
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
