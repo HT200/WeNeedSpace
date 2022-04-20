@@ -23,7 +23,7 @@ public class AsteroidController : AsteroidManager
         FormAsteroid(Random.onUnitSphere);
 
         // Decide if this asteroid has a powerup
-        if (Random.Range(0f, 1f) < 0.2f)
+        if (Random.Range(0f, 1f) <= 0.25f)
         {
             m_hasPowerup = true;
         }

@@ -19,13 +19,13 @@ public class AsteroidManager : MonoBehaviour
 
     // Asteroid variables
     [SerializeField] private AsteroidController m_AsteroidBasePrefab;
-    private int m_maxAsteroids = 200;
+    private int m_maxAsteroids = 600;
 
     void Start()
     {
         m_gameSpaceRadius = GameObject.Find("GameSpace").GetComponent<SphereCollider>().radius;
         m_asteroidBeltCenter = new Vector3(0, 0, -(m_asteroidBeltInnerRadius + m_asteroidBeltOuterRadius) / 2);
-        m_asteroidBeltHeightRadius = m_gameSpaceRadius;
+        m_asteroidBeltHeightRadius = m_gameSpaceRadius / 2;
         transform.position = m_asteroidBeltCenter;
 
         for (int i = 0; i < m_maxAsteroids; i++)
