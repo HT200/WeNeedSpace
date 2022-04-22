@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
             */
 
             //Firing Black Hole
-            if (Input.GetKeyDown(KeyCode.R) && blackHoleCooldown <= 0.0f && blackHoleCount != 0)
+            if (Input.GetMouseButtonDown(1) && blackHoleCooldown <= 0.0f && blackHoleCount != 0)
             {
                 FireBlackHole();
             }
