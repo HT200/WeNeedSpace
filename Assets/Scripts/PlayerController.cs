@@ -303,12 +303,15 @@ public class PlayerController : MonoBehaviour
                 GameObject left = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
                 left.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x - laserSpread, Input.mousePosition.y, 50)));
                 left.GetComponent<Laser>().speed = m_laserSpeed;
+                left.GetComponent<Laser>().pBullet = true;
                 GameObject middle = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
                 middle.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 50)));
                 middle.GetComponent<Laser>().speed = m_laserSpeed;
+                middle.GetComponent<Laser>().pBullet = true;
                 GameObject right = Instantiate(laserfire, transform.position + transform.forward * 1.5f, transform.rotation);
                 right.transform.LookAt(m_camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x + laserSpread, Input.mousePosition.y, 50)));
                 right.GetComponent<Laser>().speed = m_laserSpeed;
+                right.GetComponent<Laser>().pBullet = true;
             }
 
             // The interval between shots is 1/5th of a second by default
