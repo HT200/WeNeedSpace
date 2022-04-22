@@ -47,9 +47,9 @@ public class MapCollision : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(this.tag=="Wall" && other.tag == "Player")
+        if (this.tag == "Wall")
         {
-            if (other.tag == "PLayer")
+            if (other.tag == "Player")
             {
                 //Player returns into the map: put logic here
                 //1.End countdown
@@ -57,11 +57,11 @@ public class MapCollision : MonoBehaviour
                 gameManager.RemoveWarning();
                 //2.Player stops warning, tells UI script to stop warning
             }
-            if(other.tag  == "Enemy")
+
+            if (other.tag == "Enemy")
             {
                 other.gameObject.GetComponent<EnemyController>().outOfBounds = false;
             }
-
         }
     }
 }
