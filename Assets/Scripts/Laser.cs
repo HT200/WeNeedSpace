@@ -22,6 +22,8 @@ public class Laser : MonoBehaviour
 
     public Vector3 vel;
 
+    public bool pBullet;
+
     void Start()
     {
         total = 0.0f;

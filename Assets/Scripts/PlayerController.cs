@@ -290,6 +290,7 @@ public class PlayerController : MonoBehaviour
                 temp.transform.LookAt(worldPos);
                 Laser tempScript = temp.GetComponent<Laser>();
                 tempScript.speed = m_laserSpeed;
+                tempScript.pBullet = true;
 
             }
             else

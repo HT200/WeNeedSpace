@@ -65,9 +65,12 @@ public class DetectCollisions : MonoBehaviour
             }
             if (other.tag == "Bullet")
             {
-                m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
-                // m_miniMapController.DamageIndicator(other.transform.position);
-                Destroy(other.gameObject);
+                if (!other.gameObject.GetComponent<Laser>().pBullet)
+                {
+                    m_gameManager.player.GetComponent<PlayerController>().DamagePlayer();
+                    // m_miniMapController.DamageIndicator(other.transform.position);
+                    Destroy(other.gameObject);
+                }
             }
             else if (other.tag == "Asteroid")
             {
