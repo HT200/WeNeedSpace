@@ -37,9 +37,11 @@ public class HardEnemy : EnemyController
         
         if (laserTimer <= 0)
         {
-            Quaternion rotation = Quaternion.LookRotation(Direction, Vector3.zero);
-            GameObject laser = Instantiate(laserPrefab, Position + transform.forward * 3f, rotation);
-            laser.GetComponent<Laser>().speed = 20.0f;
+            //Enemy lasers have been changed to be faster, and to always spawn going towards the player, as it stands it is too safe to stay still, these changes will make it dangerous to stay still
+            Vector3 toPlayer = (player.pos - this.Position).normalized;
+            Quaternion rotation = Quaternion.LookRotation(toPlayer, Vector3.zero);
+            GameObject laser = Instantiate(laserPrefab, Position + toPlayer * 3f, rotation);
+            laser.GetComponent<Laser>().speed = 50.0f;
             laserTimer = laserCooldown;
         }
         else laserTimer -= dt;
