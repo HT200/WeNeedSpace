@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -23,6 +25,7 @@ public class ScoreManager : MonoBehaviour
 
     // UI Elements
     [SerializeField] private Text m_scoreText;
+    [SerializeField] private Text m_warningText;
 
     //for storing score/name pairs in I/O
     private Vector3 ogSpaceIndicator;
@@ -37,6 +40,8 @@ public class ScoreManager : MonoBehaviour
     List<string> names;
     List<int> scores;
     List<string> HighScores;
+    private List<string> slurs;
+    private string currPlayerName;
 
     // Start is called before the first frame update
     void Start()
@@ -51,13 +56,15 @@ public class ScoreManager : MonoBehaviour
 
         m_nameIndex = 0;
         m_nameTextCharList = new List<Text>();
-        if (m_nameTextParent != null)
+        
+        GetSlurList();
+        
+        if (m_nameTextParent == null) return;
+        
+        // Add each child Text component to the internal List
+        foreach(Transform child in m_nameTextParent.transform)
         {
-            // Add each child Text component to the internal List
-            foreach(Transform child in m_nameTextParent.transform)
-            {
-                m_nameTextCharList.Add(child.GetComponent<Text>());
-            }
+            m_nameTextCharList.Add(child.GetComponent<Text>());
         }
     }
 
@@ -156,6 +163,7 @@ public class ScoreManager : MonoBehaviour
         if (!m_nameTextParent.gameObject.activeInHierarchy)
         {
             m_nameTextParent.gameObject.SetActive(true);
+            m_warningText.gameObject.SetActive(false);
         }
 
         // Get the current character and make it red
@@ -189,23 +197,33 @@ public class ScoreManager : MonoBehaviour
         // Update the current character
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text.ToString()) + 1) % m_alphabet.Length].ToString();
+            m_warningText.gameObject.SetActive(false);
+            currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text) + 1) % m_alphabet.Length].ToString();
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (m_alphabet.IndexOf(currentChar.text.ToString()) == 0)
+            m_warningText.gameObject.SetActive(false);
+            if (m_alphabet.IndexOf(currentChar.text) == 0)
             {
                 currentChar.text = m_alphabet[m_alphabet.Length - 1].ToString();
             }
             else
             {
-                currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text.ToString()) - 1) % m_alphabet.Length].ToString();
+                currentChar.text = m_alphabet[(m_alphabet.IndexOf(currentChar.text) - 1) % m_alphabet.Length].ToString();
             }
         }
 
         // Submit the current player's name
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            foreach (Text child in m_nameTextCharList) currPlayerName += child.text;
+
+            if (IsContainSlur())
+            {
+                m_warningText.gameObject.SetActive(true);                
+                return;
+            }
+
             // This block needs a scene or state transition to avoid a player writing to file multiple times
             ReadFromFile();
             WriteToFile();
@@ -245,12 +263,7 @@ public class ScoreManager : MonoBehaviour
             names.Add(tempSplit[0].Trim('_').ToUpper());
             scores.Add(int.Parse(tempSplit[1]));
         }
-
-        string currPlayerName = "";
-        foreach (Text child in m_nameTextCharList)
-        {
-            currPlayerName += child.text.ToString();
-        }
+        
         names.Add(currPlayerName);
         scores.Add(m_currentScore);
 
@@ -278,5 +291,25 @@ public class ScoreManager : MonoBehaviour
             HighScores.Add(scores[index].ToString());
             scores[index] = -1;
         }
+    }
+
+    public void GetSlurList()
+    {
+        slurs = new List<string>();
+        StreamReader slurReader = new StreamReader("slurs.txt");
+        
+        string line = "";
+        while ((line = slurReader.ReadLine()) != null) slurs.Add(line);
+        
+        slurReader.Close();
+    }
+
+    public bool IsContainSlur()
+    {
+        foreach (var slur in slurs)
+        {
+            Debug.Log(slur);
+        }
+        return slurs.Any(slur => currPlayerName.ToLower().Contains(slur));
     }
 }
