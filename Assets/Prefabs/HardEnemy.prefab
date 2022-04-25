@@ -149,9 +149,10 @@ MonoBehaviour:
   maxForce: 30
   obstacleViewDistance: 5
   mesh: {fileID: 608598072294651864}
-  personalSpace: 4
+  personalSpace: 3
   mass: 1.5
   health: 1
+  outOfBounds: 0
   strafeDistance: 8000
   strafeArea: 3000
   fireDistance: 10000
@@ -171,3 +172,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gameManager: {fileID: 0}
   m_scoreManager: {fileID: 0}
+  m_miniMapController: {fileID: 0}

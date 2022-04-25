@@ -149,9 +149,10 @@ MonoBehaviour:
   maxForce: 60
   obstacleViewDistance: 10
   mesh: {fileID: 8422810614183661827}
-  personalSpace: 4
+  personalSpace: 3
   mass: 1
   health: 1
+  outOfBounds: 0
 --- !u!114 &1111115949860172942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,3 +167,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gameManager: {fileID: 0}
   m_scoreManager: {fileID: 0}
+  m_miniMapController: {fileID: 0}

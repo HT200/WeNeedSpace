@@ -81,6 +81,7 @@ public abstract class EnemyController : MonoBehaviour
             right = Vector3.Cross(direction, Vector3.up);
         }
         acceleration = Vector3.zero;
+
         transform.rotation = Quaternion.LookRotation(direction, Vector3.zero);
     }
 
@@ -130,14 +131,14 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="seconds">Future timeframe</param>
     /// <returns></returns>
-    protected Vector3 Pursue(float seconds = 1f)
+    protected Vector3 Pursue(float seconds = 0.3f)
     {
         Vector3 futurePos = player.GetFuturePosition(seconds);
         float futureDistance = Vector3.SqrMagnitude(player.pos - futurePos);
         float distFromTarget = GetSqrDistance(player.pos);
 
         // If the enemy is within the future distance of the player, seek the player instead
-        return distFromTarget < futureDistance ? Seek(player) : Seek(futurePos);
+        return distFromTarget < futureDistance * 5 ? Seek(player) : Seek(futurePos);
     }
     
     /// <summary>
@@ -183,7 +184,7 @@ public abstract class EnemyController : MonoBehaviour
             float personalSpaceRadius = personalSpace * personalSpace;
         
             if (sqrDistance < personalSpaceRadius) 
-                separationForce += Flee(other) * (personalSpaceRadius / sqrDistance);
+                separationForce += Flee(other) * (personalSpaceRadius / sqrDistance) / 4;
         }
 
         return separationForce;
