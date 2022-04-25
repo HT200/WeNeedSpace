@@ -6,7 +6,7 @@ public class MediumEnemy : EnemyController
     {
         Vector3 ultimateForce = Vector3.zero;
         ultimateForce += Pursue();
-        ultimateForce += Separate(gameManager.enemyList);
+        ultimateForce += Separate(gameManager.enemyList) / 3;
         ultimateForce += AvoidAsteroid();
 
         ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);

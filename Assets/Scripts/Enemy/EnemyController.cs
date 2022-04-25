@@ -31,8 +31,8 @@ public abstract class EnemyController : MonoBehaviour
     [SerializeField][Min(1f)] private float mass;
     [SerializeField][Min(1)] private int health;
 
-    private bool m_goSpawn = true;
-    private Vector3 m_target;
+    protected bool m_goSpawn = true;
+    protected Vector3 m_target;
     private RaycastHit hit;
 
     public bool outOfBounds;
@@ -99,7 +99,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="targetPosition">Player's position</param>
     /// <returns>Seek steering force</returns>
-    private Vector3 Seek(Vector3 targetPosition)
+    protected Vector3 Seek(Vector3 targetPosition)
     {
         // Calculate desired velocity
         Vector3 desiredVelocity = targetPosition - position;
@@ -115,7 +115,7 @@ public abstract class EnemyController : MonoBehaviour
     /// </summary>
     /// <param name="targetPosition">Player's position</param>
     /// <returns>Flee steering force</returns>
-    private Vector3 Flee(Vector3 targetPosition)
+    protected Vector3 Flee(Vector3 targetPosition)
     {
         // Calculate desired velocity
         Vector3 desiredVelocity = 2 * position - targetPosition;
@@ -211,7 +211,7 @@ public abstract class EnemyController : MonoBehaviour
     /// <summary>
     /// Move the enemy to the spawn target
     /// </summary>
-    private void MoveToSpawnTarget()
+    protected virtual void MoveToSpawnTarget()
     {
         Vector3 ultimateForce = Vector3.zero;
         ultimateForce += GetSqrDistance(player.pos) < GetSqrDistance(m_target) ? Pursue() : Seek(m_target);
@@ -221,7 +221,7 @@ public abstract class EnemyController : MonoBehaviour
 
         if (GetSqrDistance(m_target) <= 0.01f) m_goSpawn = false;
 
-            ApplyForce(ultimateForce);
+        ApplyForce(ultimateForce);
     } 
 
     /// <summary>
