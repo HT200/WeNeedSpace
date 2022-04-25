@@ -11,11 +11,6 @@ public class HardEnemy : EnemyController
     private float laserTimer = 0;
     private bool strafe;
 
-    protected override void MoveToSpawnTarget()
-    {
-        CalculateSteeringForces();
-    }
-
     protected override void CalculateSteeringForces()
     {
         float dt = Time.deltaTime;

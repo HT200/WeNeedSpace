@@ -61,8 +61,7 @@ public abstract class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_goSpawn) MoveToSpawnTarget();
-        else CalculateSteeringForces();
+        CalculateSteeringForces();
         if (outOfBounds) velocity -= position.normalized * 6.0f * Time.deltaTime;  
         UpdatePosition();
         transform.position = position;
@@ -207,22 +206,6 @@ public abstract class EnemyController : MonoBehaviour
 
         return Vector3.zero;
     }
-
-    /// <summary>
-    /// Move the enemy to the spawn target
-    /// </summary>
-    protected virtual void MoveToSpawnTarget()
-    {
-        Vector3 ultimateForce = Vector3.zero;
-        ultimateForce += GetSqrDistance(player.pos) < GetSqrDistance(m_target) ? Pursue() : Seek(m_target);
-        ultimateForce += Separate(gameManager.enemyList) / 3;
-        ultimateForce += AvoidAsteroid();
-        ultimateForce = Vector3.ClampMagnitude(ultimateForce, maxForce);
-
-        if (GetSqrDistance(m_target) <= 0.01f) m_goSpawn = false;
-
-        ApplyForce(ultimateForce);
-    } 
 
     /// <summary>
     /// Destroy this enemy
