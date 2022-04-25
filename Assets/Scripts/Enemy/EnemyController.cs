@@ -13,18 +13,13 @@ public abstract class EnemyController : MonoBehaviour
     
     public EnemyType enemyType;
     
-    [SerializeField] protected ScoreManager scoreManager;
     protected PlayerController player;
-    public GameManager gameManager;
+    [HideInInspector] public GameManager gameManager;
 
     [SerializeField][Min(2f)] protected float maxSpeed = 2f;
     [SerializeField][Min(2f)] protected float maxForce = 2f;
     
-    private float radius;
-    private Vector3 right = Vector3.right;
     [SerializeField][Min(3f)] private float obstacleViewDistance;
-
-    public MeshRenderer mesh;
 
     public float personalSpace = 1f;
 
@@ -39,7 +34,6 @@ public abstract class EnemyController : MonoBehaviour
 
     public int Health => health;
     protected Vector3 Position => position;
-    protected Vector3 Direction => direction;
 
     void Start()
     {
@@ -48,7 +42,6 @@ public abstract class EnemyController : MonoBehaviour
         player = gameManager.player.GetComponent<PlayerController>();
     
         position = transform.position;
-        radius = mesh.bounds.extents.x;
         direction = Vector3.forward;
         
         float fourthToPlayer = position.z + (player.pos.z - position.z) / 4;
@@ -74,11 +67,7 @@ public abstract class EnemyController : MonoBehaviour
     {
         velocity += acceleration * Time.deltaTime;
         position += velocity * Time.deltaTime;
-        if (velocity != Vector3.zero)
-        {
-            direction = velocity.normalized;
-            right = Vector3.Cross(direction, Vector3.up);
-        }
+        if (velocity != Vector3.zero) direction = velocity.normalized;
         acceleration = Vector3.zero;
 
         transform.rotation = Quaternion.LookRotation(direction, Vector3.zero);
@@ -205,29 +194,6 @@ public abstract class EnemyController : MonoBehaviour
         }
 
         return Vector3.zero;
-    }
-
-    /// <summary>
-    /// Destroy this enemy
-    /// </summary>
-    void DestroyEnemy()
-    {
-        print("Enemy Destroyed");
-
-        // Add to the player's combo
-        scoreManager.SetCombo(scoreManager.GetCombo() + 1);
-    }
-    
-    /// <summary>
-    /// Update this enemy's health
-    /// </summary>
-    public void UpdateHealth(int num)
-    {
-        health += num;
-        print("Health: " + health);
-
-        if (health > 0) return;
-        DestroyEnemy();
     }
 
     protected abstract void CalculateSteeringForces();
