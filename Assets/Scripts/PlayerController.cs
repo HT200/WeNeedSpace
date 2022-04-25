@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 acc;
 
     //bool for when game is over so rotation/acceleration letter controls dont interfere with name typing
-    bool gameover;
+    public bool gameover;
 
     //Black Hole Variables
     public GameObject BlackHoleObject;
@@ -182,11 +182,11 @@ public class PlayerController : MonoBehaviour
             }
 
             // Rotation Controls via keyboard (Roll)
-            if (Input.GetKey(KeyCode.A) && gameover)
+            if (Input.GetKey(KeyCode.A))
             {
                 transform.Rotate(0, 0, 0.1f, Space.Self);
             }
-            if (Input.GetKey(KeyCode.D) && gameover)
+            if (Input.GetKey(KeyCode.D))
             {
                 transform.Rotate(0, 0, -0.1f, Space.Self);
             }

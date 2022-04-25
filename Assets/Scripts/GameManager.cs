@@ -292,10 +292,10 @@ public class GameManager : MonoBehaviour
         //but since the player can die multiple ways we need one method
         player.GetComponent<PlayerController>().GetPlayerUI().enabled = false;
         player.GetComponent<PlayerController>().GetPlayerUI().gameObject.SetActive(false);
+        player.GetComponent<PlayerController>().gameover = true;
+        //Store score With associated name (Done in another script)
 
-        //Store score With associated name (max 10 characters)(WIP)
-
-        //Return to main menu (TBA)
+        //Return to main menu (see above)
     }
 
     /// <summary>
