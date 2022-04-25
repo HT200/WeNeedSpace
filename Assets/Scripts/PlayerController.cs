@@ -127,11 +127,13 @@ public class PlayerController : MonoBehaviour
 
             // Use only for development purposes for testing when the Player takes damage
             /*
+            
+            */
+            
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 DamagePlayer();
             }
-            */
 
             //Firing Black Hole
             if (Input.GetMouseButtonDown(1) && blackHoleCooldown <= 0.0f && blackHoleCount != 0)
@@ -180,11 +182,11 @@ public class PlayerController : MonoBehaviour
             }
 
             // Rotation Controls via keyboard (Roll)
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.A) && gameover)
             {
                 transform.Rotate(0, 0, 0.1f, Space.Self);
             }
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.D) && gameover)
             {
                 transform.Rotate(0, 0, -0.1f, Space.Self);
             }
