@@ -234,8 +234,8 @@ public class ScoreManager : MonoBehaviour
     public void WriteToFile()
     {
         SortLists();
-
-        StreamWriter scoreWrite = new StreamWriter("scores.txt");
+        //Always write to the persistent data path, even if the file isn't there yet, it'll create it
+        StreamWriter scoreWrite = new StreamWriter(Application.persistentDataPath + "scores.txt");
         for (int i = 0; i < HighScores.Count; i += 2)
         {
             scoreWrite.WriteLine(HighScores[i].Trim('_').ToUpper() + ":" + HighScores[i + 1]);
@@ -250,8 +250,19 @@ public class ScoreManager : MonoBehaviour
         names.Clear();
         scores.Clear();
         HighScores.Clear();
-
-        StreamReader scoreRead = new StreamReader("scores.txt");
+        //Forward declare score reader to avoid warnings/errors
+        StreamReader scoreRead;
+        //If this is the first time running, the score file wont exist
+        if (System.IO.File.Exists(Application.persistentDataPath + "scores.txt"))
+        {
+            //if it does exist, use it
+            scoreRead = new StreamReader(Application.persistentDataPath + "scores.txt");
+        }
+        else
+        {
+            //if it doesn't, this is the first time so use the default one
+            scoreRead = new StreamReader(Application.streamingAssetsPath + "/Text/scores.txt");
+        }
         string line = "blah";
         string[] tempSplit;
         while ((line = scoreRead.ReadLine()) != null)
@@ -295,8 +306,9 @@ public class ScoreManager : MonoBehaviour
 
     public void GetSlurList()
     {
+        //Since the player cannot create slurs, you can always take this from the streamed assets
         slurs = new List<string>();
-        StreamReader slurReader = new StreamReader("slurs.txt");
+        StreamReader slurReader = new StreamReader(Application.streamingAssetsPath + "/Text/slurs.txt");
         
         string line = "";
         while ((line = slurReader.ReadLine()) != null) slurs.Add(line);

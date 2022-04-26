@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         m_laserSpeedDefault = 80.0f;
         iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;

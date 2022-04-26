@@ -35,9 +35,18 @@ public class LeaderboardUI : MonoBehaviour
     {
         Debug.Log("Gathering Top 10 Scores for Leaderboard display");
 
+        StreamReader scoreReader;
+        //If you have scores of your own, display those 
+        if(System.IO.File.Exists(Application.persistentDataPath + "scores.txt"))
+        {
+            scoreReader = new StreamReader(Application.persistentDataPath + "scores.txt");
+        }
+        else
+        {
+            //If this is the first run through, use the default one instead
+            scoreReader = new StreamReader(Application.streamingAssetsPath + "/Text/scores.txt");
+        }
         List<string> top10 = new List<string>();
-        StreamReader scoreReader = new StreamReader("scores.txt");
-
         int counter = 10;
         string line = "";
         string[] tempSplit;
