@@ -65,7 +65,7 @@ public class PlayerUI : MonoBehaviour
             Vector3 directionToMouse = (Input.mousePosition - ellipsisCenter).normalized;
             // Rearrange the components so the player rotates properly and multiply by the
             // distance from the threshold: the further away, the faster you rotate
-            m_player.transform.Rotate(new Vector3(-directionToMouse.y * distance * 0.1f, directionToMouse.x * distance * 0.1f, 0f));
+            m_player.transform.Rotate(new Vector3(-directionToMouse.y * distance * 15.0f * Time.deltaTime, directionToMouse.x * distance * 15.0f * Time.deltaTime, 0f));
         }
 
         // If the player wants to shoot, fire a laser
