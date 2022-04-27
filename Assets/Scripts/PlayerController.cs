@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,6 +58,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
+        
         m_laserSpeedDefault = 80.0f;
         iFramesCooldown = 0.0f;
         blackHoleCooldown = 0.0f;
@@ -84,8 +87,17 @@ public class PlayerController : MonoBehaviour
     //acceleration increments by 10^-7 unity blocks per frame^2
 
     // Update is called once per frame
+
+    private void OnMouseDown()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     void Update()
     {
+        if (Input.GetKey(KeyCode.LeftWindows) || Input.GetKey(KeyCode.RightWindows))
+            Cursor.lockState = CursorLockMode.None;
+
         float dt = Time.deltaTime;
         if(iFramesCooldown > 0.0f)
         {
@@ -123,7 +135,6 @@ public class PlayerController : MonoBehaviour
         //None of this should be run if the game is over
         if (!gameover)
         {
-
             //Firing Black Hole
             if (Input.GetMouseButtonDown(1) && blackHoleCooldown <= 0.0f && blackHoleCount != 0)
             {
