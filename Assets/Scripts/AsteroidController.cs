@@ -12,6 +12,7 @@ public class AsteroidController : AsteroidManager
     float m_rotationSpeed = 12.0f;
 
     [SerializeField] GameObject[] m_powerups;
+    [SerializeField] Material m_asteroidWithPowerupMaterial;
     public bool m_hasPowerup;
 
     public Vector3 vel;
@@ -26,6 +27,7 @@ public class AsteroidController : AsteroidManager
         if (Random.Range(0f, 1f) <= 0.25f)
         {
             m_hasPowerup = true;
+            gameObject.GetComponent<MeshRenderer>().material = m_asteroidWithPowerupMaterial;
         }
         else
         {

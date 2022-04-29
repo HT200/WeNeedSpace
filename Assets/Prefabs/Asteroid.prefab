@@ -125,13 +125,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a079f338a0bd4345bb74fef82456858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseRadius: 4
-  rotationDirection: {x: 0, y: 0, z: 0}
+  m_gameManager: {fileID: 0}
+  m_AsteroidBasePrefab: {fileID: 0}
+  m_baseRadius: 4
+  m_rotationDirection: {x: 0, y: 0, z: 0}
   m_powerups:
   - {fileID: 2724097321979932840, guid: 840b70537b417d346993c3f87e2bc537, type: 3}
   - {fileID: 1244342496416905335, guid: e13d19e36f0baaf43824476574f91556, type: 3}
   - {fileID: 5901339592101916949, guid: 920ff7e1ff3a483489f12968f03dc89f, type: 3}
   - {fileID: 2728025994153000527, guid: 4b21eb5bcb3edf74f96f13426bb72ff3, type: 3}
   - {fileID: 5114179649225406681, guid: a61abfb9c2527a8428f26273c3983f19, type: 3}
-  hasPowerup: 0
+  m_asteroidWithPowerupMaterial: {fileID: 2100000, guid: 734770ccce06b894fa9af5e2484ea9db, type: 2}
+  m_hasPowerup: 0
   vel: {x: 0, y: 0, z: 0}
